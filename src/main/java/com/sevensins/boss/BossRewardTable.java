@@ -17,12 +17,8 @@ public final class BossRewardTable {
     /** Vanilla XP points awarded to the killer of the Red Demon. */
     public static final int RED_DEMON_XP = 250;
 
-    /**
-     * Vanilla XP points awarded to the killer of the Mythic Red Demon.
-     * Equals {@link #RED_DEMON_XP} × {@link MythicRedDemonEntity#REWARD_MULTIPLIER}.
-     */
-    public static final int MYTHIC_RED_DEMON_XP =
-            (int) (RED_DEMON_XP * MythicRedDemonEntity.REWARD_MULTIPLIER);
+    /** Vanilla XP points awarded to the killer of the Demon King. */
+    public static final int DEMON_KING_XP = 1500;
 
     private BossRewardTable() {}
 
@@ -38,13 +34,14 @@ public final class BossRewardTable {
     }
 
     /**
-     * Grants the Mythic Red Demon kill reward to {@code player}.
+     * Grants the Demon King kill reward to {@code player}.
+     * Awards {@value #DEMON_KING_XP} XP.
      * Safe to call with a {@code null} player — the reward is silently skipped.
      *
-     * @param player the {@link ServerPlayer} who killed the mythic boss
+     * @param player the {@link ServerPlayer} who killed the Demon King
      */
-    public static void onMythicBossDeath(@Nullable ServerPlayer player) {
+    public static void onDemonKingDeath(@Nullable ServerPlayer player) {
         if (player == null) return;
-        player.giveExperiencePoints(MYTHIC_RED_DEMON_XP);
+        player.giveExperiencePoints(DEMON_KING_XP);
     }
 }

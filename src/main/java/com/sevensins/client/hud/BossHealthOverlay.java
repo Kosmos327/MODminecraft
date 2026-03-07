@@ -42,8 +42,8 @@ public class BossHealthOverlay {
     /** Orange phase-2 text (ARGB). */
     private static final int COLOR_PHASE2 = 0xFFFF6600;
 
-    /** Purple enraged text (ARGB). */
-    private static final int COLOR_ENRAGED = 0xFFAA00FF;
+    /** Purple final-phase text (ARGB). */
+    private static final int COLOR_FINAL_PHASE = 0xFFAA00FF;
 
     /**
      * The boss HUD overlay implementation.
@@ -102,7 +102,8 @@ public class BossHealthOverlay {
             if (phaseText != null) {
                 int phaseColor = bossInfo.phase() == BossPhase.ENRAGED ? COLOR_ENRAGED : COLOR_PHASE2;
                 int phaseWidth = mc.font.width(phaseText);
-                int phaseColor = bossInfo.phase() == BossPhase.ENRAGED ? COLOR_ENRAGED : COLOR_PHASE2;
+                int phaseColor = (bossInfo.phase() == BossPhase.FINAL_PHASE)
+                        ? COLOR_FINAL_PHASE : COLOR_PHASE2;
                 guiGraphics.drawString(mc.font, phaseText,
                         centerX - phaseWidth / 2, barY + BAR_HEIGHT + 3 + mc.font.lineHeight + 1,
                         phaseColor, true);
@@ -119,7 +120,8 @@ public class BossHealthOverlay {
         return switch (phase) {
             case PHASE_1 -> null;
             case PHASE_2 -> "Phase 2";
-            case ENRAGED -> "ENRAGED";
+            case PHASE_3 -> "Phase 3";
+            case FINAL_PHASE -> "⚠ FINAL PHASE ⚠";
         };
     }
 

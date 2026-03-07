@@ -35,16 +35,8 @@ public final class QuestRegistry {
     /** ID of the quest to obtain Spirit Spear Chastiefol. */
     public static final String OBTAIN_CHASTIEFOL_ID = "obtain_chastiefol";
 
-    // Endgame quest IDs
-
-    /** ID of the endgame quest to survive a Night Demon Raid. */
-    public static final String SURVIVE_NIGHT_RAID_ID = "survive_night_raid";
-
-    /** ID of the endgame quest to slay a Mythic demon. */
-    public static final String SLAY_MYTHIC_DEMON_ID = "slay_mythic_demon";
-
-    /** ID of the endgame quest to obtain a Legendary Artifact. */
-    public static final String OBTAIN_LEGENDARY_ARTIFACT_ID = "obtain_legendary_artifact";
+    /** ID of the final boss quest — slay the Demon King. */
+    public static final String SLAY_DEMON_KING_ID = "slay_demon_king";
 
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
@@ -78,24 +70,10 @@ public final class QuestRegistry {
                 1
         ));
         register(new Quest(
-                SURVIVE_NIGHT_RAID_ID,
-                "Survive the Night",
-                "Survive a Night Demon Raid and defeat all three waves.",
-                QuestType.DUNGEON_CLEAR,
-                1
-        ));
-        register(new Quest(
-                SLAY_MYTHIC_DEMON_ID,
-                "Slay the Mythic Demon",
-                "Defeat the Mythic Red Demon that appears in the final raid wave.",
+                SLAY_DEMON_KING_ID,
+                "The Demon King",
+                "Defeat the Demon King and end the demonic catastrophe.",
                 QuestType.KILL,
-                1
-        ));
-        register(new Quest(
-                OBTAIN_LEGENDARY_ARTIFACT_ID,
-                "Claim a Legendary Artifact",
-                "Obtain your first Legendary Artifact from the endgame reward pool.",
-                QuestType.COLLECT,
                 1
         ));
     }

@@ -89,10 +89,8 @@ public final class StoryTriggerService {
             onRedDemonSlain(player);
         } else if (QuestRegistry.CLEAR_DEMON_CAVE_ID.equals(questId)) {
             onDemonCaveQuestComplete(player);
-        } else if (QuestRegistry.SURVIVE_NIGHT_RAID_ID.equals(questId)) {
-            onNightRaidComplete(player);
-        } else if (QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(questId)) {
-            onMythicDemonSlain(player);
+        } else if (QuestRegistry.SLAY_DEMON_KING_ID.equals(questId)) {
+            onDemonKingSlain(player);
         }
     }
 
@@ -157,16 +155,21 @@ public final class StoryTriggerService {
             cap.getData().setPersonalStoryStage(StoryChapter.DEMON_CAVE.getStage());
             player.sendSystemMessage(
                     Component.literal("Chapter complete: the Demon Cave has been purged."));
+            // Begin the final chapter — face the Demon King
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_DEMON_KING_ID);
+        });
+    }
 
-            // Mark main story complete and begin the endgame
-            cap.getData().getQuestData()
-                    .addStoryFlag(StoryFlag.MAIN_STORY_COMPLETE.getId());
-            cap.getData().setPersonalStoryStage(StoryChapter.ENDGAME.getStage());
+    private void onDemonKingSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.MAIN_STORY_COMPLETE.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.DEMON_KING.getStage());
             player.sendSystemMessage(
-                    Component.literal(
-                            "The darkness grows stronger. Night Demon Raids have begun..."));
-            // Assign first endgame quest
-            QuestManager.assignQuest(player, QuestRegistry.SURVIVE_NIGHT_RAID_ID);
+                    Component.literal("You have defeated the Demon King!").withStyle(
+                            net.minecraft.ChatFormatting.GOLD, net.minecraft.ChatFormatting.BOLD));
+            player.sendSystemMessage(
+                    Component.literal("The demonic catastrophe has ended. The main story is complete."));
         });
     }
 

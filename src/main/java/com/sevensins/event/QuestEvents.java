@@ -5,7 +5,7 @@ import com.sevensins.boss.BossManager;
 import com.sevensins.boss.BossRewardTable;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
-import com.sevensins.entity.MythicRedDemonEntity;
+import com.sevensins.entity.DemonKingEntity;
 import com.sevensins.entity.RedDemonEntity;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
@@ -60,9 +60,9 @@ public class QuestEvents {
             return; // boss kill does not also count toward generic kill quests
         }
 
-        if (event.getEntity() instanceof EstarossaEntity estarossa) {
-            handleEstarossaBossLogic(estarossa, killer);
-            return; // boss kill does not also count toward generic kill quests
+        if (event.getEntity() instanceof DemonKingEntity demonKing) {
+            handleDemonKingBossLogic(demonKing, killer);
+            return;
         }
 
         // --- Generic monster kill handling ---
@@ -120,43 +120,40 @@ public class QuestEvents {
     }
 
     /**
-     * Handles all side-effects of the Mythic Red Demon being killed by a player:
+     * Handles all side-effects of the Demon King being killed by a player:
      * <ol>
      *   <li>Unregisters the boss from {@link BossManager}.</li>
-     *   <li>Grants the mythic XP reward via {@link BossRewardTable#onMythicBossDeath}.</li>
-     *   <li>Completes the {@value QuestRegistry#SLAY_MYTHIC_DEMON_ID} quest if active.</li>
-     *   <li>Sets the {@link StoryFlag#MYTHIC_DEMON_SLAIN} flag.</li>
+     *   <li>Grants the XP reward via {@link BossRewardTable#onDemonKingDeath}.</li>
+     *   <li>Completes the {@value QuestRegistry#SLAY_DEMON_KING_ID} quest if active.</li>
+     *   <li>Sets the {@link StoryFlag#DEMON_KING_SLAIN} and
+     *       {@link StoryFlag#MAIN_STORY_COMPLETE} story flags.</li>
      *   <li>Broadcasts a server-wide defeat message.</li>
      * </ol>
      */
-    private static void handleMythicRedDemonBossLogic(MythicRedDemonEntity mythicDemon,
-                                                       ServerPlayer killer) {
-        // Unregister from boss tracker
-        BossManager.getInstance().unregisterBoss(mythicDemon.getUUID());
+    private static void handleDemonKingBossLogic(DemonKingEntity demonKing, ServerPlayer killer) {
+        BossManager.getInstance().unregisterBoss(demonKing.getUUID());
 
-        // Grant mythic XP reward to the killer
-        BossRewardTable.onMythicBossDeath(killer);
+        BossRewardTable.onDemonKingDeath(killer);
 
-        // Update quest and story flag
         ModCapabilities.get(killer).ifPresent(cap -> {
             if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
 
-            // Set mythic demon slain story flag
-            cap.getData().getQuestData()
-                    .addStoryFlag(StoryFlag.MYTHIC_DEMON_SLAIN.getId());
-
-            // Complete the slay_mythic_demon quest if active
+            // Complete the final quest if active
             String activeId = cap.getData().getQuestData().getActiveQuestId();
-            if (QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(activeId)) {
-                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_MYTHIC_DEMON_ID);
+            if (QuestRegistry.SLAY_DEMON_KING_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_DEMON_KING_ID);
             }
+
+            // Set story flags for kill and main story completion
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.MAIN_STORY_COMPLETE.getId());
         });
 
         // Server-wide broadcast
         if (killer.getServer() != null) {
             killer.getServer().getPlayerList()
                     .broadcastSystemMessage(
-                            Component.literal("The Mythic Red Demon has been slain!"), false);
+                            Component.literal("The Demon King has been defeated."), false);
         }
     }
 }
