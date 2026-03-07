@@ -349,8 +349,7 @@ public final class NightRaidManager {
 
     /** Returns {@code true} if the world time corresponds to night. */
     private static boolean isNight(ServerLevel level) {
-        long time = level.getDayTime() % 24000L;
-        return time >= 13000L && time <= 23000L;
+        return level.isNight();
     }
 
     /** Returns a random {@link BlockPos} within {@code radius} blocks of {@code center}. */
