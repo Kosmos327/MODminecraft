@@ -1,6 +1,5 @@
 package com.sevensins;
 
-import com.sevensins.network.ModNetwork;
 import com.sevensins.registry.ModBlocks;
 import com.sevensins.registry.ModCreativeTabs;
 import com.sevensins.registry.ModEntities;
@@ -24,8 +23,6 @@ public class SevenSinsMod {
         ModBlocks.register(modEventBus);
         ModEntities.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
-
-        ModNetwork.register();
 
         LOGGER.info("Seven Sins Mod initialized.");
     }

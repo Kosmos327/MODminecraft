@@ -6,13 +6,15 @@ out/
 # IDE
 .idea/
 *.iml
-.vscode/
+.eclipse/
+*.classpath
+*.project
+.settings/
+*.vscode/
 
-# Runtime
+# Runtime data
 run/
-
-# Forge decompiled sources
-src/main/java/net/
+logs/
 
 # OS
 .DS_Store

@@ -1,20 +1,11 @@
 modLoader="javafml"
 loaderVersion="[47,)"
 license="MIT"
-issueTrackerURL=""
-
-[[mods]]
-    modId="seven_sins"
-    version="${file.jarVersion}"
-    displayName="Seven Sins Mod"
-    description='''
-        A Forge 1.20.1 mod featuring the seven deadly sins.
-    '''
 
 [[dependencies.seven_sins]]
     modId="forge"
     mandatory=true
-    versionRange="[47.2.0,)"
+    versionRange="[47.2,)"
     ordering="NONE"
     side="BOTH"
 
@@ -24,3 +15,13 @@ issueTrackerURL=""
     versionRange="[1.20.1,1.21)"
     ordering="NONE"
     side="BOTH"
+
+[[mods]]
+    modId="seven_sins"
+    version="${file.jarVersion}"
+    displayName="Seven Sins Mod"
+    description='''
+        A Forge 1.20.1 mod featuring the seven deadly sins.
+    '''
+    logoFile="seven_sins.png"
+    authors="sevensins"
