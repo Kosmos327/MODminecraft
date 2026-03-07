@@ -5,5 +5,6 @@ public enum QuestType {
     KILL,
     COLLECT,
     REACH,
-    STORY
+    STORY,
+    DUNGEON_CLEAR
 }

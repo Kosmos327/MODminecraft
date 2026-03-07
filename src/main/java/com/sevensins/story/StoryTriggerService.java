@@ -6,6 +6,7 @@ import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.quest.PlayerQuestData;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
+import com.sevensins.world.DungeonType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -86,6 +87,8 @@ public final class StoryTriggerService {
             onFirstDemonHuntComplete(player);
         } else if (QuestRegistry.SLAY_RED_DEMON_ID.equals(questId)) {
             onRedDemonSlain(player);
+        } else if (QuestRegistry.CLEAR_DEMON_CAVE_ID.equals(questId)) {
+            onDemonCaveQuestComplete(player);
         }
     }
 
@@ -135,6 +138,55 @@ public final class StoryTriggerService {
             questData.addStoryFlag(StoryFlag.RED_DEMON_SLAIN.getId());
             cap.getData().setPersonalStoryStage(StoryChapter.RED_DEMON.getStage());
             player.sendSystemMessage(Component.literal("You have slain the Red Demon!"));
+            // Begin Chapter 4 — demonic corruption remains underground
+            player.sendSystemMessage(Component.literal(
+                    "Demonic corruption lingers underground. Seek out the Demon Cave."));
+            QuestManager.assignQuest(player, QuestRegistry.CLEAR_DEMON_CAVE_ID);
         });
+    }
+
+    private void onDemonCaveQuestComplete(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            // DEMON_CAVE_CLEARED flag is already set by onDungeonCleared, which is
+            // called unconditionally from DungeonManager. Here we only advance the
+            // story chapter and show the completion message.
+            cap.getData().setPersonalStoryStage(StoryChapter.DEMON_CAVE.getStage());
+            player.sendSystemMessage(
+                    Component.literal("Chapter complete: the Demon Cave has been purged."));
+        });
+    }
+
+    /**
+     * Called by {@link com.sevensins.world.DungeonManager} when the player first
+     * enters a dungeon.  Sets the entry story flag for the dungeon type.
+     *
+     * @param player the entering player
+     * @param type   the {@link DungeonType} entered
+     */
+    public void onDungeonEntered(ServerPlayer player, DungeonType type) {
+        if (player == null || type == null) return;
+
+        if (type == DungeonType.DEMON_CAVE) {
+            ModCapabilities.get(player).ifPresent(cap ->
+                    cap.getData().getQuestData()
+                            .addStoryFlag(StoryFlag.DEMON_CAVE_STARTED.getId()));
+        }
+    }
+
+    /**
+     * Called by {@link com.sevensins.world.DungeonManager} when a dungeon is
+     * cleared.  Sets the clear story flag for the dungeon type.
+     *
+     * @param player the player who cleared the dungeon
+     * @param type   the {@link DungeonType} that was cleared
+     */
+    public void onDungeonCleared(ServerPlayer player, DungeonType type) {
+        if (player == null || type == null) return;
+
+        if (type == DungeonType.DEMON_CAVE) {
+            ModCapabilities.get(player).ifPresent(cap ->
+                    cap.getData().getQuestData()
+                            .addStoryFlag(StoryFlag.DEMON_CAVE_CLEARED.getId()));
+        }
     }
 }
