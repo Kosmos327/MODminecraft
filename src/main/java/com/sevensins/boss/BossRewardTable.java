@@ -16,8 +16,8 @@ public final class BossRewardTable {
     /** Vanilla XP points awarded to the killer of the Red Demon. */
     public static final int RED_DEMON_XP = 250;
 
-    /** Vanilla XP points awarded to the killer of the Gray Demon. */
-    public static final int GRAY_DEMON_XP = 350;
+    /** Vanilla XP points awarded to the killer of Estarossa. */
+    public static final int ESTAROSSA_XP = 800;
 
     private BossRewardTable() {}
 
@@ -33,13 +33,13 @@ public final class BossRewardTable {
     }
 
     /**
-     * Grants the Gray Demon kill reward to {@code player}.
+     * Grants the Estarossa kill reward to {@code player}.
      * Safe to call with a {@code null} player — the reward is silently skipped.
      *
      * @param player the {@link ServerPlayer} who killed the boss
      */
-    public static void onGrayDemonDeath(@Nullable ServerPlayer player) {
+    public static void onEstarossaDeath(@Nullable ServerPlayer player) {
         if (player == null) return;
-        player.giveExperiencePoints(GRAY_DEMON_XP);
+        player.giveExperiencePoints(ESTAROSSA_XP);
     }
 }

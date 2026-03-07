@@ -5,7 +5,7 @@ import com.sevensins.boss.BossManager;
 import com.sevensins.boss.BossRewardTable;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
-import com.sevensins.entity.GrayDemonEntity;
+import com.sevensins.entity.EstarossaEntity;
 import com.sevensins.entity.RedDemonEntity;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
@@ -54,8 +54,8 @@ public class QuestEvents {
             return; // boss kill does not also count toward generic kill quests
         }
 
-        if (event.getEntity() instanceof GrayDemonEntity grayDemon) {
-            handleGrayDemonBossLogic(grayDemon, killer);
+        if (event.getEntity() instanceof EstarossaEntity estarossa) {
+            handleEstarossaBossLogic(estarossa, killer);
             return; // boss kill does not also count toward generic kill quests
         }
 
@@ -114,27 +114,27 @@ public class QuestEvents {
     }
 
     /**
-     * Handles all side-effects of the Gray Demon being killed by a player:
+     * Handles all side-effects of Estarossa being killed by a player:
      * <ol>
      *   <li>Unregisters the boss from {@link BossManager}.</li>
-     *   <li>Grants the XP reward via {@link BossRewardTable#onGrayDemonDeath}.</li>
-     *   <li>Completes the {@value QuestRegistry#SLAY_GRAY_DEMON_ID} quest if active.</li>
+     *   <li>Grants the XP reward via {@link BossRewardTable#onEstarossaDeath}.</li>
+     *   <li>Completes the {@value QuestRegistry#SLAY_ESTAROSSA_ID} quest if active.</li>
      *   <li>Broadcasts a server-wide defeat message.</li>
      * </ol>
      */
-    private static void handleGrayDemonBossLogic(GrayDemonEntity grayDemon, ServerPlayer killer) {
+    private static void handleEstarossaBossLogic(EstarossaEntity estarossa, ServerPlayer killer) {
         // Unregister from boss tracker
-        BossManager.getInstance().unregisterBoss(grayDemon.getUUID());
+        BossManager.getInstance().unregisterBoss(estarossa.getUUID());
 
         // Grant XP reward to the killer
-        BossRewardTable.onGrayDemonDeath(killer);
+        BossRewardTable.onEstarossaDeath(killer);
 
-        // Complete the slay_gray_demon quest if the killer has it active
+        // Complete the slay_estarossa quest if the killer has it active
         ModCapabilities.get(killer).ifPresent(cap -> {
             if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
             String activeId = cap.getData().getQuestData().getActiveQuestId();
-            if (QuestRegistry.SLAY_GRAY_DEMON_ID.equals(activeId)) {
-                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_GRAY_DEMON_ID);
+            if (QuestRegistry.SLAY_ESTAROSSA_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_ESTAROSSA_ID);
             }
         });
 
@@ -142,7 +142,7 @@ public class QuestEvents {
         if (killer.getServer() != null) {
             killer.getServer().getPlayerList()
                     .broadcastSystemMessage(
-                            Component.literal("The Gray Demon has been defeated."), false);
+                            Component.literal("Estarossa has been defeated."), false);
         }
     }
 }
