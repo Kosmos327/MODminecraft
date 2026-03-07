@@ -22,5 +22,6 @@ public class PlayerCharacterDataImpl implements IPlayerCharacterData {
         data.setJoinedToMeliodasTeam(other.isJoinedToMeliodasTeam());
         data.setPersonalStoryStage(other.getPersonalStoryStage());
         data.setUnlockedAbilities(other.getUnlockedAbilities());
+        data.copyQuestDataFrom(other);
     }
 }

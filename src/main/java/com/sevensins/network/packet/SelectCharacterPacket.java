@@ -3,6 +3,7 @@ package com.sevensins.network.packet;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.PlayerCharacterData;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.story.StoryTriggerService;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -57,10 +58,9 @@ public class SelectCharacterPacket {
      *
      * <ul>
      *   <li>Retrieves the {@link PlayerCharacterData} capability from the sender.</li>
-     *   <li>If the player has not yet selected a character (or if selection is
-     *       still permitted on first login), records the chosen character.</li>
-     *   <li>If the chosen character is {@link CharacterType#MELIODAS}, sets
-     *       {@code personalStoryStage = 1} to kick off Meliodas's personal arc.</li>
+     *   <li>If the player has not yet selected a character, records the chosen
+     *       character and triggers {@link StoryTriggerService#onCharacterSelected}
+     *       to begin Chapter 1 and assign the first quest.</li>
      * </ul>
      */
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
@@ -77,17 +77,16 @@ public class SelectCharacterPacket {
             if (player == null) return;
 
             ModCapabilities.get(player).ifPresent(capData -> {
-                PlayerCharacterData data = capData.getData();
-                // Allow selection only if the player hasn't chosen yet.
-                if (data.getSelectedCharacter() == CharacterType.NONE) {
-                    data.setSelectedCharacter(character);
+                    PlayerCharacterData data = capData.getData();
+                    // Allow selection only if the player hasn't chosen yet.
+                    if (data.getSelectedCharacter() == CharacterType.NONE) {
+                        data.setSelectedCharacter(character);
 
-                    // Meliodas special-case: begin personal story arc.
-                    if (character == CharacterType.MELIODAS) {
-                        data.setPersonalStoryStage(1);
+                        // Trigger story Chapter 1 and first quest (sets personalStoryStage
+                        // via StoryChapter.AWAKENING for all characters uniformly).
+                        StoryTriggerService.getInstance().onCharacterSelected(player, character);
                     }
-                }
-            });
+                });
         });
 
         ctx.setPacketHandled(true);

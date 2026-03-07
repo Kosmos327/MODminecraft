@@ -1,6 +1,7 @@
 package com.sevensins.character;
 
 import com.sevensins.ability.AbilityType;
+import com.sevensins.quest.PlayerQuestData;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -17,6 +18,7 @@ public class PlayerCharacterData {
     private boolean joinedToMeliodasTeam = false;
     private int personalStoryStage = 0;
     private final Set<AbilityType> unlockedAbilities = EnumSet.noneOf(AbilityType.class);
+    private final PlayerQuestData questData = new PlayerQuestData();
 
     public CharacterType getSelectedCharacter() {
         return selectedCharacter;
@@ -135,5 +137,19 @@ public class PlayerCharacterData {
     /** Returns {@code true} if the given ability has been unlocked. */
     public boolean hasUnlockedAbility(AbilityType ability) {
         return ability != null && unlockedAbilities.contains(ability);
+    }
+
+    // -------------------------------------------------------------------------
+    // Quest and story data
+    // -------------------------------------------------------------------------
+
+    /** Returns the per-player quest and story flag data. */
+    public PlayerQuestData getQuestData() {
+        return questData;
+    }
+
+    /** Copies all quest and story state from {@code other} into this instance. */
+    public void copyQuestDataFrom(PlayerCharacterData other) {
+        this.questData.copyFrom(other.questData);
     }
 }
