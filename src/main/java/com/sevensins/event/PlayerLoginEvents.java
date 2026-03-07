@@ -38,7 +38,7 @@ public class PlayerLoginEvents {
 
         ModCapabilities.get(serverPlayer).ifPresent(data -> {
             if (data.getData().getSelectedCharacter() == CharacterType.NONE) {
-                ModNetwork.INSTANCE.send(
+                ModNetwork.CHANNEL.send(
                         PacketDistributor.PLAYER.with(() -> serverPlayer),
                         new OpenCharacterSelectionPacket()
                 );

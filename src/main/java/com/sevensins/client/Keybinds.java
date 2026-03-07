@@ -1,9 +1,10 @@
 package com.sevensins.client;
 
 import com.sevensins.SevenSinsMod;
-import com.sevensins.ability.IAbility;
+import com.sevensins.ability.Ability;
+import com.sevensins.ability.AbilityManager;
 import com.sevensins.character.CharacterType;
-import com.sevensins.common.capability.ModCapabilities;
+import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.network.ModNetwork;
 import com.sevensins.network.packet.UseAbilityPacket;
 import net.minecraft.client.KeyMapping;
@@ -82,17 +83,16 @@ public class Keybinds {
             if (event.phase != TickEvent.Phase.END) return;
 
             // Ability one (R) – sends the first ability of the player's character.
-            // The player's character is resolved from their local ISinData capability
-            // (kept in sync by SinDataSyncPacket).
+            // The player's character is resolved from their IPlayerCharacterData capability.
             while (ABILITY_ONE.consumeClick()) {
                 Minecraft mc = Minecraft.getInstance();
                 if (mc.player == null) break;
 
-                mc.player.getCapability(ModCapabilities.SIN_DATA).ifPresent(sinData -> {
-                    CharacterType character = sinData.getCharacter();
-                    if (character == null) return;
+                ModCapabilities.get(mc.player).ifPresent(cap -> {
+                    CharacterType character = cap.getData().getSelectedCharacter();
+                    if (character == CharacterType.NONE) return;
 
-                    List<IAbility> abilities = character.getAbilities();
+                    List<Ability> abilities = AbilityManager.getAbilitiesFor(character);
                     if (abilities.isEmpty()) return;
 
                     ModNetwork.CHANNEL.send(

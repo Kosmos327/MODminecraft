@@ -1,5 +1,6 @@
 package com.sevensins.character.capability;
 
+import com.sevensins.character.CharacterType;
 import com.sevensins.character.PlayerCharacterData;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -40,11 +41,11 @@ public class PlayerCharacterDataProvider implements ICapabilitySerializable<Comp
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        tag.putString("selectedCharacter", data.getSelectedCharacter());
+        tag.putString("selectedCharacter", data.getSelectedCharacter().getSerializedName());
         tag.putInt("level", data.getLevel());
         tag.putInt("experience", data.getExperience());
-        tag.putFloat("mana", data.getMana());
-        tag.putFloat("maxMana", data.getMaxMana());
+        tag.putInt("mana", data.getMana());
+        tag.putInt("maxMana", data.getMaxMana());
         tag.putInt("skillPoints", data.getSkillPoints());
         tag.putBoolean("joinedToMeliodasTeam", data.isJoinedToMeliodasTeam());
         tag.putInt("personalStoryStage", data.getPersonalStoryStage());
@@ -54,7 +55,8 @@ public class PlayerCharacterDataProvider implements ICapabilitySerializable<Comp
     @Override
     public void deserializeNBT(CompoundTag tag) {
         if (tag.contains("selectedCharacter")) {
-            data.setSelectedCharacter(tag.getString("selectedCharacter"));
+            data.setSelectedCharacter(
+                    CharacterType.fromName(tag.getString("selectedCharacter")));
         }
         if (tag.contains("level")) {
             data.setLevel(tag.getInt("level"));
@@ -63,10 +65,10 @@ public class PlayerCharacterDataProvider implements ICapabilitySerializable<Comp
             data.setExperience(tag.getInt("experience"));
         }
         if (tag.contains("mana")) {
-            data.setMana(tag.getFloat("mana"));
+            data.setMana(tag.getInt("mana"));
         }
         if (tag.contains("maxMana")) {
-            data.setMaxMana(tag.getFloat("maxMana"));
+            data.setMaxMana(tag.getInt("maxMana"));
         }
         if (tag.contains("skillPoints")) {
             data.setSkillPoints(tag.getInt("skillPoints"));

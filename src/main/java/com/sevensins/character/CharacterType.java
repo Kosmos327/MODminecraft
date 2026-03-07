@@ -14,6 +14,14 @@ public enum CharacterType {
         return this.name().toLowerCase();
     }
 
+    /**
+     * Returns {@code true} if this is a concrete, selectable character
+     * (i.e. not {@link #NONE}).
+     */
+    public boolean isSelectable() {
+        return this != NONE;
+    }
+
     public static CharacterType fromName(String value) {
         if (value == null) {
             return NONE;

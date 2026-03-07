@@ -1,7 +1,7 @@
 package com.sevensins.client.event;
 
 import com.sevensins.SevenSinsMod;
-import com.sevensins.common.capability.ModCapabilities;
+import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.common.data.SinType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

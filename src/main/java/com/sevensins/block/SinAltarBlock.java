@@ -1,7 +1,7 @@
-package com.sevensins.common.block;
+package com.sevensins.block;
 
-import com.sevensins.common.capability.ModCapabilities;
-import com.sevensins.common.registry.ModSounds;
+import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;

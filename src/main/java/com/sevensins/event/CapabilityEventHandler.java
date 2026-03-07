@@ -1,8 +1,8 @@
-package com.sevensins.common.event;
+package com.sevensins.event;
 
 import com.sevensins.SevenSinsMod;
-import com.sevensins.common.capability.ModCapabilities;
-import com.sevensins.common.capability.SinDataProvider;
+import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.character.capability.SinDataProvider;
 import com.sevensins.network.ModNetwork;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -13,9 +13,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /**
- * Handles all capability lifecycle events:
+ * Handles all capability lifecycle events for the sin alignment system:
  * <ul>
- *   <li>Attaching {@link com.sevensins.common.capability.ISinData} to player entities.</li>
+ *   <li>Attaching {@link com.sevensins.character.capability.ISinData} to player entities.</li>
  *   <li>Copying capability data when a player respawns (death clone).</li>
  *   <li>Syncing capability data to the client on login, respawn, and dimension change.</li>
  * </ul>

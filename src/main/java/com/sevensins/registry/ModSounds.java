@@ -1,4 +1,4 @@
-package com.sevensins.common.registry;
+package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import net.minecraft.resources.ResourceLocation;

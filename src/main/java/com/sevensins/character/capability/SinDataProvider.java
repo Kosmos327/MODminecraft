@@ -1,4 +1,4 @@
-package com.sevensins.common.capability;
+package com.sevensins.character.capability;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Capability provider that attaches {@link ISinData} to a player entity.
- * Registered via {@link com.sevensins.common.event.CapabilityEventHandler}.
+ * Registered via {@link com.sevensins.event.CapabilityEventHandler}.
  */
 public class SinDataProvider implements ICapabilitySerializable<CompoundTag> {
 

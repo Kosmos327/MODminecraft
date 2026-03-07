@@ -1,11 +1,11 @@
 package com.sevensins;
 
 import com.mojang.logging.LogUtils;
-import com.sevensins.common.registry.ModBlocks;
-import com.sevensins.common.registry.ModCreativeTabs;
-import com.sevensins.common.registry.ModEffects;
-import com.sevensins.common.registry.ModItems;
-import com.sevensins.common.registry.ModSounds;
+import com.sevensins.registry.ModBlocks;
+import com.sevensins.registry.ModCreativeTabs;
+import com.sevensins.registry.ModEffects;
+import com.sevensins.registry.ModItems;
+import com.sevensins.registry.ModSounds;
 import com.sevensins.config.ModConfig;
 import com.sevensins.network.ModNetwork;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -26,10 +26,10 @@ import org.slf4j.Logger;
  *   <li>Triggers network channel registration during common setup.</li>
  * </ul>
  *
- * <p>Event handlers ({@link com.sevensins.common.event.CapabilityEventHandler},
+ * <p>Event handlers ({@link com.sevensins.event.CapabilityEventHandler},
  * {@link com.sevensins.server.event.ServerEventHandler},
  * {@link com.sevensins.client.event.ClientEventHandler}) and
- * {@link com.sevensins.common.capability.ModCapabilities} are auto-registered via
+ * {@link com.sevensins.character.capability.ModCapabilities} are auto-registered via
  * {@link Mod.EventBusSubscriber} annotations on those classes.
  */
 @Mod(SevenSinsMod.MODID)

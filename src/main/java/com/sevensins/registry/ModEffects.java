@@ -1,8 +1,8 @@
-package com.sevensins.common.registry;
+package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.common.data.SinType;
-import com.sevensins.common.effect.SinEffect;
+import com.sevensins.effect.SinEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraftforge.registries.DeferredRegister;
