@@ -1,5 +1,6 @@
 package com.sevensins.boss;
 
+import com.sevensins.entity.MythicRedDemonEntity;
 import net.minecraft.server.level.ServerPlayer;
 
 import javax.annotation.Nullable;

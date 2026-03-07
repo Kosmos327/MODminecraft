@@ -3,6 +3,7 @@ package com.sevensins.registry;
 import com.sevensins.SevenSinsMod;
 import com.sevensins.entity.DemonKingEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
+import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;

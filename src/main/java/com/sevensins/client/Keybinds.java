@@ -3,6 +3,8 @@ package com.sevensins.client;
 import com.sevensins.SevenSinsMod;
 import com.sevensins.ability.Ability;
 import com.sevensins.ability.AbilityManager;
+import com.sevensins.ability.AbilityType;
+import com.sevensins.ability.UltimateAbilityManager;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.client.screen.SkillTreeScreen;
@@ -65,6 +67,13 @@ public class Keybinds {
             KEY_CATEGORY
     );
 
+    /** G – activates the character's ultimate ability. */
+    public static final KeyMapping ULTIMATE = new KeyMapping(
+            "key.seven_sins.ultimate",
+            GLFW.GLFW_KEY_G,
+            KEY_CATEGORY
+    );
+
     // -------------------------------------------------------------------------
     // MOD bus – register keybindings
 
@@ -74,6 +83,7 @@ public class Keybinds {
         event.register(ABILITY_TWO);
         event.register(ABILITY_THREE);
         event.register(OPEN_SKILL_TREE);
+        event.register(ULTIMATE);
     }
 
     // -------------------------------------------------------------------------
@@ -129,6 +139,25 @@ public class Keybinds {
                 if (mc.player != null && mc.screen == null) {
                     mc.setScreen(new SkillTreeScreen());
                 }
+            }
+
+            // Ultimate (G) – sends the ultimate ability for the player's character to the server.
+            while (ULTIMATE.consumeClick()) {
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.player == null) break;
+
+                ModCapabilities.get(mc.player).ifPresent(cap -> {
+                    CharacterType character = cap.getData().getSelectedCharacter();
+                    if (character == CharacterType.NONE) return;
+
+                    AbilityType ultimateType = UltimateAbilityManager.getUltimateAbilityFor(character);
+                    if (ultimateType == AbilityType.NONE) return;
+
+                    ModNetwork.CHANNEL.send(
+                            PacketDistributor.SERVER.noArg(),
+                            new UseAbilityPacket(ultimateType)
+                    );
+                });
             }
         }
     }

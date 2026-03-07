@@ -13,7 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.UUID;
 
 /**
- * Registers the {@code /sevensins} command tree.
+ * Registers the {@code /sevensins dungeon} sub-command tree.
  *
  * <h2>Available sub-commands</h2>
  * <pre>
@@ -28,14 +28,10 @@ public final class DungeonCommand {
     private DungeonCommand() {}
 
     /**
-     * Registers all {@code /sevensins} sub-commands with the given
-     * {@link CommandDispatcher}.
+     * Registers the {@code dungeon} sub-tree under the given root literal builder.
+     * The root must already have the required permission check applied.
      */
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        LiteralArgumentBuilder<CommandSourceStack> root =
-                Commands.literal("sevensins")
-                        .requires(src -> src.hasPermission(2));
-
+    public static void registerUnder(LiteralArgumentBuilder<CommandSourceStack> root) {
         // /sevensins dungeon spawn demon_cave
         root.then(Commands.literal("dungeon")
                 .then(Commands.literal("spawn")
@@ -44,7 +40,21 @@ public final class DungeonCommand {
                 .then(Commands.literal("quest")
                         .then(Commands.literal("assign")
                                 .executes(ctx -> assignDungeonQuest(ctx.getSource())))));
+    }
 
+    /**
+     * Registers all {@code /sevensins dungeon} sub-commands with the given
+     * {@link CommandDispatcher}.
+     *
+     * <p><em>Note:</em> {@link com.sevensins.event.CommandRegistrationEvents} now builds a
+     * single shared root and calls {@link #registerUnder} directly. This method is kept
+     * for backward compatibility and standalone testing only.</p>
+     */
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        LiteralArgumentBuilder<CommandSourceStack> root =
+                Commands.literal("sevensins")
+                        .requires(src -> src.hasPermission(2));
+        registerUnder(root);
         dispatcher.register(root);
     }
 

@@ -1,6 +1,7 @@
 package com.sevensins.server.event;
 
 import com.sevensins.SevenSinsMod;
+import com.sevensins.ability.UltimateAbilityManager;
 import com.sevensins.character.capability.ISinData;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.common.data.SinType;
@@ -9,6 +10,7 @@ import com.sevensins.network.ModNetwork;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,9 +28,15 @@ public class ServerEventHandler {
     /**
      * Awards Wrath experience when the aligned player kills a living entity.
      * Other sins can hook similar events to earn experience relevant to their theme.
+     * Also clears the ultimate state of any player who dies.
      */
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
+        // If a player dies, clear their active ultimate state (effects are removed by Minecraft).
+        if (event.getEntity() instanceof ServerPlayer dyingPlayer) {
+            UltimateAbilityManager.clearPlayer(dyingPlayer.getUUID());
+        }
+
         Entity attacker = event.getSource().getEntity();
         if (!(attacker instanceof ServerPlayer player)) return;
 
@@ -50,6 +58,20 @@ public class ServerEventHandler {
                 ModNetwork.syncToPlayer(sinData, player);
             }
         });
+    }
+
+    // -------------------------------------------------------------------------
+    // Server tick – expire ultimates
+    // -------------------------------------------------------------------------
+
+    /**
+     * Checks every server tick whether any active ultimates have expired and
+     * cleans them up if so.
+     */
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        UltimateAbilityManager.tickAll(event.server);
     }
 
     // -------------------------------------------------------------------------

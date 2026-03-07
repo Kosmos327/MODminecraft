@@ -50,6 +50,11 @@ public class QuestEvents {
         if (!(event.getSource().getEntity() instanceof ServerPlayer killer)) return;
 
         // --- Boss-specific handling ---
+        // MythicRedDemonEntity must be checked BEFORE RedDemonEntity (it is a subclass)
+        if (event.getEntity() instanceof MythicRedDemonEntity mythicDemon) {
+            handleMythicRedDemonBossLogic(mythicDemon, killer);
+            return;
+        }
         if (event.getEntity() instanceof RedDemonEntity redDemon) {
             handleRedDemonBossLogic(redDemon, killer);
             return; // boss kill does not also count toward generic kill quests
