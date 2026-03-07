@@ -37,7 +37,10 @@ public enum StoryFlag {
     OBTAINED_RHITTA("obtained_rhitta"),
 
     /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
-    OBTAINED_CHASTIEFOL("obtained_chastiefol");
+    OBTAINED_CHASTIEFOL("obtained_chastiefol"),
+
+    /** Set when the player first upgrades a Sacred Treasure at the Sacred Forge. */
+    SACRED_TREASURE_UPGRADED("sacred_treasure_upgraded");
 
     private final String id;
 
