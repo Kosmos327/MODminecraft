@@ -30,12 +30,30 @@ public final class DungeonCommand {
     /**
      * Registers all {@code /sevensins} sub-commands with the given
      * {@link CommandDispatcher}.
+     *
+     * @deprecated Prefer building a shared root and calling
+     *             {@link #registerUnder(LiteralArgumentBuilder)} so that all
+     *             {@code /sevensins} sub-commands share a single root node.
      */
+    @Deprecated
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralArgumentBuilder<CommandSourceStack> root =
                 Commands.literal("sevensins")
                         .requires(src -> src.hasPermission(2));
+        registerUnder(root);
+        dispatcher.register(root);
+    }
 
+    /**
+     * Attaches all {@code dungeon} sub-commands to the given
+     * {@code /sevensins} root node.
+     *
+     * <p>Use this method when composing the command tree so that all
+     * {@code /sevensins} sub-commands share a single root.</p>
+     *
+     * @param root the root {@code /sevensins} literal builder
+     */
+    public static void registerUnder(LiteralArgumentBuilder<CommandSourceStack> root) {
         // /sevensins dungeon spawn demon_cave
         root.then(Commands.literal("dungeon")
                 .then(Commands.literal("spawn")
@@ -44,8 +62,6 @@ public final class DungeonCommand {
                 .then(Commands.literal("quest")
                         .then(Commands.literal("assign")
                                 .executes(ctx -> assignDungeonQuest(ctx.getSource())))));
-
-        dispatcher.register(root);
     }
 
     // -------------------------------------------------------------------------
