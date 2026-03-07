@@ -1,6 +1,5 @@
 package com.sevensins.ability;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,23 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * cooldown expires.  {@link System#currentTimeMillis()} is used so that the
  * map stays correct even across server ticks.</p>
  *
- * <h2>Optimisations</h2>
- * <ul>
- *   <li><strong>Thread safety</strong>: the outer map now uses
- *       {@link ConcurrentHashMap} so ability lookups from server tick threads
- *       and ability activation threads do not race.</li>
- *   <li><strong>Lazy expired-entry removal</strong>: {@link #isOnCooldown} and
- *       {@link #getRemainingMs} silently clean up entries that have already
- *       expired, preventing unbounded map growth over long sessions.</li>
- *   <li><strong>Explicit cleanup</strong>: {@link #removeExpiredForPlayer(UUID)}
- *       allows callers to proactively free memory for a specific player.</li>
- * </ul>
+ * <p>Thread-safe: uses {@link ConcurrentHashMap} for both the outer UUID map
+ * and each inner ability map, so concurrent reads from the server tick thread
+ * and network-handler threads do not cause {@link java.util.ConcurrentModificationException}.</p>
  */
 public class CooldownManager {
 
     /** UUID → (AbilityType → expiry time in ms) */
-    private static final ConcurrentHashMap<UUID, ConcurrentHashMap<AbilityType, Long>> COOLDOWNS =
-            new ConcurrentHashMap<>();
+    private static final Map<UUID, Map<AbilityType, Long>> COOLDOWNS = new ConcurrentHashMap<>();
 
     private CooldownManager() {}
 

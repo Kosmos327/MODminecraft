@@ -33,7 +33,7 @@ public class PlayerCharacterData {
     }
 
     public void setLevel(int level) {
-        this.level = level;
+        this.level = Math.max(1, level);
     }
 
     public int getExperience() {
@@ -41,7 +41,7 @@ public class PlayerCharacterData {
     }
 
     public void setExperience(int experience) {
-        this.experience = experience;
+        this.experience = Math.max(0, experience);
     }
 
     public int getMana() {
@@ -65,7 +65,7 @@ public class PlayerCharacterData {
     }
 
     public void setSkillPoints(int skillPoints) {
-        this.skillPoints = skillPoints;
+        this.skillPoints = Math.max(0, skillPoints);
     }
 
     public boolean isJoinedToMeliodasTeam() {

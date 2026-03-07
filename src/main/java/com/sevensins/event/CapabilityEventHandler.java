@@ -46,11 +46,11 @@ public class CapabilityEventHandler {
     /**
      * Copies sin data from the old player instance to the new one.
      * Called after death (clone) and when returning from the End.
+     * We copy in both cases so that sin progression is preserved across
+     * dimension transitions as well as respawns.
      */
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        if (!event.isWasDeath()) return;
-
         event.getOriginal().reviveCaps();
         event.getOriginal().getCapability(ModCapabilities.SIN_DATA).ifPresent(oldData ->
                 event.getEntity().getCapability(ModCapabilities.SIN_DATA)
