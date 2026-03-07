@@ -41,6 +41,20 @@ public class CooldownManager {
     }
 
     /**
+     * Returns the remaining cooldown time in milliseconds for the given ability,
+     * or {@code 0} if the ability is not on cooldown.
+     *
+     * <p>Safe to call from any thread. Returns 0 when no cooldown entry exists.</p>
+     */
+    public static long getRemainingMs(UUID playerId, AbilityType ability) {
+        Map<AbilityType, Long> playerMap = COOLDOWNS.get(playerId);
+        if (playerMap == null) return 0L;
+        Long expiry = playerMap.get(ability);
+        if (expiry == null) return 0L;
+        return Math.max(0L, expiry - System.currentTimeMillis());
+    }
+
+    /**
      * Removes all cooldown entries for a player (e.g. on logout).
      */
     public static void clearCooldowns(UUID playerId) {

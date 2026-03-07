@@ -7,11 +7,15 @@ import com.sevensins.ability.IAbility;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.mana.ManaManager;
+import com.sevensins.network.ModNetwork;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.PacketDistributor;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -28,6 +32,8 @@ import java.util.function.Supplier;
  *   <li>Checks mana via {@link ManaManager} – aborts if mana is insufficient.</li>
  *   <li>Consumes mana, records a new cooldown, then calls
  *       {@link IAbility#activate(ServerPlayer)}.</li>
+ *   <li>Sends a {@link SyncCooldownPacket} back to the client so the
+ *       cooldown HUD updates immediately.</li>
  * </ol>
  * </p>
  */
@@ -83,6 +89,15 @@ public class UseAbilityPacket {
                 CooldownManager.setCooldown(
                         player.getUUID(), packet.abilityType, ability.getCooldownTicks());
                 ability.activate(player);
+
+                // 6. Sync the new cooldown state back to the client HUD
+                long expiryMs = System.currentTimeMillis()
+                        + (long) ability.getCooldownTicks() * 50L;
+                Map<AbilityType, Long> cooldownMap = new EnumMap<>(AbilityType.class);
+                cooldownMap.put(packet.abilityType, expiryMs);
+                ModNetwork.CHANNEL.send(
+                        PacketDistributor.PLAYER.with(() -> player),
+                        new SyncCooldownPacket(cooldownMap));
             });
         });
         ctx.setPacketHandled(true);
