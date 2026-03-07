@@ -1,0 +1,115 @@
+package com.sevensins.story;
+
+import com.sevensins.character.CharacterType;
+import com.sevensins.character.PlayerCharacterData;
+import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.quest.PlayerQuestData;
+import com.sevensins.quest.QuestManager;
+import com.sevensins.quest.QuestRegistry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+
+/**
+ * Drives the story flow for Chapter 1: "The Awakening of Sin".
+ *
+ * <p>Acts as a bridge between the character system, quest system, and story
+ * progression.  All public methods are safe to call from the server thread;
+ * missing capability data is handled without throwing.</p>
+ *
+ * <p>Singleton — obtain via {@link #getInstance()}.</p>
+ */
+public final class StoryTriggerService {
+
+    private static final StoryTriggerService INSTANCE = new StoryTriggerService();
+
+    private StoryTriggerService() {}
+
+    /** Returns the singleton {@link StoryTriggerService}. */
+    public static StoryTriggerService getInstance() {
+        return INSTANCE;
+    }
+
+    // -------------------------------------------------------------------------
+    // Character selection hook
+    // -------------------------------------------------------------------------
+
+    /**
+     * Called after a player successfully selects a {@link CharacterType}.
+     *
+     * <ul>
+     *   <li>Begins Chapter 1 ({@link StoryChapter#AWAKENING}) if no chapter
+     *       is active yet.</li>
+     *   <li>Assigns the {@value QuestRegistry#AWAKENING_TRIAL_ID} quest if
+     *       the player has not already completed or started it.</li>
+     * </ul>
+     *
+     * @param player        the server-side player who selected a character
+     * @param characterType the chosen {@link CharacterType}
+     */
+    public void onCharacterSelected(ServerPlayer player, CharacterType characterType) {
+        if (player == null || characterType == null || !characterType.isSelectable()) {
+            return;
+        }
+
+        ModCapabilities.get(player).ifPresent(cap -> {
+            PlayerCharacterData charData = cap.getData();
+
+            // Begin Chapter 1 if not already started
+            if (charData.getPersonalStoryStage() == StoryChapter.NONE.getStage()) {
+                charData.setPersonalStoryStage(StoryChapter.AWAKENING.getStage());
+                player.sendSystemMessage(Component.literal("Your Sin has awakened..."));
+            }
+
+            // Assign the first quest if not already active or completed
+            checkAndAssignFirstQuest(player, charData);
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // Quest completion hook
+    // -------------------------------------------------------------------------
+
+    /**
+     * Called by {@link QuestManager} after a quest is completed.
+     *
+     * <p>Handles story advancement for known quest IDs.</p>
+     *
+     * @param player  the server-side player who completed the quest
+     * @param questId the ID of the completed quest
+     */
+    public void onQuestCompleted(ServerPlayer player, String questId) {
+        if (player == null || questId == null) return;
+
+        if (QuestRegistry.AWAKENING_TRIAL_ID.equals(questId)) {
+            onAwakeningTrialComplete(player);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Assigns the first quest ({@value QuestRegistry#AWAKENING_TRIAL_ID}) if
+     * the player has a valid character, has not completed it, and has no
+     * active quest.
+     *
+     * <p>Called on character selection and on login, so players who relog
+     * before completing the quest can still receive it.</p>
+     */
+    public void checkAndAssignFirstQuest(ServerPlayer player, PlayerCharacterData charData) {
+        if (charData.getSelectedCharacter() == CharacterType.NONE) return;
+        PlayerQuestData questData = charData.getQuestData();
+        if (!questData.isCompleted(QuestRegistry.AWAKENING_TRIAL_ID)
+                && questData.getActiveQuestId().isEmpty()) {
+            QuestManager.assignQuest(player, QuestRegistry.AWAKENING_TRIAL_ID);
+        }
+    }
+
+    private void onAwakeningTrialComplete(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            PlayerQuestData questData = cap.getData().getQuestData();
+            questData.addStoryFlag(StoryFlag.AWAKENING_TRIAL_COMPLETE.getId());
+        });
+    }
+}

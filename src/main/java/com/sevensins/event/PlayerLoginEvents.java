@@ -4,6 +4,7 @@ import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.network.ModNetwork;
 import com.sevensins.network.OpenCharacterSelectionPacket;
+import com.sevensins.story.StoryTriggerService;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -18,6 +19,10 @@ import net.minecraftforge.network.PacketDistributor;
  * {@code selectedCharacter} is still {@link CharacterType#NONE}), a
  * {@link OpenCharacterSelectionPacket} is sent to that specific client.
  * The client then opens {@link com.sevensins.client.screen.CharacterSelectionScreen}.
+ * <p>
+ * If the player already has a character but has not yet received the first
+ * story quest (e.g. they joined before this system was added, or they
+ * relogged before completing it), the quest is re-assigned here.
  * <p>
  * The GUI is never opened directly from the server — all screen logic is
  * handled via the dedicated network packet, which keeps the architecture
@@ -37,12 +42,19 @@ public class PlayerLoginEvents {
         }
 
         ModCapabilities.get(serverPlayer).ifPresent(data -> {
-            if (data.getData().getSelectedCharacter() == CharacterType.NONE) {
+            CharacterType character = data.getData().getSelectedCharacter();
+            if (character == CharacterType.NONE) {
+                // No character chosen yet — open the selection screen
                 ModNetwork.CHANNEL.send(
                         PacketDistributor.PLAYER.with(() -> serverPlayer),
                         new OpenCharacterSelectionPacket()
                 );
+            } else {
+                // Character already chosen — ensure first quest is assigned if not done yet
+                StoryTriggerService.getInstance()
+                        .checkAndAssignFirstQuest(serverPlayer, data.getData());
             }
         });
     }
 }
+
