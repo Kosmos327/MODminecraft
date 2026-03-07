@@ -3,6 +3,7 @@ package com.sevensins.event;
 import com.sevensins.SevenSinsMod;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.character.capability.SinDataProvider;
+import com.sevensins.network.DirtySyncTracker;
 import com.sevensins.network.ModNetwork;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -19,9 +20,18 @@ import net.minecraftforge.fml.common.Mod;
  *   <li>Copying capability data when a player respawns (death clone).</li>
  *   <li>Syncing capability data to the client on login, respawn, and dimension change.</li>
  * </ul>
+ *
+ * <h2>Sync throttling</h2>
+ * Dimension-change syncs are throttled via {@link DirtySyncTracker} to avoid
+ * sending duplicate packets when the event fires in rapid succession (e.g.
+ * during teleportation chains).  Login and respawn syncs always go through
+ * unconditionally because correctness is critical on those paths.
  */
 @Mod.EventBusSubscriber(modid = SevenSinsMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CapabilityEventHandler {
+
+    /** Minimum interval between dimension-change sin-data syncs (ms). */
+    private static final long DIMENSION_SYNC_INTERVAL_MS = 1_000L;
 
     @SubscribeEvent
     public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
@@ -66,12 +76,21 @@ public class CapabilityEventHandler {
         }
     }
 
-    /** Syncs capability data after a player changes dimension. */
+    /**
+     * Syncs capability data after a player changes dimension.
+     *
+     * <p>Throttled via {@link DirtySyncTracker} to at most one packet per
+     * {@value #DIMENSION_SYNC_INTERVAL_MS} ms, preventing packet bursts during
+     * back-to-back dimension transitions.</p>
+     */
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            player.getCapability(ModCapabilities.SIN_DATA)
-                    .ifPresent(data -> ModNetwork.syncToPlayer(data, player));
-        }
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!DirtySyncTracker.canSync(player.getUUID(), DIMENSION_SYNC_INTERVAL_MS)) return;
+
+        player.getCapability(ModCapabilities.SIN_DATA).ifPresent(data -> {
+            ModNetwork.syncToPlayer(data, player);
+            DirtySyncTracker.recordSync(player.getUUID());
+        });
     }
 }
