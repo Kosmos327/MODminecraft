@@ -37,7 +37,19 @@ public enum StoryFlag {
     OBTAINED_RHITTA("obtained_rhitta"),
 
     /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
-    OBTAINED_CHASTIEFOL("obtained_chastiefol");
+    OBTAINED_CHASTIEFOL("obtained_chastiefol"),
+
+    /** Set when the player first encounters Estarossa. */
+    ESTAROSSA_ENCOUNTERED("estarossa_encountered"),
+
+    /** Set when Estarossa first transitions to Phase 2 in the player's encounter. */
+    ESTAROSSA_PHASE_2_SEEN("estarossa_phase_2_seen"),
+
+    /** Set when Estarossa enters the ENRAGED phase in the player's encounter. */
+    ESTAROSSA_ENRAGED_SEEN("estarossa_enraged_seen"),
+
+    /** Set after the player defeats Estarossa. */
+    ESTAROSSA_SLAIN("estarossa_slain");
 
     private final String id;
 

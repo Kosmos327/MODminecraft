@@ -1,6 +1,7 @@
 package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
+import com.sevensins.entity.EstarossaEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
 import com.sevensins.entity.RedDemonEntity;
 import net.minecraft.world.entity.EntityType;
@@ -39,6 +40,16 @@ public class ModEntities {
                             .build(SevenSinsMod.MODID + ":" + RedDemonEntity.REGISTRY_NAME)
             );
 
+    /** Estarossa boss — spawnable via {@code /summon seven_sins:estarossa} for testing. */
+    public static final RegistryObject<EntityType<EstarossaEntity>> ESTAROSSA =
+            ENTITY_TYPES.register(
+                    EstarossaEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<EstarossaEntity>of(EstarossaEntity::new, MobCategory.MONSTER)
+                            .sized(0.8f, 2.5f)
+                            .build(SevenSinsMod.MODID + ":" + EstarossaEntity.REGISTRY_NAME)
+            );
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
@@ -47,5 +58,6 @@ public class ModEntities {
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(MELIODAS_NPC.get(), MeliodasNpcEntity.createAttributes().build());
         event.put(RED_DEMON.get(), RedDemonEntity.createAttributes().build());
+        event.put(ESTAROSSA.get(), EstarossaEntity.createAttributes().build());
     }
 }

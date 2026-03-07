@@ -26,8 +26,8 @@ public final class QuestRegistry {
 
     // Sacred Treasure quest placeholder IDs (scaffold for future story chapters)
 
-    /** ID of the quest to obtain Lostvayne. */
-    public static final String OBTAIN_LOSTVAYNE_ID = "obtain_lostvayne";
+    /** ID of the Chapter 5 Estarossa boss quest. */
+    public static final String SLAY_ESTAROSSA_ID = "slay_estarossa";
 
     /** ID of the quest to obtain the Divine Axe Rhitta. */
     public static final String OBTAIN_RHITTA_ID = "obtain_rhitta";
@@ -64,6 +64,13 @@ public final class QuestRegistry {
                 "Into the Demon Cave",
                 "Enter and clear a Demon Cave corrupted by demonic energy.",
                 QuestType.DUNGEON_CLEAR,
+                1
+        ));
+        register(new Quest(
+                SLAY_ESTAROSSA_ID,
+                "Estarossa, Harbinger of Darkness",
+                "Defeat Estarossa, the elite demon warrior standing before the final darkness.",
+                QuestType.KILL,
                 1
         ));
     }

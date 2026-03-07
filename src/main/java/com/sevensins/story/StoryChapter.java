@@ -22,7 +22,10 @@ public enum StoryChapter {
     RED_DEMON(3),
 
     /** Chapter 4 — "Into the Demon Cave". */
-    DEMON_CAVE(4);
+    DEMON_CAVE(4),
+
+    /** Chapter 5 — "Estarossa, Harbinger of Darkness". */
+    ESTAROSSA(5);
 
     private final int stage;
 

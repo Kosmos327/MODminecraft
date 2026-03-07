@@ -89,6 +89,8 @@ public final class StoryTriggerService {
             onRedDemonSlain(player);
         } else if (QuestRegistry.CLEAR_DEMON_CAVE_ID.equals(questId)) {
             onDemonCaveQuestComplete(player);
+        } else if (QuestRegistry.SLAY_ESTAROSSA_ID.equals(questId)) {
+            onEstarossaSlain(player);
         }
     }
 
@@ -153,6 +155,23 @@ public final class StoryTriggerService {
             cap.getData().setPersonalStoryStage(StoryChapter.DEMON_CAVE.getStage());
             player.sendSystemMessage(
                     Component.literal("Chapter complete: the Demon Cave has been purged."));
+            // Begin Chapter 5 — Estarossa stands before the final darkness
+            player.sendSystemMessage(Component.literal(
+                    "A powerful dark presence stirs beyond the cave. Seek Estarossa."));
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_ESTAROSSA_ID);
+        });
+    }
+
+    private void onEstarossaSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            PlayerQuestData questData = cap.getData().getQuestData();
+            questData.addStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.ESTAROSSA.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated Estarossa!").withStyle(
+                            net.minecraft.ChatFormatting.DARK_PURPLE));
+            player.sendSystemMessage(Component.literal(
+                    "The path to the final darkness lies ahead..."));
         });
     }
 
