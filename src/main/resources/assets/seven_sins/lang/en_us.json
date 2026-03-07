@@ -1,0 +1,43 @@
+{
+  "itemGroup.seven_sins.main": "Seven Deadly Sins",
+
+  "item.seven_sins.wrath_emblem":    "Emblem of Wrath",
+  "item.seven_sins.greed_emblem":    "Emblem of Greed",
+  "item.seven_sins.sloth_emblem":    "Emblem of Sloth",
+  "item.seven_sins.pride_emblem":    "Emblem of Pride",
+  "item.seven_sins.lust_emblem":     "Emblem of Lust",
+  "item.seven_sins.envy_emblem":     "Emblem of Envy",
+  "item.seven_sins.gluttony_emblem": "Emblem of Gluttony",
+
+  "block.seven_sins.sin_altar": "Sin Altar",
+  "block.seven_sins.sin_altar.aligned":   "You are aligned with %s (Level %s)",
+  "block.seven_sins.sin_altar.unaligned": "You are not yet aligned with any sin. Use a Sin Emblem to choose your path.",
+
+  "sin.seven_sins.wrath":    "Wrath",
+  "sin.seven_sins.greed":    "Greed",
+  "sin.seven_sins.sloth":    "Sloth",
+  "sin.seven_sins.pride":    "Pride",
+  "sin.seven_sins.lust":     "Lust",
+  "sin.seven_sins.envy":     "Envy",
+  "sin.seven_sins.gluttony": "Gluttony",
+
+  "sin.seven_sins.wrath.description":    "The sin of uncontrolled rage and violent anger.",
+  "sin.seven_sins.greed.description":    "The sin of excessive desire for wealth and power.",
+  "sin.seven_sins.sloth.description":    "The sin of laziness and failure to act.",
+  "sin.seven_sins.pride.description":    "The sin of excessive belief in one's own superiority.",
+  "sin.seven_sins.lust.description":     "The sin of intense craving and overwhelming desire.",
+  "sin.seven_sins.envy.description":     "The sin of coveting what rightfully belongs to others.",
+  "sin.seven_sins.gluttony.description": "The sin of overindulgence and insatiable appetite.",
+
+  "effect.seven_sins.wrath":    "Wrath",
+  "effect.seven_sins.greed":    "Greed",
+  "effect.seven_sins.sloth":    "Sloth",
+  "effect.seven_sins.pride":    "Pride",
+  "effect.seven_sins.lust":     "Lust",
+  "effect.seven_sins.envy":     "Envy",
+  "effect.seven_sins.gluttony": "Gluttony",
+
+  "message.seven_sins.sin_chosen":      "You have chosen the path of %s. There is no turning back.",
+  "message.seven_sins.already_aligned": "You are already bound to a sin.",
+  "message.seven_sins.sin_level_up":    "Your %s has reached level %s!"
+}

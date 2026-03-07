@@ -1,20 +1,23 @@
-# Gradle
-.gradle/
+# Gradle build output
 build/
+.gradle/
 out/
+run/
+src/generated/
 
-# IDE
+# IDE files
 .idea/
 *.iml
-.eclipse/
-*.classpath
-*.project
+.classpath
+.project
 .settings/
-*.vscode/
+*.eclipse
+bin/
 
-# Runtime data
-run/
-logs/
+# Gradle wrapper binary (download separately with: gradle wrapper)
+gradle/wrapper/gradle-wrapper.jar
+gradlew
+gradlew.bat
 
 # OS
 .DS_Store

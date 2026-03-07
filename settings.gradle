@@ -1,8 +1,11 @@
 pluginManagement {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
         gradlePluginPortal()
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
     }
 }
 
-rootProject.name = 'seven_sins'
+rootProject.name = 'SevenDeadlySins'

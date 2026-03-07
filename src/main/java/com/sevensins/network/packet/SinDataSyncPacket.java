@@ -1,46 +1,75 @@
 package com.sevensins.network.packet;
 
+import com.sevensins.common.capability.ISinData;
+import com.sevensins.common.capability.ModCapabilities;
+import com.sevensins.common.capability.SinData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 /**
- * Server → Client packet that synchronises the full {@code ISinData} state to
- * the owning player.
+ * Server → Client packet that synchronises a player's {@link ISinData} capability.
+ *
+ * <p>Sent on login, respawn, and dimension change, as well as whenever the
+ * sin data changes server-side (alignment, level-up, etc.).
  */
 public class SinDataSyncPacket {
 
-    // Placeholder payload – expand fields as ISinData grows.
-    private final String characterName;
+    private final CompoundTag nbt;
 
-    public SinDataSyncPacket(String characterName) {
-        this.characterName = characterName;
+    public SinDataSyncPacket(ISinData sinData) {
+        this.nbt = sinData.serializeNBT();
+    }
+
+    private SinDataSyncPacket(CompoundTag nbt) {
+        this.nbt = nbt;
     }
 
     // -------------------------------------------------------------------------
+    // Codec
+    // -------------------------------------------------------------------------
+
+    public static void encode(SinDataSyncPacket packet, FriendlyByteBuf buf) {
+        buf.writeNbt(packet.nbt);
+    }
 
     public static SinDataSyncPacket decode(FriendlyByteBuf buf) {
-        return new SinDataSyncPacket(buf.readUtf());
+        return new SinDataSyncPacket(buf.readNbt());
     }
 
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeUtf(characterName == null ? "" : characterName);
-    }
+    // -------------------------------------------------------------------------
+    // Handler (runs on the receiving side – always the client for this packet)
+    // -------------------------------------------------------------------------
 
-    public void handle(Supplier<NetworkEvent.Context> ctxSupplier) {
-        NetworkEvent.Context ctx = ctxSupplier.get();
-        ctx.enqueueWork(() -> {
-            // Client-side: update local capability cache
-            // TODO: resolve client-side ISinData and apply characterName
-        });
+    public static void handle(SinDataSyncPacket packet,
+                               Supplier<NetworkEvent.Context> contextSupplier) {
+        NetworkEvent.Context ctx = contextSupplier.get();
+        ctx.enqueueWork(() ->
+                // Guard the Minecraft client reference so the class is safe to load
+                // on a dedicated server (where this packet is never received).
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                        () -> () -> handleOnClient(packet.nbt)));
         ctx.setPacketHandled(true);
     }
 
     // -------------------------------------------------------------------------
+    // Client-only handler
+    // -------------------------------------------------------------------------
 
-    public String getCharacterName() {
-        return characterName;
+    private static void handleOnClient(CompoundTag nbt) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        player.getCapability(ModCapabilities.SIN_DATA).ifPresent(sinData -> {
+            if (sinData instanceof SinData concrete) {
+                concrete.deserializeNBT(nbt);
+            }
+        });
     }
 }

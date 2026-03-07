@@ -1,11 +1,12 @@
 modLoader="javafml"
 loaderVersion="[47,)"
 license="MIT"
+issueTrackerURL="https://github.com/Kosmos327/MODminecraft/issues"
 
 [[dependencies.seven_sins]]
     modId="forge"
     mandatory=true
-    versionRange="[47.2,)"
+    versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
 
@@ -17,11 +18,10 @@ license="MIT"
     side="BOTH"
 
 [[mods]]
-    modId="seven_sins"
-    version="${file.jarVersion}"
-    displayName="Seven Sins Mod"
-    description='''
-        A Forge 1.20.1 mod featuring the seven deadly sins.
-    '''
-    logoFile="seven_sins.png"
-    authors="sevensins"
+modId="seven_sins"
+version="${file.jarVersion}"
+displayName="Seven Deadly Sins"
+description='''
+A story RPG mod for 1-2 players based on the Seven Deadly Sins.
+Choose your sin, gain power, and unravel the dark story.
+'''
