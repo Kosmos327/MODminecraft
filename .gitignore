@@ -1,0 +1,24 @@
+# Gradle build output
+build/
+.gradle/
+out/
+run/
+src/generated/
+
+# IDE files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.eclipse
+bin/
+
+# Gradle wrapper binary (download separately with: gradle wrapper)
+gradle/wrapper/gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+# OS
+.DS_Store
+Thumbs.db

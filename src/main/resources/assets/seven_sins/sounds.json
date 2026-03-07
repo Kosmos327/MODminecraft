@@ -1,0 +1,32 @@
+{
+  "seven_sins:sin_align": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "seven_sins:sin_align",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "seven_sins:sin_level_up": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "seven_sins:sin_level_up",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "seven_sins:altar_activate": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "seven_sins:altar_activate",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  }
+}
