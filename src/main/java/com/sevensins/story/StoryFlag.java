@@ -37,7 +37,29 @@ public enum StoryFlag {
     OBTAINED_RHITTA("obtained_rhitta"),
 
     /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
-    OBTAINED_CHASTIEFOL("obtained_chastiefol");
+    OBTAINED_CHASTIEFOL("obtained_chastiefol"),
+
+    // -------------------------------------------------------------------------
+    // Demon King flags
+    // -------------------------------------------------------------------------
+
+    /** Set the first time the player enters the Demon King's arena. */
+    DEMON_KING_ENCOUNTERED("demon_king_encountered"),
+
+    /** Set when the Demon King transitions to Phase 2 (75 % HP). */
+    DEMON_KING_PHASE_2_SEEN("demon_king_phase_2_seen"),
+
+    /** Set when the Demon King transitions to Phase 3 (45 % HP). */
+    DEMON_KING_PHASE_3_SEEN("demon_king_phase_3_seen"),
+
+    /** Set when the Demon King enters Final Phase (15 % HP). */
+    DEMON_KING_FINAL_PHASE_SEEN("demon_king_final_phase_seen"),
+
+    /** Set when the player defeats the Demon King. */
+    DEMON_KING_SLAIN("demon_king_slain"),
+
+    /** Set when the main story is fully completed (Demon King defeated). */
+    MAIN_STORY_COMPLETE("main_story_complete");
 
     private final String id;
 

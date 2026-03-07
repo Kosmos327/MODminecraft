@@ -1,6 +1,7 @@
 package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
+import com.sevensins.entity.DemonKingEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
 import com.sevensins.entity.RedDemonEntity;
 import net.minecraft.world.entity.EntityType;
@@ -39,6 +40,16 @@ public class ModEntities {
                             .build(SevenSinsMod.MODID + ":" + RedDemonEntity.REGISTRY_NAME)
             );
 
+    /** Demon King final boss — spawnable via {@code /summon seven_sins:demon_king} for testing. */
+    public static final RegistryObject<EntityType<DemonKingEntity>> DEMON_KING =
+            ENTITY_TYPES.register(
+                    DemonKingEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<DemonKingEntity>of(DemonKingEntity::new, MobCategory.MONSTER)
+                            .sized(1.0f, 3.0f)
+                            .build(SevenSinsMod.MODID + ":" + DemonKingEntity.REGISTRY_NAME)
+            );
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
@@ -47,5 +58,6 @@ public class ModEntities {
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(MELIODAS_NPC.get(), MeliodasNpcEntity.createAttributes().build());
         event.put(RED_DEMON.get(), RedDemonEntity.createAttributes().build());
+        event.put(DEMON_KING.get(), DemonKingEntity.createAttributes().build());
     }
 }

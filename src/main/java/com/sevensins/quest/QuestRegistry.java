@@ -35,6 +35,9 @@ public final class QuestRegistry {
     /** ID of the quest to obtain Spirit Spear Chastiefol. */
     public static final String OBTAIN_CHASTIEFOL_ID = "obtain_chastiefol";
 
+    /** ID of the final boss quest — slay the Demon King. */
+    public static final String SLAY_DEMON_KING_ID = "slay_demon_king";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {
@@ -64,6 +67,13 @@ public final class QuestRegistry {
                 "Into the Demon Cave",
                 "Enter and clear a Demon Cave corrupted by demonic energy.",
                 QuestType.DUNGEON_CLEAR,
+                1
+        ));
+        register(new Quest(
+                SLAY_DEMON_KING_ID,
+                "The Demon King",
+                "Defeat the Demon King and end the demonic catastrophe.",
+                QuestType.KILL,
                 1
         ));
     }

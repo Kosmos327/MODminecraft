@@ -5,9 +5,11 @@ import com.sevensins.boss.BossManager;
 import com.sevensins.boss.BossRewardTable;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.entity.DemonKingEntity;
 import com.sevensins.entity.RedDemonEntity;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
+import com.sevensins.story.StoryFlag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.monster.Monster;
@@ -51,6 +53,11 @@ public class QuestEvents {
         if (event.getEntity() instanceof RedDemonEntity redDemon) {
             handleRedDemonBossLogic(redDemon, killer);
             return; // boss kill does not also count toward generic kill quests
+        }
+
+        if (event.getEntity() instanceof DemonKingEntity demonKing) {
+            handleDemonKingBossLogic(demonKing, killer);
+            return;
         }
 
         // --- Generic monster kill handling ---
@@ -104,6 +111,44 @@ public class QuestEvents {
             killer.getServer().getPlayerList()
                     .broadcastSystemMessage(
                             Component.literal("The Red Demon has been defeated."), false);
+        }
+    }
+
+    /**
+     * Handles all side-effects of the Demon King being killed by a player:
+     * <ol>
+     *   <li>Unregisters the boss from {@link BossManager}.</li>
+     *   <li>Grants the XP reward via {@link BossRewardTable#onDemonKingDeath}.</li>
+     *   <li>Completes the {@value QuestRegistry#SLAY_DEMON_KING_ID} quest if active.</li>
+     *   <li>Sets the {@link StoryFlag#DEMON_KING_SLAIN} and
+     *       {@link StoryFlag#MAIN_STORY_COMPLETE} story flags.</li>
+     *   <li>Broadcasts a server-wide defeat message.</li>
+     * </ol>
+     */
+    private static void handleDemonKingBossLogic(DemonKingEntity demonKing, ServerPlayer killer) {
+        BossManager.getInstance().unregisterBoss(demonKing.getUUID());
+
+        BossRewardTable.onDemonKingDeath(killer);
+
+        ModCapabilities.get(killer).ifPresent(cap -> {
+            if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
+
+            // Complete the final quest if active
+            String activeId = cap.getData().getQuestData().getActiveQuestId();
+            if (QuestRegistry.SLAY_DEMON_KING_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_DEMON_KING_ID);
+            }
+
+            // Set story flags for kill and main story completion
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.MAIN_STORY_COMPLETE.getId());
+        });
+
+        // Server-wide broadcast
+        if (killer.getServer() != null) {
+            killer.getServer().getPlayerList()
+                    .broadcastSystemMessage(
+                            Component.literal("The Demon King has been defeated."), false);
         }
     }
 }
