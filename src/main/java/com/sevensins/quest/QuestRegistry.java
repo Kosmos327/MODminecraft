@@ -24,6 +24,17 @@ public final class QuestRegistry {
     /** ID of the Chapter 4 Demon Cave dungeon quest. */
     public static final String CLEAR_DEMON_CAVE_ID = "clear_demon_cave";
 
+    // Sacred Treasure quest placeholder IDs (scaffold for future story chapters)
+
+    /** ID of the quest to obtain Lostvayne. */
+    public static final String OBTAIN_LOSTVAYNE_ID = "obtain_lostvayne";
+
+    /** ID of the quest to obtain the Divine Axe Rhitta. */
+    public static final String OBTAIN_RHITTA_ID = "obtain_rhitta";
+
+    /** ID of the quest to obtain Spirit Spear Chastiefol. */
+    public static final String OBTAIN_CHASTIEFOL_ID = "obtain_chastiefol";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {

@@ -2,11 +2,15 @@ package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.common.data.SinType;
+import com.sevensins.item.ChastiefolItem;
+import com.sevensins.item.LostvayneItem;
 import com.sevensins.item.MagicScrollItem;
+import com.sevensins.item.RhittaItem;
 import com.sevensins.item.SinEmblemItem;
 import com.sevensins.item.SinFragmentItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -61,6 +65,27 @@ public class ModItems {
     public static final List<RegistryObject<Item>> ALL_EMBLEMS = List.of(
             WRATH_EMBLEM, GREED_EMBLEM, SLOTH_EMBLEM, PRIDE_EMBLEM,
             LUST_EMBLEM, ENVY_EMBLEM, GLUTTONY_EMBLEM
+    );
+
+    // -------------------------------------------------------------------------
+    // Sacred Treasures — legendary weapons linked to specific character types
+    // -------------------------------------------------------------------------
+
+    /** Lostvayne — Sacred Treasure of Meliodas (Wrath). */
+    public static final RegistryObject<Item> LOSTVAYNE = ITEMS.register("lostvayne",
+            () -> new LostvayneItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Divine Axe Rhitta — Sacred Treasure of Escanor (Pride). */
+    public static final RegistryObject<Item> RHITTA = ITEMS.register("rhitta",
+            () -> new RhittaItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Spirit Spear Chastiefol — Sacred Treasure of King (Sloth). */
+    public static final RegistryObject<Item> CHASTIEFOL = ITEMS.register("chastiefol",
+            () -> new ChastiefolItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Ordered list of all sacred treasure items (e.g. for creative tab). */
+    public static final List<RegistryObject<Item>> ALL_SACRED_TREASURES = List.of(
+            LOSTVAYNE, RHITTA, CHASTIEFOL
     );
 
     // -------------------------------------------------------------------------

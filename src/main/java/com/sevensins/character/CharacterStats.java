@@ -1,7 +1,10 @@
 package com.sevensins.character;
 
+import com.sevensins.ability.AbilityType;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.item.SacredTreasureItem;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Utility class that computes derived player statistics such as Power Level.
@@ -10,6 +13,9 @@ import net.minecraft.world.entity.player.Player;
  */
 public final class CharacterStats {
 
+    /** Flat power-level bonus granted when a compatible sacred treasure is held. */
+    private static final int SACRED_TREASURE_POWER_BONUS = 50;
+
     private CharacterStats() {}
 
     /**
@@ -17,6 +23,7 @@ public final class CharacterStats {
      *
      * <pre>
      *   powerLevel = (sinLevel × 10) + maxMana + (unlockedAbilities × 25)
+     *              + sacredTreasureBonus (50 if compatible treasure held)
      * </pre>
      *
      * <p>If either capability is unavailable the missing component is treated as 0,
@@ -42,6 +49,105 @@ public final class CharacterStats {
             unlockedCount = data.getUnlockedAbilities().size();
         }
 
-        return (sinLevel * 10) + maxMana + (unlockedCount * 25);
+        int base = (sinLevel * 10) + maxMana + (unlockedCount * 25);
+
+        // Add sacred treasure power bonus if the player holds a compatible treasure
+        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
+        int sacredBonus = (treasure != null && treasure.isCompatible(player))
+                ? SACRED_TREASURE_POWER_BONUS : 0;
+
+        return base + sacredBonus;
+    }
+
+    // -------------------------------------------------------------------------
+    // Sacred Treasure helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the {@link SacredTreasureItem} held in the player's main hand,
+     * or {@code null} if no sacred treasure is currently held.
+     *
+     * @param player the player to inspect
+     * @return the sacred treasure in the main hand, or {@code null}
+     */
+    public static SacredTreasureItem getEquippedSacredTreasure(Player player) {
+        ItemStack held = player.getMainHandItem();
+        if (held.getItem() instanceof SacredTreasureItem treasure) {
+            return treasure;
+        }
+        return null;
+    }
+
+    /**
+     * Returns the flat ability-damage bonus from the sacred treasure held in
+     * the player's main hand, if that treasure is compatible with the ability.
+     *
+     * <p>Version 1 rule: a treasure bonus applies to an ability when both the
+     * treasure and the ability belong to the same character type.</p>
+     *
+     * @param player      the wielding player
+     * @param abilityType the ability being used
+     * @return flat damage bonus (≥ 0)
+     */
+    public static int getAbilityDamageBonus(Player player, AbilityType abilityType) {
+        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
+        if (treasure == null || !treasure.isCompatible(player)) {
+            return 0;
+        }
+        CharacterType abilityOwner = getCharacterForAbility(abilityType);
+        if (abilityOwner != CharacterType.NONE && abilityOwner == treasure.getLinkedCharacter()) {
+            return treasure.rawAbilityDamageBonus();
+        }
+        return 0;
+    }
+
+    /**
+     * Returns the max-mana increase (in units) granted by the sacred treasure
+     * held in the player's main hand, if compatible.
+     *
+     * <p>The mana bonus is expressed as a percentage of the player's base max
+     * mana from the capability (e.g. 10 = +10%).</p>
+     *
+     * @param player the wielding player
+     * @return additional max-mana units (≥ 0)
+     */
+    public static int getMaxManaBonus(Player player) {
+        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
+        if (treasure == null) {
+            return 0;
+        }
+        int pct = treasure.getManaBonus(player);
+        if (pct <= 0) {
+            return 0;
+        }
+        int baseMana = ModCapabilities.get(player).resolve()
+                .map(cap -> cap.getData().getMaxMana())
+                .orElse(0);
+        return (baseMana * pct) / 100;
+    }
+
+    // -------------------------------------------------------------------------
+    // Ability → CharacterType mapping
+    // -------------------------------------------------------------------------
+
+    /**
+     * Maps an {@link AbilityType} to the {@link CharacterType} it belongs to.
+     * Returns {@link CharacterType#NONE} for legacy or unmapped abilities.
+     *
+     * @param ability the ability to look up
+     * @return the owning character type, or {@link CharacterType#NONE}
+     */
+    public static CharacterType getCharacterForAbility(AbilityType ability) {
+        return switch (ability) {
+            case HELL_BLAZE, FULL_COUNTER, DEMON_MARK, DEMON_MODE -> CharacterType.MELIODAS;
+            case CRUEL_SUN, SUPERNOVA, THE_ONE                    -> CharacterType.ESCANOR;
+            case SNATCH, FOX_HUNT, HUNTER_FEST                    -> CharacterType.BAN;
+            case SPIRIT_SPEAR, GUARDIAN, INCREASE                 -> CharacterType.KING;
+            case MIND_CONTROL, ILLUSION_BURST, MEMORY_REWRITE     -> CharacterType.GOWTHER;
+            case TELEPORT, ARCANE_BURST, INFINITY_MAGIC, EARTH_SMASH -> CharacterType.DIANE;
+            case ENERGY_DRAIN, DEVOUR, ABYSS_SHIELD               -> CharacterType.MERLIN;
+            default                                               -> CharacterType.NONE;
+        };
     }
 }
+

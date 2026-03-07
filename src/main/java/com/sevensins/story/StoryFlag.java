@@ -28,7 +28,16 @@ public enum StoryFlag {
     DEMON_CAVE_STARTED("demon_cave_started"),
 
     /** Set when the player successfully clears a Demon Cave dungeon. */
-    DEMON_CAVE_CLEARED("demon_cave_cleared");
+    DEMON_CAVE_CLEARED("demon_cave_cleared"),
+
+    /** Set when the player obtains Lostvayne for the first time. */
+    OBTAINED_LOSTVAYNE("obtained_lostvayne"),
+
+    /** Set when the player obtains the Divine Axe Rhitta for the first time. */
+    OBTAINED_RHITTA("obtained_rhitta"),
+
+    /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
+    OBTAINED_CHASTIEFOL("obtained_chastiefol");
 
     private final String id;
 
