@@ -2,20 +2,20 @@ package com.sevensins.character;
 
 public class PlayerCharacterData {
 
-    private CharacterType selectedCharacter = CharacterType.NONE;
+    private String selectedCharacter = "";
     private int level = 1;
     private int experience = 0;
-    private int mana = 100;
-    private int maxMana = 100;
+    private float mana = 100.0f;
+    private float maxMana = 100.0f;
     private int skillPoints = 0;
     private boolean joinedToMeliodasTeam = false;
     private int personalStoryStage = 0;
 
-    public CharacterType getSelectedCharacter() {
+    public String getSelectedCharacter() {
         return selectedCharacter;
     }
 
-    public void setSelectedCharacter(CharacterType selectedCharacter) {
+    public void setSelectedCharacter(String selectedCharacter) {
         this.selectedCharacter = selectedCharacter;
     }
 
@@ -35,19 +35,19 @@ public class PlayerCharacterData {
         this.experience = experience;
     }
 
-    public int getMana() {
+    public float getMana() {
         return mana;
     }
 
-    public void setMana(int mana) {
-        this.mana = Math.max(0, Math.min(mana, maxMana));
+    public void setMana(float mana) {
+        this.mana = mana;
     }
 
-    public int getMaxMana() {
+    public float getMaxMana() {
         return maxMana;
     }
 
-    public void setMaxMana(int maxMana) {
+    public void setMaxMana(float maxMana) {
         this.maxMana = maxMana;
     }
 
@@ -73,31 +73,5 @@ public class PlayerCharacterData {
 
     public void setPersonalStoryStage(int personalStoryStage) {
         this.personalStoryStage = personalStoryStage;
-    }
-
-    public void addExperience(int amount) {
-        this.experience += amount;
-        levelUpIfNeeded();
-    }
-
-    public int getXpToNextLevel() {
-        return level * 100;
-    }
-
-    public void levelUpIfNeeded() {
-        int xpNeeded;
-        while (experience >= (xpNeeded = getXpToNextLevel())) {
-            experience -= xpNeeded;
-            level++;
-            skillPoints++;
-        }
-    }
-
-    public void restoreMana(int amount) {
-        mana = Math.min(mana + amount, maxMana);
-    }
-
-    public void consumeMana(int amount) {
-        mana = Math.max(mana - amount, 0);
     }
 }
