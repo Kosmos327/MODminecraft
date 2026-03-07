@@ -87,6 +87,9 @@ public enum StoryFlag {
     /** Set the first time Estarossa enters the Enraged phase. */
     ESTAROSSA_ENRAGED_SEEN("estarossa_enraged_seen"),
 
+    /** Set when the player defeats Estarossa. */
+    ESTAROSSA_SLAIN("estarossa_slain"),
+
     /** Set when the player successfully completes a Night Demon Raid. */
     NIGHT_RAID_COMPLETE("night_raid_complete"),
 

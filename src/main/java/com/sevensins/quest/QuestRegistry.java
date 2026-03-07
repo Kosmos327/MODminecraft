@@ -118,6 +118,27 @@ public final class QuestRegistry {
                 QuestType.DUNGEON_CLEAR,
                 1
         ));
+        register(new Quest(
+                SLAY_ESTAROSSA_ID,
+                "Confront Estarossa",
+                "Defeat Estarossa, the most dangerous member of the Demon Clan's Ten Commandments.",
+                QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                OBTAIN_RHITTA_ID,
+                "Divine Axe Rhitta",
+                "Obtain the Divine Axe Rhitta, the Sacred Treasure of Escanor.",
+                QuestType.COLLECT,
+                1
+        ));
+        register(new Quest(
+                OBTAIN_CHASTIEFOL_ID,
+                "Spirit Spear Chastiefol",
+                "Obtain the Spirit Spear Chastiefol, the Sacred Treasure of King.",
+                QuestType.COLLECT,
+                1
+        ));
     }
 
     private QuestRegistry() {}
