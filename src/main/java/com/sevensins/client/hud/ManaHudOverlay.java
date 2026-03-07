@@ -1,5 +1,6 @@
 package com.sevensins.client.hud;
 
+import com.sevensins.character.capability.ModCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
@@ -56,17 +57,13 @@ public class ManaHudOverlay {
             int currentMana = 0;
             int maxMana = 0;
 
-            // Retrieve mana values from the capability attached to the player.
-            // The capability key is expected to be registered under
-            // com.sevensins.capability.ManaCapability.MANA_CAPABILITY.
-            var capabilityOpt = player.getCapability(
-                    com.sevensins.capability.ManaCapability.MANA_CAPABILITY
-            ).resolve();
+            // Retrieve mana values from the canonical PLAYER_CHARACTER_DATA capability.
+            var capabilityOpt = ModCapabilities.get(player).resolve();
 
             if (capabilityOpt.isPresent()) {
-                var mana = capabilityOpt.get();
-                currentMana = mana.getMana();
-                maxMana = mana.getMaxMana();
+                var data = capabilityOpt.get().getData();
+                currentMana = data.getMana();
+                maxMana = data.getMaxMana();
             }
 
             String manaText = "Mana: " + currentMana + " / " + maxMana;
