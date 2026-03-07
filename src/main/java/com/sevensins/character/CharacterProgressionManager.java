@@ -84,10 +84,12 @@ public final class CharacterProgressionManager {
             leveledUp = true;
 
             // Increase max mana: BASE_MAX_MANA + (sinLevel × MANA_PER_LEVEL)
+            // Also grant +1 skill point for each sin level gained.
             final int newLevel = level;
             ModCapabilities.get(player).ifPresent(charCap -> {
                 int newMaxMana = BASE_MAX_MANA + (newLevel * MANA_PER_LEVEL);
                 charCap.getData().setMaxMana(newMaxMana);
+                charCap.getData().setSkillPoints(charCap.getData().getSkillPoints() + 1);
             });
 
             player.sendSystemMessage(Component.translatable(MSG_LEVEL_UP, level));

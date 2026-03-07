@@ -5,6 +5,7 @@ import com.sevensins.ability.Ability;
 import com.sevensins.ability.AbilityManager;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.client.screen.SkillTreeScreen;
 import com.sevensins.network.ModNetwork;
 import com.sevensins.network.packet.UseAbilityPacket;
 import net.minecraft.client.KeyMapping;
@@ -57,6 +58,13 @@ public class Keybinds {
             KEY_CATEGORY
     );
 
+    /** K – opens the Skill Tree screen. */
+    public static final KeyMapping OPEN_SKILL_TREE = new KeyMapping(
+            "key.seven_sins.open_skill_tree",
+            GLFW.GLFW_KEY_K,
+            KEY_CATEGORY
+    );
+
     // -------------------------------------------------------------------------
     // MOD bus – register keybindings
 
@@ -65,6 +73,7 @@ public class Keybinds {
         event.register(ABILITY_ONE);
         event.register(ABILITY_TWO);
         event.register(ABILITY_THREE);
+        event.register(OPEN_SKILL_TREE);
     }
 
     // -------------------------------------------------------------------------
@@ -112,6 +121,14 @@ public class Keybinds {
             // Clicks are consumed to prevent accumulation until the feature is ready.
             while (ABILITY_THREE.consumeClick()) {
                 SevenSinsMod.LOGGER.debug("[Seven Sins] ability_three pressed – not yet implemented");
+            }
+
+            // Skill Tree (K) – opens the SkillTreeScreen on the client.
+            while (OPEN_SKILL_TREE.consumeClick()) {
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.player != null && mc.screen == null) {
+                    mc.setScreen(new SkillTreeScreen());
+                }
             }
         }
     }

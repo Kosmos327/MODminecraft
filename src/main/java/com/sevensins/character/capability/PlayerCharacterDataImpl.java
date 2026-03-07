@@ -21,5 +21,6 @@ public class PlayerCharacterDataImpl implements IPlayerCharacterData {
         data.setSkillPoints(other.getSkillPoints());
         data.setJoinedToMeliodasTeam(other.isJoinedToMeliodasTeam());
         data.setPersonalStoryStage(other.getPersonalStoryStage());
+        data.setUnlockedAbilities(other.getUnlockedAbilities());
     }
 }

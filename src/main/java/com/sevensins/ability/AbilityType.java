@@ -5,15 +5,40 @@ package com.sevensins.ability;
  * Provides helper methods for serialisation / deserialisation.
  */
 public enum AbilityType {
+    // WRATH (Meliodas)
+    HELL_BLAZE,
     FULL_COUNTER,
+    DEMON_MARK,
     DEMON_MODE,
-    EARTH_SMASH,
-    SPIRIT_SPEAR,
+    // PRIDE (Escanor)
+    CRUEL_SUN,
+    SUPERNOVA,
+    THE_ONE,
+    // GREED (Ban)
     SNATCH,
+    FOX_HUNT,
+    HUNTER_FEST,
+    // SLOTH (King)
+    SPIRIT_SPEAR,
+    GUARDIAN,
+    INCREASE,
+    // LUST (Gowther)
+    MIND_CONTROL,
+    ILLUSION_BURST,
+    MEMORY_REWRITE,
+    // ENVY (Diane)
+    TELEPORT,
+    ARCANE_BURST,
+    INFINITY_MAGIC,
+    // GLUTTONY (Merlin)
+    ENERGY_DRAIN,
+    DEVOUR,
+    ABYSS_SHIELD,
+    // Legacy / other
+    EARTH_SMASH,
     INVASION,
     INFINITY,
     SUNSHINE,
-    HELL_BLAZE,
     NONE;
 
     /** Returns the lower-case name used when persisting to NBT or JSON. */
