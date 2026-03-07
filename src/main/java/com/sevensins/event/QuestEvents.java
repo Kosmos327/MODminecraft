@@ -6,7 +6,9 @@ import com.sevensins.boss.BossRewardTable;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.entity.DemonCommanderEntity;
+import com.sevensins.entity.DemonKingEntity;
 import com.sevensins.entity.GrayDemonEntity;
+import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
@@ -193,6 +195,51 @@ public class QuestEvents {
             killer.getServer().getPlayerList()
                     .broadcastSystemMessage(
                             Component.literal("The Demon Commander has been defeated."), false);
+        }
+    }
+
+    /**
+     * Handles all side-effects of the Mythic Red Demon being killed by a player.
+     */
+    private static void handleMythicRedDemonBossLogic(MythicRedDemonEntity mythicDemon,
+                                                       ServerPlayer killer) {
+        BossManager.getInstance().unregisterBoss(mythicDemon.getUUID());
+        BossRewardTable.onBossDeath(killer);
+
+        ModCapabilities.get(killer).ifPresent(cap -> {
+            if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
+            String activeId = cap.getData().getQuestData().getActiveQuestId();
+            if (QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_MYTHIC_DEMON_ID);
+            }
+        });
+
+        if (killer.getServer() != null) {
+            killer.getServer().getPlayerList()
+                    .broadcastSystemMessage(
+                            Component.literal("The Mythic Red Demon has been defeated."), false);
+        }
+    }
+
+    /**
+     * Handles all side-effects of the Demon King being killed by a player.
+     */
+    private static void handleDemonKingBossLogic(DemonKingEntity demonKing,
+                                                  ServerPlayer killer) {
+        BossManager.getInstance().unregisterBoss(demonKing.getUUID());
+        BossRewardTable.onBossDeath(killer);
+
+        ModCapabilities.get(killer).ifPresent(cap -> {
+            if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
+            // DEMON_KING_ENCOUNTERED is already set on proximity by DemonKingEntity;
+            // here we set the "slain" flag to mark the kill milestone.
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+        });
+
+        if (killer.getServer() != null) {
+            killer.getServer().getPlayerList()
+                    .broadcastSystemMessage(
+                            Component.literal("The Demon King has been defeated!"), false);
         }
     }
 }

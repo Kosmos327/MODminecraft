@@ -1,6 +1,7 @@
 package com.sevensins.character;
 
 import com.sevensins.ability.AbilityType;
+import com.sevensins.ability.PassiveAbilityManager;
 import com.sevensins.ability.UltimateAbilityManager;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.item.SacredTreasureData;

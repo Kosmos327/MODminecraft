@@ -2,6 +2,8 @@ package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.entity.DemonCommanderEntity;
+import com.sevensins.entity.DemonKingEntity;
+import com.sevensins.entity.EstarossaEntity;
 import com.sevensins.entity.GrayDemonEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
 import com.sevensins.entity.MythicRedDemonEntity;
@@ -62,6 +64,36 @@ public class ModEntities {
                             .build(SevenSinsMod.MODID + ":" + DemonCommanderEntity.REGISTRY_NAME)
             );
 
+    /** Mythic Red Demon — endgame-tier boss spawned during Night Demon Raids. */
+    public static final RegistryObject<EntityType<MythicRedDemonEntity>> MYTHIC_RED_DEMON =
+            ENTITY_TYPES.register(
+                    MythicRedDemonEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<MythicRedDemonEntity>of(MythicRedDemonEntity::new, MobCategory.MONSTER)
+                            .sized(0.8f, 2.5f)
+                            .build(SevenSinsMod.MODID + ":" + MythicRedDemonEntity.REGISTRY_NAME)
+            );
+
+    /** Estarossa — Chapter 5 boss. */
+    public static final RegistryObject<EntityType<EstarossaEntity>> ESTAROSSA =
+            ENTITY_TYPES.register(
+                    EstarossaEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<EstarossaEntity>of(EstarossaEntity::new, MobCategory.MONSTER)
+                            .sized(0.9f, 2.8f)
+                            .build(SevenSinsMod.MODID + ":" + EstarossaEntity.REGISTRY_NAME)
+            );
+
+    /** Demon King — supreme final boss. */
+    public static final RegistryObject<EntityType<DemonKingEntity>> DEMON_KING =
+            ENTITY_TYPES.register(
+                    DemonKingEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<DemonKingEntity>of(DemonKingEntity::new, MobCategory.MONSTER)
+                            .sized(1.2f, 3.5f)
+                            .build(SevenSinsMod.MODID + ":" + DemonKingEntity.REGISTRY_NAME)
+            );
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
@@ -72,5 +104,8 @@ public class ModEntities {
         event.put(RED_DEMON.get(), RedDemonEntity.createAttributes().build());
         event.put(GRAY_DEMON.get(), GrayDemonEntity.createAttributes().build());
         event.put(DEMON_COMMANDER.get(), DemonCommanderEntity.createAttributes().build());
+        event.put(MYTHIC_RED_DEMON.get(), MythicRedDemonEntity.createAttributes().build());
+        event.put(ESTAROSSA.get(), EstarossaEntity.createAttributes().build());
+        event.put(DEMON_KING.get(), DemonKingEntity.createAttributes().build());
     }
 }

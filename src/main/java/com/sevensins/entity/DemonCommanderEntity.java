@@ -344,6 +344,8 @@ public class DemonCommanderEntity extends Monster {
             case PHASE_1 -> SUMMON_COOLDOWN_PHASE1;
             case PHASE_2 -> SUMMON_COOLDOWN_PHASE2;
             case ENRAGED -> SUMMON_COOLDOWN_ENRAGED;
+            // PHASE_3 and FINAL_PHASE are not used by DemonCommander; fall back to ENRAGED rate
+            default -> SUMMON_COOLDOWN_ENRAGED;
         };
     }
 

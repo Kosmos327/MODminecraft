@@ -41,6 +41,17 @@ public final class QuestRegistry {
     /** ID of the Chapter 6 Demon Commander boss quest. */
     public static final String SLAY_DEMON_COMMANDER_ID = "slay_demon_commander";
 
+    // Endgame quest IDs
+
+    /** ID of the endgame quest to survive a Night Demon Raid. */
+    public static final String SURVIVE_NIGHT_RAID_ID = "survive_night_raid";
+
+    /** ID of the endgame quest to slay the Mythic Red Demon. */
+    public static final String SLAY_MYTHIC_DEMON_ID = "slay_mythic_demon";
+
+    /** ID of the endgame quest to obtain a Legendary Artifact. */
+    public static final String OBTAIN_LEGENDARY_ARTIFACT_ID = "obtain_legendary_artifact";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {
@@ -84,6 +95,27 @@ public final class QuestRegistry {
                 "The Demon Commander",
                 "Defeat the Demon Commander leading demonic forces in the region.",
                 QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                SURVIVE_NIGHT_RAID_ID,
+                "Night Demon Raid",
+                "Survive a full Night Demon Raid (all 3 waves).",
+                QuestType.DUNGEON_CLEAR,
+                1
+        ));
+        register(new Quest(
+                SLAY_MYTHIC_DEMON_ID,
+                "The Mythic Demon",
+                "Defeat the Mythic Red Demon — an endgame-tier threat.",
+                QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                OBTAIN_LEGENDARY_ARTIFACT_ID,
+                "Legendary Artifact",
+                "Obtain a Legendary Artifact from a Night Demon Raid.",
+                QuestType.DUNGEON_CLEAR,
                 1
         ));
     }

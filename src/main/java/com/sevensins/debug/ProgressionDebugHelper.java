@@ -53,7 +53,7 @@ public final class ProgressionDebugHelper {
     public static List<Component> buildCharacterSection(ServerPlayer player) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("-- Character --"));
-        ModCapabilities.get(player).ifPresentOrElse(cap -> {
+        ModCapabilities.get(player).resolve().ifPresentOrElse(cap -> {
             PlayerCharacterData data = cap.getData();
             CharacterType character = data.getSelectedCharacter();
             lines.add(Component.literal("  Character : " + character.name()));
@@ -70,7 +70,7 @@ public final class ProgressionDebugHelper {
     public static List<Component> buildSinSection(ServerPlayer player) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("-- Sin --"));
-        player.getCapability(ModCapabilities.SIN_DATA).ifPresentOrElse(sinData -> {
+        player.getCapability(ModCapabilities.SIN_DATA).resolve().ifPresentOrElse(sinData -> {
             String sin = sinData.isAligned()
                     ? sinData.getActiveSin().name()
                     : "NONE";
@@ -85,7 +85,7 @@ public final class ProgressionDebugHelper {
     public static List<Component> buildManaSection(ServerPlayer player) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("-- Mana --"));
-        ModCapabilities.get(player).ifPresentOrElse(cap -> {
+        ModCapabilities.get(player).resolve().ifPresentOrElse(cap -> {
             PlayerCharacterData data = cap.getData();
             lines.add(Component.literal("  Mana: " + data.getMana() + " / " + data.getMaxMana()));
         }, () -> lines.add(Component.literal("  [capability unavailable]")));
@@ -96,7 +96,7 @@ public final class ProgressionDebugHelper {
     public static List<Component> buildAbilitiesSection(ServerPlayer player) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("-- Abilities --"));
-        ModCapabilities.get(player).ifPresentOrElse(cap -> {
+        ModCapabilities.get(player).resolve().ifPresentOrElse(cap -> {
             Set<AbilityType> unlocked = cap.getData().getUnlockedAbilities();
             if (unlocked.isEmpty()) {
                 lines.add(Component.literal("  (none unlocked)"));
@@ -117,7 +117,7 @@ public final class ProgressionDebugHelper {
     public static List<Component> buildQuestSection(ServerPlayer player) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("-- Quest --"));
-        ModCapabilities.get(player).ifPresentOrElse(cap -> {
+        ModCapabilities.get(player).resolve().ifPresentOrElse(cap -> {
             PlayerQuestData qd = cap.getData().getQuestData();
             String active = qd.getActiveQuestId();
             if (active.isEmpty()) {
@@ -140,7 +140,7 @@ public final class ProgressionDebugHelper {
     public static List<Component> buildStorySection(ServerPlayer player) {
         List<Component> lines = new ArrayList<>();
         lines.add(Component.literal("-- Story --"));
-        ModCapabilities.get(player).ifPresentOrElse(cap -> {
+        ModCapabilities.get(player).resolve().ifPresentOrElse(cap -> {
             Set<String> flags = cap.getData().getQuestData().getStoryFlags();
             if (flags.isEmpty()) {
                 lines.add(Component.literal("  Flags: (none)"));
