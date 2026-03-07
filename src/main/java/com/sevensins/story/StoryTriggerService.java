@@ -96,6 +96,14 @@ public final class StoryTriggerService {
             onGrayDemonSlain(player);
         } else if (QuestRegistry.SLAY_DEMON_COMMANDER_ID.equals(questId)) {
             onDemonCommanderSlain(player);
+        } else if (QuestRegistry.SLAY_ESTAROSSA_ID.equals(questId)) {
+            onEstarossaSlain(player);
+        } else if (QuestRegistry.SLAY_DEMON_KING_ID.equals(questId)) {
+            onDemonKingSlain(player);
+        } else if (QuestRegistry.SURVIVE_NIGHT_RAID_ID.equals(questId)) {
+            onNightRaidComplete(player);
+        } else if (QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(questId)) {
+            onMythicDemonSlain(player);
         }
     }
 
@@ -194,7 +202,34 @@ public final class StoryTriggerService {
             player.sendSystemMessage(
                     Component.literal("You have defeated the Demon Commander!"));
             player.sendSystemMessage(
-                    Component.literal("The demonic forces fall into disarray."));
+                    Component.literal("But the Lord of Commandments, Estarossa, approaches. Prepare yourself!"));
+            // Begin Chapter 7 — Estarossa
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_ESTAROSSA_ID);
+        });
+    }
+
+    private void onEstarossaSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.ESTAROSSA.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated Estarossa!"));
+            player.sendSystemMessage(
+                    Component.literal("The Demon King himself stirs. The final battle awaits!"));
+            // Begin Chapter 8 — Demon King endgame
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_DEMON_KING_ID);
+        });
+    }
+
+    private void onDemonKingSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.CAMPAIGN_COMPLETE.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.DEMON_KING.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated the Demon King!"));
+            player.sendSystemMessage(
+                    Component.literal("The Seven Deadly Sins have triumphed. The Demon Clan is vanquished!"));
         });
     }
 
