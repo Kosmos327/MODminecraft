@@ -1,7 +1,6 @@
 package com.sevensins.ability;
 
-import com.sevensins.character.PlayerCharacterData;
-import com.sevensins.character.PlayerDataRegistry;
+import com.sevensins.mana.ManaManager;
 import net.minecraft.world.entity.player.Player;
 
 /**
@@ -41,8 +40,7 @@ public abstract class Ability {
      * activate this ability.
      */
     public boolean canUse(Player player) {
-        PlayerCharacterData data = PlayerDataRegistry.getOrCreate(player);
-        return data.getMana() >= manaCost;
+        return ManaManager.hasEnoughMana(player, manaCost);
     }
 
     /**
@@ -54,7 +52,7 @@ public abstract class Ability {
         if (!canUse(player)) {
             return;
         }
-        PlayerDataRegistry.getOrCreate(player).consumeMana(manaCost);
+        ManaManager.consumeMana(player, manaCost);
         execute(player);
     }
 
