@@ -127,10 +127,23 @@ public class Keybinds {
                 SevenSinsMod.LOGGER.debug("[Seven Sins] ability_two pressed – not yet implemented");
             }
 
-            // Ability three (V) – TODO: implement and wire up the third character ability.
-            // Clicks are consumed to prevent accumulation until the feature is ready.
+            // Ability three (V) – sends the third ability of the player's character to the server.
             while (ABILITY_THREE.consumeClick()) {
-                SevenSinsMod.LOGGER.debug("[Seven Sins] ability_three pressed – not yet implemented");
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.player == null) break;
+
+                ModCapabilities.get(mc.player).ifPresent(cap -> {
+                    CharacterType character = cap.getData().getSelectedCharacter();
+                    if (character == CharacterType.NONE) return;
+
+                    List<Ability> abilities = AbilityManager.getAbilitiesFor(character);
+                    if (abilities.size() < 3) return;
+
+                    ModNetwork.CHANNEL.send(
+                            PacketDistributor.SERVER.noArg(),
+                            new UseAbilityPacket(abilities.get(2).getType())
+                    );
+                });
             }
 
             // Skill Tree (K) – opens the SkillTreeScreen on the client.
