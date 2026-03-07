@@ -1,5 +1,6 @@
 package com.sevensins.event;
 
+import com.sevensins.config.BalanceHelper;
 import com.sevensins.mana.ManaManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
@@ -44,6 +45,6 @@ public class ManaRegenEvents {
             return;
         }
 
-        ManaManager.restoreMana(serverPlayer, MANA_PER_REGEN);
+        ManaManager.restoreMana(serverPlayer, BalanceHelper.getEffectiveManaRegen(serverPlayer, MANA_PER_REGEN));
     }
 }

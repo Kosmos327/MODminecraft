@@ -6,6 +6,7 @@ import com.sevensins.ability.CooldownManager;
 import com.sevensins.ability.IAbility;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.config.BalanceHelper;
 import com.sevensins.mana.ManaManager;
 import com.sevensins.network.ModNetwork;
 import net.minecraft.network.FriendlyByteBuf;
@@ -83,16 +84,20 @@ public class UseAbilityPacket {
                 if (CooldownManager.isOnCooldown(player.getUUID(), packet.abilityType)) return;
 
                 // 4 & 5. Check mana, consume it, set cooldown, activate ability
-                if (!ManaManager.hasEnoughMana(player, ability.getManaCost())) return;
+                int effectiveMana = BalanceHelper.getEffectiveManaCost(
+                        player, packet.abilityType, ability.getManaCost());
+                int effectiveCooldown = BalanceHelper.getEffectiveCooldownTicks(
+                        player, packet.abilityType, ability.getCooldownTicks());
 
-                ManaManager.consumeMana(player, ability.getManaCost());
-                CooldownManager.setCooldown(
-                        player.getUUID(), packet.abilityType, ability.getCooldownTicks());
+                if (!ManaManager.hasEnoughMana(player, effectiveMana)) return;
+
+                ManaManager.consumeMana(player, effectiveMana);
+                CooldownManager.setCooldown(player.getUUID(), packet.abilityType, effectiveCooldown);
                 ability.activate(player);
 
                 // 6. Sync the new cooldown state back to the client HUD
                 long expiryMs = System.currentTimeMillis()
-                        + (long) ability.getCooldownTicks() * 50L;
+                        + (long) effectiveCooldown * 50L;
                 Map<AbilityType, Long> cooldownMap = new EnumMap<>(AbilityType.class);
                 cooldownMap.put(packet.abilityType, expiryMs);
                 ModNetwork.CHANNEL.send(

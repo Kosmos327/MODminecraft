@@ -127,6 +127,57 @@ public final class CharacterStats {
     }
 
     // -------------------------------------------------------------------------
+    // Balance modifier queries (used by BalanceHelper)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns a multiplier (≥ 0) that scales ability damage upward based on
+     * the player's sin level.
+     *
+     * <p>Formula: {@code 1.0 + (sinLevel * 0.02)} — each sin level grants a
+     * 2 % damage bonus.  Falls back to {@code 1.0} when the capability is
+     * unavailable.</p>
+     *
+     * @param player the queried player
+     * @return ability damage multiplier (always &ge; 1.0)
+     */
+    public static double getAbilityDamageMultiplier(Player player) {
+        int sinLevel = player.getCapability(ModCapabilities.SIN_DATA)
+                .resolve()
+                .map(sin -> sin.getSinLevel())
+                .orElse(0);
+        return 1.0 + sinLevel * 0.02;
+    }
+
+    /**
+     * Returns a multiplier applied to mana costs.  Values less than {@code 1.0}
+     * reduce mana costs; values greater than {@code 1.0} increase them.
+     *
+     * <p>Version 1 always returns {@code 1.0}.  Override in future versions
+     * to add character-specific or sacred-treasure mana discounts.</p>
+     *
+     * @param player the queried player
+     * @return mana cost modifier (always &gt; 0)
+     */
+    public static double getManaCostModifier(Player player) {
+        return 1.0;
+    }
+
+    /**
+     * Returns a multiplier applied to ability cooldowns.  Values less than
+     * {@code 1.0} reduce cooldowns; values greater than {@code 1.0} increase them.
+     *
+     * <p>Version 1 always returns {@code 1.0}.  Override in future versions
+     * to add character-specific or sacred-treasure cooldown reductions.</p>
+     *
+     * @param player the queried player
+     * @return cooldown modifier (always &gt; 0)
+     */
+    public static double getCooldownModifier(Player player) {
+        return 1.0;
+    }
+
+    // -------------------------------------------------------------------------
     // Ability → CharacterType mapping
     // -------------------------------------------------------------------------
 
