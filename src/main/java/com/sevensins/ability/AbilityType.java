@@ -1,42 +1,40 @@
 package com.sevensins.ability;
 
 /**
- * All ability types available across all Seven Sins characters.
+ * Identifies each ability available in the mod.
+ * Provides helper methods for serialisation / deserialisation.
  */
 public enum AbilityType {
-
-    // Meliodas
     FULL_COUNTER,
-    HELL_BLAZE,
-    REVENGE_COUNTER,
-
-    // Ban
+    DEMON_MODE,
+    EARTH_SMASH,
+    SPIRIT_SPEAR,
     SNATCH,
-    BANISHING_KILL,
-    HUNTER_FEST,
-
-    // King
-    CHASTIEFOL,
-    FORM_BASQUIAS,
-    POLLEN_GARDEN,
-
-    // Diane
-    HEAVY_METAL,
-    DOUBLE_HAMMER,
-    DROLES_DANCE,
-
-    // Merlin
+    INVASION,
     INFINITY,
-    PERFECT_CUBE,
-    ABSOLUTE_CANCEL,
-
-    // Gowther
-    REWRITE_LIGHT,
-    NIGHTMARE_TELLER,
-    DOLLS_PLAY,
-
-    // Escanor
     SUNSHINE,
-    DIVINE_SWORD,
-    THE_ONE
+    NONE;
+
+    /** Returns the lower-case name used when persisting to NBT or JSON. */
+    public String getSerializedName() {
+        return this.name().toLowerCase();
+    }
+
+    /**
+     * Looks up an {@link AbilityType} by its serialised name (case-insensitive).
+     *
+     * @param value serialised name, or {@code null}
+     * @return matching type, or {@link #NONE} if not found
+     */
+    public static AbilityType fromName(String value) {
+        if (value == null) {
+            return NONE;
+        }
+        for (AbilityType type : values()) {
+            if (type.name().equalsIgnoreCase(value)) {
+                return type;
+            }
+        }
+        return NONE;
+    }
 }
