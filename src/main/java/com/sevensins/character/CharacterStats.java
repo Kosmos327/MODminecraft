@@ -3,7 +3,9 @@ package com.sevensins.character;
 import com.sevensins.ability.AbilityType;
 import com.sevensins.ability.UltimateAbilityManager;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.item.SacredTreasureData;
 import com.sevensins.item.SacredTreasureItem;
+import com.sevensins.item.SacredTreasureUpgradeHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -53,11 +55,15 @@ public final class CharacterStats {
         int base = (sinLevel * 10) + maxMana + (unlockedCount * 25);
 
         // Add sacred treasure power bonus if the player holds a compatible treasure
-        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
-        int sacredBonus = (treasure != null && treasure.isCompatible(player))
-                ? SACRED_TREASURE_POWER_BONUS : 0;
+        ItemStack heldStack = player.getMainHandItem();
+        SacredTreasureItem treasure = heldStack.getItem() instanceof SacredTreasureItem t ? t : null;
+        boolean compatible = treasure != null && treasure.isCompatible(player);
 
-        return base + sacredBonus;
+        int sacredBonus   = compatible ? SACRED_TREASURE_POWER_BONUS : 0;
+        int upgradeBonus  = compatible
+                ? SacredTreasureUpgradeHelper.getUpgradePowerBonus(heldStack) : 0;
+
+        return base + sacredBonus + upgradeBonus;
     }
 
     // -------------------------------------------------------------------------
@@ -189,6 +195,46 @@ public final class CharacterStats {
             return THE_ONE_DAMAGE_BONUS;
         }
         return 0;
+    }
+
+    // -------------------------------------------------------------------------
+    // Passive-ability stat helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the effective max mana for a player, including any passive bonus from
+     * {@link PassiveAbilityManager} (e.g. SLOTH/KING +15 % max mana).
+     *
+     * @param player the target player
+     * @return effective max mana (≥ 0)
+     */
+    public static int getEffectiveMaxMana(Player player) {
+        int baseMana = ModCapabilities.get(player)
+                .map(cap -> cap.getData().getMaxMana())
+                .orElse(0);
+        float bonus = PassiveAbilityManager.getMaxManaBonus(player);
+        return baseMana + Math.round(baseMana * bonus);
+    }
+
+    /**
+     * Returns the additive damage multiplier bonus for a player (e.g. 0.20 = +20 %).
+     * Delegates to {@link PassiveAbilityManager#getBonusDamage}.
+     *
+     * @param player the target player
+     * @return cumulative damage multiplier bonus (≥ 0)
+     */
+    public static float getTotalBonusDamage(Player player) {
+        return PassiveAbilityManager.getBonusDamage(player);
+    }
+
+    /**
+     * Returns the total damage resistance fraction for a player (e.g. 0.10 = 10 % reduction).
+     *
+     * @param player the target player
+     * @return resistance fraction in the range [0, 1)
+     */
+    public static float getTotalResistance(Player player) {
+        return PassiveAbilityManager.getResistanceBonus(player);
     }
 
     // -------------------------------------------------------------------------

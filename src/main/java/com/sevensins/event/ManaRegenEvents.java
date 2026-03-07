@@ -1,5 +1,6 @@
 package com.sevensins.event;
 
+import com.sevensins.ability.PassiveAbilityManager;
 import com.sevensins.mana.ManaManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
@@ -10,7 +11,9 @@ import net.minecraftforge.fml.common.Mod;
  * Forge event subscriber responsible for passive mana regeneration.
  *
  * <p>Every 20 ticks (roughly once per second) each server-side player
- * regenerates {@value #MANA_PER_REGEN} mana, up to their maximum.</p>
+ * regenerates {@value #MANA_PER_REGEN} mana, up to their maximum.
+ * Characters with the ENVY passive (DIANE) receive a bonus to their
+ * regeneration rate via {@link PassiveAbilityManager#getManaRegenBonus}.</p>
  */
 @Mod.EventBusSubscriber(modid = "seven_sins")
 public class ManaRegenEvents {
@@ -18,7 +21,7 @@ public class ManaRegenEvents {
     /** Number of ticks between each regen tick. */
     private static final int REGEN_INTERVAL_TICKS = 20;
 
-    /** Amount of mana restored each regen tick. */
+    /** Base amount of mana restored each regen tick. */
     private static final int MANA_PER_REGEN = 2;
 
     private ManaRegenEvents() {}
@@ -44,6 +47,8 @@ public class ManaRegenEvents {
             return;
         }
 
-        ManaManager.restoreMana(serverPlayer, MANA_PER_REGEN);
+        float regenBonus = PassiveAbilityManager.getManaRegenBonus(serverPlayer);
+        int regenAmount = MANA_PER_REGEN + Math.round(MANA_PER_REGEN * regenBonus);
+        ManaManager.restoreMana(serverPlayer, regenAmount);
     }
 }

@@ -89,6 +89,8 @@ public final class StoryTriggerService {
             onRedDemonSlain(player);
         } else if (QuestRegistry.CLEAR_DEMON_CAVE_ID.equals(questId)) {
             onDemonCaveQuestComplete(player);
+        } else if (QuestRegistry.SLAY_GRAY_DEMON_ID.equals(questId)) {
+            onGrayDemonSlain(player);
         }
     }
 
@@ -153,6 +155,17 @@ public final class StoryTriggerService {
             cap.getData().setPersonalStoryStage(StoryChapter.DEMON_CAVE.getStage());
             player.sendSystemMessage(
                     Component.literal("Chapter complete: the Demon Cave has been purged."));
+        });
+    }
+
+    private void onGrayDemonSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            PlayerQuestData questData = cap.getData().getQuestData();
+            questData.addStoryFlag(StoryFlag.GRAY_DEMON_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.GRAY_DEMON.getStage());
+            player.sendSystemMessage(Component.literal("You have slain the Gray Demon!"));
+            player.sendSystemMessage(Component.literal(
+                    "The corruption fades... but darker threats await."));
         });
     }
 

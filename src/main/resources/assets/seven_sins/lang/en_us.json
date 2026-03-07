@@ -21,10 +21,18 @@
   "item.seven_sins.sacred_treasure.ability_bonus": "+%s ability damage (compatible wielder)",
   "item.seven_sins.sacred_treasure.melee_bonus":  "+%s%% melee damage (compatible wielder)",
   "item.seven_sins.sacred_treasure.mana_bonus":   "+%s%% max mana (compatible wielder)",
+  "item.seven_sins.sacred_treasure.upgrade":      "Upgrade: +%s / +%s",
 
   "block.seven_sins.sin_altar": "Sin Altar",
   "block.seven_sins.sin_altar.aligned":   "You are aligned with %s (Level %s)",
   "block.seven_sins.sin_altar.unaligned": "You are not yet aligned with any sin. Use a Sin Emblem to choose your path.",
+
+  "block.seven_sins.sacred_forge": "Sacred Forge",
+  "block.seven_sins.sacred_forge.upgraded":     "Sacred Treasure upgraded to +%s",
+  "block.seven_sins.sacred_forge.invalid_item": "Hold a Sacred Treasure to upgrade it.",
+  "block.seven_sins.sacred_forge.max_level":    "This treasure is already at maximum upgrade level (+5).",
+  "block.seven_sins.sacred_forge.need_fragments": "Not enough Sin Fragments.",
+  "block.seven_sins.sacred_forge.need_scrolls":   "Not enough Magic Scrolls.",
 
   "sin.seven_sins.wrath":    "Wrath",
   "sin.seven_sins.greed":    "Greed",
