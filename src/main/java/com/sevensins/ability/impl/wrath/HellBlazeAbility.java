@@ -2,7 +2,7 @@ package com.sevensins.ability.impl.wrath;
 
 import com.sevensins.ability.Ability;
 import com.sevensins.ability.AbilityType;
-import com.sevensins.character.CharacterStats;
+import com.sevensins.config.BalanceHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -65,8 +65,8 @@ public class HellBlazeAbility extends Ability {
 
         DamageSource source = player.damageSources().playerAttack(player);
 
-        // Apply sacred treasure ability bonus if Lostvayne (or compatible) is held
-        float totalDamage = DAMAGE + CharacterStats.getAbilityDamageBonus(player, AbilityType.HELL_BLAZE);
+        // Compute effective damage through the centralized balance framework
+        float totalDamage = BalanceHelper.getEffectiveAbilityDamage(player, AbilityType.HELL_BLAZE, DAMAGE);
 
         for (LivingEntity target : targets) {
             target.hurt(source, totalDamage);

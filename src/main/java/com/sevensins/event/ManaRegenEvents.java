@@ -1,6 +1,6 @@
 package com.sevensins.event;
 
-import com.sevensins.ability.PassiveAbilityManager;
+import com.sevensins.config.BalanceHelper;
 import com.sevensins.mana.ManaManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
@@ -47,8 +47,6 @@ public class ManaRegenEvents {
             return;
         }
 
-        float regenBonus = PassiveAbilityManager.getManaRegenBonus(serverPlayer);
-        int regenAmount = MANA_PER_REGEN + Math.round(MANA_PER_REGEN * regenBonus);
-        ManaManager.restoreMana(serverPlayer, regenAmount);
+        ManaManager.restoreMana(serverPlayer, BalanceHelper.getEffectiveManaRegen(serverPlayer, MANA_PER_REGEN));
     }
 }
