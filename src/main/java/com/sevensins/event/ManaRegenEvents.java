@@ -23,7 +23,7 @@ public class ManaRegenEvents {
     /** Number of ticks between each regen tick. */
     private static final int REGEN_INTERVAL_TICKS = 20;
 
-    /** Amount of mana restored each regen tick. */
+    /** Base amount of mana restored each regen tick. */
     private static final int MANA_PER_REGEN = 2;
 
     private ManaRegenEvents() {}

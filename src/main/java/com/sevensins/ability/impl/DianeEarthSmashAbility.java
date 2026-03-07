@@ -2,6 +2,7 @@ package com.sevensins.ability.impl;
 
 import com.sevensins.ability.Ability;
 import com.sevensins.ability.AbilityType;
+import com.sevensins.config.BalanceHelper;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -51,9 +52,10 @@ public class DianeEarthSmashAbility extends Ability {
         );
 
         DamageSource source = player.damageSources().playerAttack(player);
+        float effectiveDamage = BalanceHelper.getEffectiveAbilityDamage(player, AbilityType.EARTH_SMASH, DAMAGE);
 
         for (LivingEntity target : targets) {
-            target.hurt(source, DAMAGE);
+            target.hurt(source, effectiveDamage);
 
             Vec3 delta = target.position().subtract(player.position());
             if (delta.lengthSqr() > 1.0e-8) {

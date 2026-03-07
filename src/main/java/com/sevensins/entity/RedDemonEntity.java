@@ -2,6 +2,7 @@ package com.sevensins.entity;
 
 import com.sevensins.boss.BossManager;
 import com.sevensins.boss.BossPhase;
+import com.sevensins.config.BalanceHelper;
 import com.sevensins.network.ModNetwork;
 import com.sevensins.network.packet.SyncBossStatePacket;
 import net.minecraft.ChatFormatting;
@@ -112,6 +113,18 @@ public class RedDemonEntity extends Monster {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if (!level().isClientSide()) {
+            // Apply centralized boss balance scaling to this entity's attributes
+            float scaledHp = BalanceHelper.getBossMaxHealth(MAX_HP);
+            double scaledDamage = BalanceHelper.getBossDamage(BASE_DAMAGE);
+            var healthAttr = getAttribute(Attributes.MAX_HEALTH);
+            if (healthAttr != null) {
+                healthAttr.setBaseValue(scaledHp);
+            }
+            var damageAttr = getAttribute(Attributes.ATTACK_DAMAGE);
+            if (damageAttr != null) {
+                damageAttr.setBaseValue(scaledDamage);
+            }
+            setHealth(getMaxHealth());
             BossManager.getInstance().registerBoss(getUUID(), "Red Demon", getHealth(), getMaxHealth());
         }
     }
