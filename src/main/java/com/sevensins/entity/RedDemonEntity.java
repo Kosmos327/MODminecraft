@@ -61,12 +61,10 @@ public class RedDemonEntity extends Monster {
     private static final double SYNC_RANGE = 100.0;
 
     /** Phase-2 movement speed (replaces base 0.3 at 50 % HP). */
-    private static final double PHASE_2_SPEED = 0.4;
+    protected static final double PHASE_2_SPEED = 0.4;
 
-    /** Fraction of max-HP that must change before an interval sync is sent. */
-    private static final float SYNC_HP_DELTA_THRESHOLD = 0.02f; // 2 % of max HP
-
-    private BossPhase phase = BossPhase.PHASE_1;
+    /** Current phase — protected so mythic subclasses can extend phase behaviour. */
+    protected BossPhase phase = BossPhase.PHASE_1;
 
     /** HP at the time of the last broadcast – used to suppress redundant syncs. */
     private float lastSyncedHp = MAX_HP;
@@ -75,6 +73,21 @@ public class RedDemonEntity extends Monster {
 
     public RedDemonEntity(EntityType<? extends RedDemonEntity> type, Level level) {
         super(type, level);
+    }
+
+    // -----------------------------------------------------------------------
+    // Boss display name — override in subclasses
+    // -----------------------------------------------------------------------
+
+    /**
+     * Returns the display name sent in {@link SyncBossStatePacket} and shown
+     * in {@link com.sevensins.client.hud.BossHealthOverlay}.
+     *
+     * <p>Subclasses (e.g. {@link MythicRedDemonEntity}) override this to show
+     * a different name.</p>
+     */
+    protected String getBossDisplayName() {
+        return "Red Demon";
     }
 
     // -----------------------------------------------------------------------
@@ -113,19 +126,7 @@ public class RedDemonEntity extends Monster {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if (!level().isClientSide()) {
-            // Apply centralized boss balance scaling to this entity's attributes
-            float scaledHp = BalanceHelper.getBossMaxHealth(MAX_HP);
-            double scaledDamage = BalanceHelper.getBossDamage(BASE_DAMAGE);
-            var healthAttr = getAttribute(Attributes.MAX_HEALTH);
-            if (healthAttr != null) {
-                healthAttr.setBaseValue(scaledHp);
-            }
-            var damageAttr = getAttribute(Attributes.ATTACK_DAMAGE);
-            if (damageAttr != null) {
-                damageAttr.setBaseValue(scaledDamage);
-            }
-            setHealth(getMaxHealth());
-            BossManager.getInstance().registerBoss(getUUID(), "Red Demon", getHealth(), getMaxHealth());
+            BossManager.getInstance().registerBoss(getUUID(), getBossDisplayName(), getHealth(), getMaxHealth());
         }
     }
 
@@ -198,7 +199,7 @@ public class RedDemonEntity extends Monster {
         if (!(level() instanceof ServerLevel serverLevel)) return;
         BossManager.getInstance().updateBoss(getUUID(), getHealth(), phase);
         SyncBossStatePacket packet = new SyncBossStatePacket(
-                "Red Demon", getHealth(), getMaxHealth(), phase);
+                getBossDisplayName(), getHealth(), getMaxHealth(), phase);
         for (ServerPlayer player : serverLevel.players()) {
             if (distanceTo(player) <= SYNC_RANGE) {
                 ModNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);

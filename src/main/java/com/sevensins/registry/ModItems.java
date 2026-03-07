@@ -3,6 +3,7 @@ package com.sevensins.registry;
 import com.sevensins.SevenSinsMod;
 import com.sevensins.common.data.SinType;
 import com.sevensins.item.ChastiefolItem;
+import com.sevensins.item.CrownOfNightItem;
 import com.sevensins.item.LostvayneItem;
 import com.sevensins.item.MagicScrollItem;
 import com.sevensins.item.RhittaItem;
@@ -86,6 +87,19 @@ public class ModItems {
     /** Ordered list of all sacred treasure items (e.g. for creative tab). */
     public static final List<RegistryObject<Item>> ALL_SACRED_TREASURES = List.of(
             LOSTVAYNE, RHITTA, CHASTIEFOL
+    );
+
+    // -------------------------------------------------------------------------
+    // Legendary Artifacts — rare endgame relics
+    // -------------------------------------------------------------------------
+
+    /** Crown of Night — first Legendary Artifact; endgame drop from Night Demon Raids. */
+    public static final RegistryObject<Item> CROWN_OF_NIGHT = ITEMS.register("crown_of_night",
+            () -> new CrownOfNightItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Ordered list of all legendary artifact items (e.g. for creative tab). */
+    public static final List<RegistryObject<Item>> ALL_LEGENDARY_ARTIFACTS = List.of(
+            CROWN_OF_NIGHT
     );
 
     // -------------------------------------------------------------------------

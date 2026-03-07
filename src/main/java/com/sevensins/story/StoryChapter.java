@@ -24,8 +24,8 @@ public enum StoryChapter {
     /** Chapter 4 — "Into the Demon Cave". */
     DEMON_CAVE(4),
 
-    /** Chapter 5 — "Estarossa, Harbinger of Darkness". */
-    ESTAROSSA(5);
+    /** Chapter 5 — Endgame: Night Demon Raids and beyond. */
+    ENDGAME(5);
 
     private final int stage;
 

@@ -39,17 +39,21 @@ public enum StoryFlag {
     /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
     OBTAINED_CHASTIEFOL("obtained_chastiefol"),
 
-    /** Set when the player first encounters Estarossa. */
-    ESTAROSSA_ENCOUNTERED("estarossa_encountered"),
+    // -------------------------------------------------------------------------
+    // Endgame flags (post-main-story)
+    // -------------------------------------------------------------------------
 
-    /** Set when Estarossa first transitions to Phase 2 in the player's encounter. */
-    ESTAROSSA_PHASE_2_SEEN("estarossa_phase_2_seen"),
+    /** Set when the player has completed the main story arc (Demon Cave cleared). */
+    MAIN_STORY_COMPLETE("main_story_complete"),
 
-    /** Set when Estarossa enters the ENRAGED phase in the player's encounter. */
-    ESTAROSSA_ENRAGED_SEEN("estarossa_enraged_seen"),
+    /** Set when the player successfully completes a Night Demon Raid. */
+    NIGHT_RAID_COMPLETE("night_raid_complete"),
 
-    /** Set after the player defeats Estarossa. */
-    ESTAROSSA_SLAIN("estarossa_slain");
+    /** Set when the player defeats the Mythic Red Demon. */
+    MYTHIC_DEMON_SLAIN("mythic_demon_slain"),
+
+    /** Set when the player obtains their first Legendary Artifact. */
+    LEGENDARY_ARTIFACT_OBTAINED("legendary_artifact_obtained");
 
     private final String id;
 

@@ -1,5 +1,6 @@
 package com.sevensins.boss;
 
+import com.sevensins.entity.MythicRedDemonEntity;
 import net.minecraft.server.level.ServerPlayer;
 
 import javax.annotation.Nullable;
@@ -16,8 +17,12 @@ public final class BossRewardTable {
     /** Vanilla XP points awarded to the killer of the Red Demon. */
     public static final int RED_DEMON_XP = 250;
 
-    /** Vanilla XP points awarded to the killer of Estarossa. */
-    public static final int ESTAROSSA_XP = 800;
+    /**
+     * Vanilla XP points awarded to the killer of the Mythic Red Demon.
+     * Equals {@link #RED_DEMON_XP} × {@link MythicRedDemonEntity#REWARD_MULTIPLIER}.
+     */
+    public static final int MYTHIC_RED_DEMON_XP =
+            (int) (RED_DEMON_XP * MythicRedDemonEntity.REWARD_MULTIPLIER);
 
     private BossRewardTable() {}
 
@@ -33,13 +38,13 @@ public final class BossRewardTable {
     }
 
     /**
-     * Grants the Estarossa kill reward to {@code player}.
+     * Grants the Mythic Red Demon kill reward to {@code player}.
      * Safe to call with a {@code null} player — the reward is silently skipped.
      *
-     * @param player the {@link ServerPlayer} who killed the boss
+     * @param player the {@link ServerPlayer} who killed the mythic boss
      */
-    public static void onEstarossaDeath(@Nullable ServerPlayer player) {
+    public static void onMythicBossDeath(@Nullable ServerPlayer player) {
         if (player == null) return;
-        player.giveExperiencePoints(ESTAROSSA_XP);
+        player.giveExperiencePoints(MYTHIC_RED_DEMON_XP);
     }
 }
