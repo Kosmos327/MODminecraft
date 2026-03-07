@@ -89,6 +89,10 @@ public final class StoryTriggerService {
             onRedDemonSlain(player);
         } else if (QuestRegistry.CLEAR_DEMON_CAVE_ID.equals(questId)) {
             onDemonCaveQuestComplete(player);
+        } else if (QuestRegistry.SLAY_GRAY_DEMON_ID.equals(questId)) {
+            onGrayDemonSlain(player);
+        } else if (QuestRegistry.SLAY_DEMON_COMMANDER_ID.equals(questId)) {
+            onDemonCommanderSlain(player);
         }
     }
 
@@ -153,6 +157,33 @@ public final class StoryTriggerService {
             cap.getData().setPersonalStoryStage(StoryChapter.DEMON_CAVE.getStage());
             player.sendSystemMessage(
                     Component.literal("Chapter complete: the Demon Cave has been purged."));
+            // Begin Chapter 5 — the Gray Demon lurks in the depths
+            player.sendSystemMessage(
+                    Component.literal("Strange reports of a Gray Demon emerge from the depths."));
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_GRAY_DEMON_ID);
+        });
+    }
+
+    private void onGrayDemonSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.GRAY_DEMON_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.GRAY_DEMON.getStage());
+            player.sendSystemMessage(Component.literal("You have slain the Gray Demon!"));
+            // Begin Chapter 6 — the Demon Commander rallies forces
+            player.sendSystemMessage(Component.literal(
+                    "A powerful Demon Commander rallies the demonic forces. Stop them!"));
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_DEMON_COMMANDER_ID);
+        });
+    }
+
+    private void onDemonCommanderSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_COMMANDER_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.DEMON_COMMANDER.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated the Demon Commander!"));
+            player.sendSystemMessage(
+                    Component.literal("The demonic forces fall into disarray."));
         });
     }
 
