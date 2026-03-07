@@ -1,6 +1,7 @@
 package com.sevensins.character;
 
 import com.sevensins.ability.AbilityType;
+import com.sevensins.ability.PassiveAbilityManager;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.item.SacredTreasureItem;
 import net.minecraft.world.entity.player.Player;
@@ -124,6 +125,46 @@ public final class CharacterStats {
                 .map(cap -> cap.getData().getMaxMana())
                 .orElse(0);
         return (baseMana * pct) / 100;
+    }
+
+    // -------------------------------------------------------------------------
+    // Passive-ability stat helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the effective max mana for a player, including any passive bonus from
+     * {@link PassiveAbilityManager} (e.g. SLOTH/KING +15 % max mana).
+     *
+     * @param player the target player
+     * @return effective max mana (≥ 0)
+     */
+    public static int getEffectiveMaxMana(Player player) {
+        int baseMana = ModCapabilities.get(player)
+                .map(cap -> cap.getData().getMaxMana())
+                .orElse(0);
+        float bonus = PassiveAbilityManager.getMaxManaBonus(player);
+        return baseMana + Math.round(baseMana * bonus);
+    }
+
+    /**
+     * Returns the additive damage multiplier bonus for a player (e.g. 0.20 = +20 %).
+     * Delegates to {@link PassiveAbilityManager#getBonusDamage}.
+     *
+     * @param player the target player
+     * @return cumulative damage multiplier bonus (≥ 0)
+     */
+    public static float getTotalBonusDamage(Player player) {
+        return PassiveAbilityManager.getBonusDamage(player);
+    }
+
+    /**
+     * Returns the total damage resistance fraction for a player (e.g. 0.10 = 10 % reduction).
+     *
+     * @param player the target player
+     * @return resistance fraction in the range [0, 1)
+     */
+    public static float getTotalResistance(Player player) {
+        return PassiveAbilityManager.getResistanceBonus(player);
     }
 
     // -------------------------------------------------------------------------
