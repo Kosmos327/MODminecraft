@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Runtime
+run/
+
+# Forge decompiled sources
+src/main/java/net/
+
+# OS
+.DS_Store
+Thumbs.db
