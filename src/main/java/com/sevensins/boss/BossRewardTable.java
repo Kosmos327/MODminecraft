@@ -23,6 +23,12 @@ public final class BossRewardTable {
     /** Vanilla XP points awarded to the killer of the Demon Commander. */
     public static final int DEMON_COMMANDER_XP = 500;
 
+    /** Vanilla XP points awarded to the killer of Estarossa. */
+    public static final int ESTAROSSA_XP = 800;
+
+    /** Vanilla XP points awarded to the killer of the Demon King. */
+    public static final int DEMON_KING_XP = 2000;
+
     private BossRewardTable() {}
 
     /**
@@ -56,5 +62,27 @@ public final class BossRewardTable {
     public static void onDemonCommanderDeath(@Nullable ServerPlayer player) {
         if (player == null) return;
         player.giveExperiencePoints(DEMON_COMMANDER_XP);
+    }
+
+    /**
+     * Grants the Estarossa kill reward to {@code player}.
+     * Safe to call with a {@code null} player — the reward is silently skipped.
+     *
+     * @param player the {@link ServerPlayer} who killed the boss
+     */
+    public static void onEstarossaDeath(@Nullable ServerPlayer player) {
+        if (player == null) return;
+        player.giveExperiencePoints(ESTAROSSA_XP);
+    }
+
+    /**
+     * Grants the Demon King kill reward to {@code player}.
+     * Safe to call with a {@code null} player — the reward is silently skipped.
+     *
+     * @param player the {@link ServerPlayer} who killed the boss
+     */
+    public static void onDemonKingDeath(@Nullable ServerPlayer player) {
+        if (player == null) return;
+        player.giveExperiencePoints(DEMON_KING_XP);
     }
 }

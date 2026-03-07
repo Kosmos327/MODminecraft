@@ -59,7 +59,8 @@ public final class StoryTriggerService {
             // Begin Chapter 1 if not already started
             if (charData.getPersonalStoryStage() == StoryChapter.NONE.getStage()) {
                 charData.setPersonalStoryStage(StoryChapter.AWAKENING.getStage());
-                player.sendSystemMessage(Component.literal("Your Sin has awakened..."));
+                player.sendSystemMessage(Component.literal(
+                        buildAwakeningMessage(characterType)));
             }
 
             // Assign the first quest if not already active or completed
@@ -96,6 +97,14 @@ public final class StoryTriggerService {
             onGrayDemonSlain(player);
         } else if (QuestRegistry.SLAY_DEMON_COMMANDER_ID.equals(questId)) {
             onDemonCommanderSlain(player);
+        } else if (QuestRegistry.SLAY_ESTAROSSA_ID.equals(questId)) {
+            onEstarossaSlain(player);
+        } else if (QuestRegistry.SLAY_DEMON_KING_ID.equals(questId)) {
+            onDemonKingQuestComplete(player);
+        } else if (QuestRegistry.SURVIVE_NIGHT_RAID_ID.equals(questId)) {
+            onNightRaidComplete(player);
+        } else if (QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(questId)) {
+            onMythicDemonSlain(player);
         }
     }
 
@@ -194,7 +203,35 @@ public final class StoryTriggerService {
             player.sendSystemMessage(
                     Component.literal("You have defeated the Demon Commander!"));
             player.sendSystemMessage(
-                    Component.literal("The demonic forces fall into disarray."));
+                    Component.literal("The demonic forces fall into disarray. But something far worse stirs..."));
+            // Begin Chapter 7 — Estarossa, the Commandment of Love
+            player.sendSystemMessage(Component.literal(
+                    "Estarossa, one of the Ten Commandments, approaches. Steel yourself."));
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_ESTAROSSA_ID);
+        });
+    }
+
+    private void onEstarossaSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.ESTAROSSA.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated Estarossa!"));
+            player.sendSystemMessage(
+                    Component.literal("The Demon King himself now turns his gaze upon you."));
+            // Begin Chapter 8 — face the Demon King
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_DEMON_KING_ID);
+        });
+    }
+
+    private void onDemonKingQuestComplete(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.DEMON_KING.getStage());
+            player.sendSystemMessage(
+                    Component.literal("\u2605 The Demon King has fallen. The darkness lifts. \u2605"));
+            player.sendSystemMessage(
+                    Component.literal("You have completed your journey as one of the Seven Deadly Sins."));
         });
     }
 
@@ -257,5 +294,26 @@ public final class StoryTriggerService {
                 QuestManager.assignQuest(player, QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID);
             }
         });
+    }
+
+    // -------------------------------------------------------------------------
+    // Character-specific helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns a character-specific awakening message for the given
+     * {@link CharacterType}, matching each sin's canonical identity.
+     */
+    private static String buildAwakeningMessage(CharacterType character) {
+        return switch (character) {
+            case MELIODAS -> "Your Sin of Wrath has awakened... the Dragon's Sin stirs within you.";
+            case DIANE    -> "Your Sin of Envy has awakened... the earth trembles at your resolve.";
+            case BAN      -> "Your Sin of Greed has awakened... undying hunger fuels your strength.";
+            case KING     -> "Your Sin of Sloth has awakened... the fairy king's spirit answers your call.";
+            case GOWTHER  -> "Your Sin of Lust has awakened... the puppet mage's power flows through you.";
+            case MERLIN   -> "Your Sin of Gluttony has awakened... infinite arcane knowledge awaits.";
+            case ESCANOR  -> "Your Sin of Pride has awakened... at high noon, you are the strongest there is.";
+            default       -> "Your Sin has awakened...";
+        };
     }
 }
