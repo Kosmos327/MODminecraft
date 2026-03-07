@@ -5,6 +5,7 @@ import com.sevensins.character.capability.ISinData;
 import com.sevensins.network.packet.AdvanceDialoguePacket;
 import com.sevensins.network.packet.SelectCharacterPacket;
 import com.sevensins.network.packet.SinDataSyncPacket;
+import com.sevensins.network.packet.SyncBossStatePacket;
 import com.sevensins.network.packet.SyncCharacterDataPacket;
 import com.sevensins.network.packet.SyncCooldownPacket;
 import com.sevensins.network.packet.TriggerDialoguePacket;
@@ -99,6 +100,13 @@ public class ModNetwork {
                 AdvanceDialoguePacket::encode,
                 AdvanceDialoguePacket::decode,
                 AdvanceDialoguePacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                SyncBossStatePacket.class,
+                SyncBossStatePacket::encode,
+                SyncBossStatePacket::decode,
+                SyncBossStatePacket::handle
         );
     }
 

@@ -19,7 +19,10 @@ public enum StoryFlag {
     FIRST_DEMONS_STARTED("first_demons_started"),
 
     /** Set when the player completes the Chapter 2 demon-hunt quest. */
-    FIRST_DEMONS_COMPLETE("first_demons_complete");
+    FIRST_DEMONS_COMPLETE("first_demons_complete"),
+
+    /** Set when the player defeats the Red Demon boss. */
+    RED_DEMON_SLAIN("red_demon_slain");
 
     private final String id;
 

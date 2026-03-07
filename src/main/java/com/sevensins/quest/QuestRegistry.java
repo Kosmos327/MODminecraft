@@ -18,6 +18,9 @@ public final class QuestRegistry {
     /** ID of the Chapter 2 demon-hunt quest. */
     public static final String FIRST_DEMON_HUNT_ID = "first_demon_hunt";
 
+    /** ID of the Chapter 3 Red Demon boss quest. */
+    public static final String SLAY_RED_DEMON_ID = "slay_red_demon";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {
@@ -34,6 +37,13 @@ public final class QuestRegistry {
                 "Defeat 3 powerful hostile creatures (max health \u2265 20) threatening the land.",
                 QuestType.KILL,
                 3
+        ));
+        register(new Quest(
+                SLAY_RED_DEMON_ID,
+                "The Red Demon",
+                "Defeat the Red Demon threatening the land.",
+                QuestType.KILL,
+                1
         ));
     }
 

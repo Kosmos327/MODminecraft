@@ -84,6 +84,8 @@ public final class StoryTriggerService {
             onAwakeningTrialComplete(player);
         } else if (QuestRegistry.FIRST_DEMON_HUNT_ID.equals(questId)) {
             onFirstDemonHuntComplete(player);
+        } else if (QuestRegistry.SLAY_RED_DEMON_ID.equals(questId)) {
+            onRedDemonSlain(player);
         }
     }
 
@@ -122,6 +124,17 @@ public final class StoryTriggerService {
             cap.getData().setPersonalStoryStage(StoryChapter.FIRST_DEMONS.getStage());
             player.sendSystemMessage(
                     Component.literal("Chapter complete: you have faced the first demons."));
+            // Begin Chapter 3 — the Red Demon threatens the land
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_RED_DEMON_ID);
+        });
+    }
+
+    private void onRedDemonSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            PlayerQuestData questData = cap.getData().getQuestData();
+            questData.addStoryFlag(StoryFlag.RED_DEMON_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.RED_DEMON.getStage());
+            player.sendSystemMessage(Component.literal("You have slain the Red Demon!"));
         });
     }
 }

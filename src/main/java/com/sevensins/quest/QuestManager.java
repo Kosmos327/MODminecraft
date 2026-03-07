@@ -84,6 +84,28 @@ public final class QuestManager {
     }
 
     // -------------------------------------------------------------------------
+    // Boss quest completion
+    // -------------------------------------------------------------------------
+
+    /**
+     * Directly completes {@code questId} for {@code player} if it is currently
+     * the active quest.  Intended for boss-kill quests that use a dedicated
+     * event path rather than the generic {@link #incrementKillProgress} counter.
+     */
+    public static void completeBossKillQuest(ServerPlayer player, String questId) {
+        if (player == null || questId == null) return;
+
+        QuestRegistry.getQuest(questId).ifPresent(quest ->
+                ModCapabilities.get(player).ifPresent(cap -> {
+                    PlayerQuestData questData = cap.getData().getQuestData();
+                    if (!questId.equals(questData.getActiveQuestId())) return;
+                    if (questData.isCompleted(questId)) return;
+                    completeQuest(player, quest, cap.getData());
+                })
+        );
+    }
+
+    // -------------------------------------------------------------------------
     // Completion
     // -------------------------------------------------------------------------
 
