@@ -4,6 +4,7 @@ import com.sevensins.SevenSinsMod;
 import com.sevensins.entity.DemonCommanderEntity;
 import com.sevensins.entity.GrayDemonEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
+import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;

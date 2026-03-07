@@ -220,4 +220,31 @@ public final class StoryTriggerService {
                             .addStoryFlag(StoryFlag.DEMON_CAVE_CLEARED.getId()));
         }
     }
+
+    private void onNightRaidComplete(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            // Night raid complete flag is set by NightRaidManager; here we advance quests.
+            player.sendSystemMessage(
+                    Component.literal("You have survived the Night Demon Raid!"));
+            // Offer the next endgame quest if not already completed or active
+            PlayerQuestData questData = cap.getData().getQuestData();
+            if (!questData.isCompleted(QuestRegistry.SLAY_MYTHIC_DEMON_ID)
+                    && !QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(questData.getActiveQuestId())) {
+                QuestManager.assignQuest(player, QuestRegistry.SLAY_MYTHIC_DEMON_ID);
+            }
+        });
+    }
+
+    private void onMythicDemonSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            player.sendSystemMessage(
+                    Component.literal("The Mythic demon has fallen. Seek the Legendary Artifacts."));
+            // Offer the legendary artifact quest if not already completed or active
+            PlayerQuestData questData = cap.getData().getQuestData();
+            if (!questData.isCompleted(QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID)
+                    && !QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID.equals(questData.getActiveQuestId())) {
+                QuestManager.assignQuest(player, QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID);
+            }
+        });
+    }
 }

@@ -23,8 +23,11 @@ public class ModCreativeTabs {
                             .displayItems((parameters, output) -> {
                                 ModItems.ALL_EMBLEMS.forEach(item -> output.accept(item.get()));
                                 output.accept(ModItems.SIN_ALTAR_ITEM.get());
+                                output.accept(ModItems.SACRED_FORGE_ITEM.get());
                                 output.accept(ModItems.DEMON_FRAGMENT.get());
                                 output.accept(ModItems.SACRED_SCROLL.get());
+                                output.accept(ModItems.SIN_FRAGMENT.get());
+                                output.accept(ModItems.MAGIC_SCROLL.get());
                                 ModItems.ALL_SACRED_TREASURES.forEach(item -> output.accept(item.get()));
                             })
                             .build()
