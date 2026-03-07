@@ -58,7 +58,40 @@ public enum StoryFlag {
     DEMON_COMMANDER_PHASE2_SEEN("demon_commander_phase2_seen"),
 
     /** Set the first time the Demon Commander summons minions. */
-    DEMON_COMMANDER_SUMMONS_SEEN("demon_commander_summons_seen");
+    DEMON_COMMANDER_SUMMONS_SEEN("demon_commander_summons_seen"),
+
+    /** Set when the player upgrades a Sacred Treasure for the first time. */
+    SACRED_TREASURE_UPGRADED("sacred_treasure_upgraded"),
+
+    /** Set when the player first encounters (enters range of) the Demon King. */
+    DEMON_KING_ENCOUNTERED("demon_king_encountered"),
+
+    /** Set the first time the Demon King enters Phase 2. */
+    DEMON_KING_PHASE_2_SEEN("demon_king_phase_2_seen"),
+
+    /** Set the first time the Demon King enters Phase 3. */
+    DEMON_KING_PHASE_3_SEEN("demon_king_phase_3_seen"),
+
+    /** Set the first time the Demon King enters his Final Phase. */
+    DEMON_KING_FINAL_PHASE_SEEN("demon_king_final_phase_seen"),
+
+    /** Set when the player defeats the Demon King. */
+    DEMON_KING_SLAIN("demon_king_slain"),
+
+    /** Set when the player first encounters (spawns) Estarossa. */
+    ESTAROSSA_ENCOUNTERED("estarossa_encountered"),
+
+    /** Set the first time Estarossa enters Phase 2. */
+    ESTAROSSA_PHASE_2_SEEN("estarossa_phase_2_seen"),
+
+    /** Set the first time Estarossa enters the Enraged phase. */
+    ESTAROSSA_ENRAGED_SEEN("estarossa_enraged_seen"),
+
+    /** Set when the player successfully completes a Night Demon Raid. */
+    NIGHT_RAID_COMPLETE("night_raid_complete"),
+
+    /** Set when the player obtains a Legendary Artifact for the first time. */
+    LEGENDARY_ARTIFACT_OBTAINED("legendary_artifact_obtained");
 
     private final String id;
 

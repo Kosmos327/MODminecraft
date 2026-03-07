@@ -63,6 +63,12 @@ public class RedDemonEntity extends Monster {
     /** Phase-2 movement speed (replaces base 0.3 at 50 % HP). */
     protected static final double PHASE_2_SPEED = 0.4;
 
+    /**
+     * Minimum HP change (as a fraction of max HP) required to trigger a sync.
+     * A value of 0.02 means syncs occur when HP changes by 2 % or more.
+     */
+    private static final float SYNC_HP_DELTA_THRESHOLD = 0.02f;
+
     /** Current phase — protected so mythic subclasses can extend phase behaviour. */
     protected BossPhase phase = BossPhase.PHASE_1;
 

@@ -71,7 +71,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
-        UltimateAbilityManager.tickAll(event.server);
+        UltimateAbilityManager.tickAll(event.getServer());
     }
 
     // -------------------------------------------------------------------------

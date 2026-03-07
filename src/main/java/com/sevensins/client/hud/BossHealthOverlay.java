@@ -100,7 +100,6 @@ public class BossHealthOverlay {
             // Phase label (only shown in PHASE_2 and beyond)
             String phaseText = getPhaseDisplayText(bossInfo.phase());
             if (phaseText != null) {
-                int phaseColor = bossInfo.phase() == BossPhase.ENRAGED ? COLOR_ENRAGED : COLOR_PHASE2;
                 int phaseWidth = mc.font.width(phaseText);
                 int phaseColor = getPhaseColor(bossInfo.phase());
                 guiGraphics.drawString(mc.font, phaseText,
@@ -119,7 +118,9 @@ public class BossHealthOverlay {
         return switch (phase) {
             case PHASE_1 -> null;
             case PHASE_2 -> "Phase 2";
+            case PHASE_3 -> "Phase 3";
             case ENRAGED -> "ENRAGED";
+            case FINAL_PHASE -> "FINAL PHASE";
         };
     }
 
@@ -131,7 +132,9 @@ public class BossHealthOverlay {
         return switch (phase) {
             case PHASE_1 -> COLOR_TEXT;
             case PHASE_2 -> COLOR_PHASE2;
+            case PHASE_3 -> COLOR_PHASE2;
             case ENRAGED -> COLOR_ENRAGED;
+            case FINAL_PHASE -> COLOR_ENRAGED;
         };
     }
 
