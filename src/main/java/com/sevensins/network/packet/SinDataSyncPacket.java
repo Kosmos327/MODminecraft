@@ -1,8 +1,8 @@
 package com.sevensins.network.packet;
 
-import com.sevensins.common.capability.ISinData;
-import com.sevensins.common.capability.ModCapabilities;
-import com.sevensins.common.capability.SinData;
+import com.sevensins.character.capability.ISinData;
+import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.character.capability.SinData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;

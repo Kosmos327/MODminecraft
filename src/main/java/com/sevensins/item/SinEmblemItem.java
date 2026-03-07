@@ -1,8 +1,8 @@
-package com.sevensins.common.item;
+package com.sevensins.item;
 
-import com.sevensins.common.capability.ModCapabilities;
+import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.common.data.SinType;
-import com.sevensins.common.registry.ModSounds;
+import com.sevensins.registry.ModSounds;
 import com.sevensins.network.ModNetwork;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

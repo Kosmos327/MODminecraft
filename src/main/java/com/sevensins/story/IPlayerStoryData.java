@@ -1,6 +1,6 @@
 package com.sevensins.story;
 
-import com.sevensins.common.CharacterType;
+import com.sevensins.character.CharacterType;
 
 /**
  * Holds per-player story state for Act 1.

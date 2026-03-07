@@ -1,4 +1,4 @@
-package com.sevensins.common.effect;
+package com.sevensins.effect;
 
 import com.sevensins.common.data.SinType;
 import net.minecraft.world.effect.MobEffect;

@@ -1,6 +1,6 @@
 package com.sevensins.story;
 
-import com.sevensins.common.CharacterType;
+import com.sevensins.character.CharacterType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 

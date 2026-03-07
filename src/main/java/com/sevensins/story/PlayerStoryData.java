@@ -1,6 +1,6 @@
 package com.sevensins.story;
 
-import com.sevensins.common.CharacterType;
+import com.sevensins.character.CharacterType;
 
 /**
  * Default in-memory implementation of {@link IPlayerStoryData}.

@@ -20,10 +20,10 @@ public final class ManaManager {
      * @param player the target player
      * @return current mana, or {@code 0} if the capability is unavailable
      */
-    public static float getMana(Player player) {
+    public static int getMana(Player player) {
         return ModCapabilities.get(player)
                 .map(cap -> cap.getData().getMana())
-                .orElse(0f);
+                .orElse(0);
     }
 
     /**
@@ -32,10 +32,10 @@ public final class ManaManager {
      * @param player the target player
      * @return maximum mana, or {@code 0} if the capability is unavailable
      */
-    public static float getMaxMana(Player player) {
+    public static int getMaxMana(Player player) {
         return ModCapabilities.get(player)
                 .map(cap -> cap.getData().getMaxMana())
-                .orElse(0f);
+                .orElse(0);
     }
 
     /**
@@ -48,8 +48,8 @@ public final class ManaManager {
      */
     public static void consumeMana(Player player, int amount) {
         ModCapabilities.get(player).ifPresent(cap -> {
-            float current = cap.getData().getMana();
-            cap.getData().setMana(Math.max(0f, current - amount));
+            int current = cap.getData().getMana();
+            cap.getData().setMana(Math.max(0, current - amount));
         });
     }
 
@@ -64,8 +64,8 @@ public final class ManaManager {
      */
     public static void restoreMana(Player player, int amount) {
         ModCapabilities.get(player).ifPresent(cap -> {
-            float current = cap.getData().getMana();
-            float max = cap.getData().getMaxMana();
+            int current = cap.getData().getMana();
+            int max = cap.getData().getMaxMana();
             cap.getData().setMana(Math.min(max, current + amount));
         });
     }

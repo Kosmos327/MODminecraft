@@ -1,8 +1,10 @@
 package com.sevensins.network;
 
 import com.sevensins.SevenSinsMod;
-import com.sevensins.common.capability.ISinData;
+import com.sevensins.character.capability.ISinData;
+import com.sevensins.network.packet.SelectCharacterPacket;
 import com.sevensins.network.packet.SinDataSyncPacket;
+import com.sevensins.network.packet.UseAbilityPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
@@ -36,6 +38,27 @@ public class ModNetwork {
                 SinDataSyncPacket::encode,
                 SinDataSyncPacket::decode,
                 SinDataSyncPacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                OpenCharacterSelectionPacket.class,
+                OpenCharacterSelectionPacket::encode,
+                OpenCharacterSelectionPacket::decode,
+                OpenCharacterSelectionPacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                SelectCharacterPacket.class,
+                SelectCharacterPacket::encode,
+                SelectCharacterPacket::decode,
+                SelectCharacterPacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                UseAbilityPacket.class,
+                UseAbilityPacket::encode,
+                UseAbilityPacket::decode,
+                UseAbilityPacket::handle
         );
     }
 

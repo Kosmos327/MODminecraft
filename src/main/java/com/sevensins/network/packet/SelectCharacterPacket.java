@@ -1,8 +1,8 @@
 package com.sevensins.network.packet;
 
-import com.sevensins.common.capability.ModCapabilities;
-import com.sevensins.common.data.CharacterType;
-import com.sevensins.common.data.PlayerCharacterData;
+import com.sevensins.character.CharacterType;
+import com.sevensins.character.PlayerCharacterData;
+import com.sevensins.character.capability.ModCapabilities;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -76,9 +76,10 @@ public class SelectCharacterPacket {
             ServerPlayer player = ctx.getSender();
             if (player == null) return;
 
-            player.getCapability(ModCapabilities.PLAYER_CHARACTER).ifPresent(data -> {
+            ModCapabilities.get(player).ifPresent(capData -> {
+                PlayerCharacterData data = capData.getData();
                 // Allow selection only if the player hasn't chosen yet.
-                if (!data.hasSelectedCharacter()) {
+                if (data.getSelectedCharacter() == CharacterType.NONE) {
                     data.setSelectedCharacter(character);
 
                     // Meliodas special-case: begin personal story arc.

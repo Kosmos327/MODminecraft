@@ -1,4 +1,4 @@
-package com.sevensins.common.capability;
+package com.sevensins.character.capability;
 
 import com.sevensins.common.data.SinType;
 import net.minecraft.nbt.CompoundTag;

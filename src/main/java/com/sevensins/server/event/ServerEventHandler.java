@@ -1,8 +1,8 @@
 package com.sevensins.server.event;
 
 import com.sevensins.SevenSinsMod;
-import com.sevensins.common.capability.ISinData;
-import com.sevensins.common.capability.ModCapabilities;
+import com.sevensins.character.capability.ISinData;
+import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.common.data.SinType;
 import com.sevensins.config.ModConfig;
 import com.sevensins.network.ModNetwork;
