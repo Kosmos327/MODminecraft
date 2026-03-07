@@ -4,6 +4,8 @@ import com.sevensins.SevenSinsMod;
 import com.sevensins.character.capability.ISinData;
 import com.sevensins.network.packet.SelectCharacterPacket;
 import com.sevensins.network.packet.SinDataSyncPacket;
+import com.sevensins.network.packet.SyncCharacterDataPacket;
+import com.sevensins.network.packet.UnlockSkillPacket;
 import com.sevensins.network.packet.UseAbilityPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,6 +61,20 @@ public class ModNetwork {
                 UseAbilityPacket::encode,
                 UseAbilityPacket::decode,
                 UseAbilityPacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                UnlockSkillPacket.class,
+                UnlockSkillPacket::encode,
+                UnlockSkillPacket::decode,
+                UnlockSkillPacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                SyncCharacterDataPacket.class,
+                SyncCharacterDataPacket::encode,
+                SyncCharacterDataPacket::decode,
+                SyncCharacterDataPacket::handle
         );
     }
 

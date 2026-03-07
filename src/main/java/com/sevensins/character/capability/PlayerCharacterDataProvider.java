@@ -1,14 +1,21 @@
 package com.sevensins.character.capability;
 
+import com.sevensins.ability.AbilityType;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.PlayerCharacterData;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 public class PlayerCharacterDataProvider implements ICapabilitySerializable<CompoundTag> {
 
@@ -29,6 +36,7 @@ public class PlayerCharacterDataProvider implements ICapabilitySerializable<Comp
             data.setSkillPoints(other.getSkillPoints());
             data.setJoinedToMeliodasTeam(other.isJoinedToMeliodasTeam());
             data.setPersonalStoryStage(other.getPersonalStoryStage());
+            data.setUnlockedAbilities(other.getUnlockedAbilities());
         }
     };
     private final LazyOptional<IPlayerCharacterData> optional = LazyOptional.of(() -> instance);
@@ -49,6 +57,13 @@ public class PlayerCharacterDataProvider implements ICapabilitySerializable<Comp
         tag.putInt("skillPoints", data.getSkillPoints());
         tag.putBoolean("joinedToMeliodasTeam", data.isJoinedToMeliodasTeam());
         tag.putInt("personalStoryStage", data.getPersonalStoryStage());
+
+        ListTag abilitiesList = new ListTag();
+        for (AbilityType ability : data.getUnlockedAbilities()) {
+            abilitiesList.add(StringTag.valueOf(ability.getSerializedName()));
+        }
+        tag.put("unlockedAbilities", abilitiesList);
+
         return tag;
     }
 
@@ -78,6 +93,17 @@ public class PlayerCharacterDataProvider implements ICapabilitySerializable<Comp
         }
         if (tag.contains("personalStoryStage")) {
             data.setPersonalStoryStage(tag.getInt("personalStoryStage"));
+        }
+        if (tag.contains("unlockedAbilities", Tag.TAG_LIST)) {
+            Set<AbilityType> unlocked = EnumSet.noneOf(AbilityType.class);
+            ListTag list = tag.getList("unlockedAbilities", Tag.TAG_STRING);
+            for (int i = 0; i < list.size(); i++) {
+                AbilityType ability = AbilityType.fromName(list.getString(i));
+                if (ability != AbilityType.NONE) {
+                    unlocked.add(ability);
+                }
+            }
+            data.setUnlockedAbilities(unlocked);
         }
     }
 
