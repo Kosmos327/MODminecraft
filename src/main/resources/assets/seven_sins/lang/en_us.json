@@ -40,5 +40,12 @@
   "message.seven_sins.sin_chosen":      "You have chosen the path of %s. There is no turning back.",
   "message.seven_sins.already_aligned": "You are already bound to a sin.",
   "message.seven_sins.sin_level_up":    "Your %s has reached level %s!",
-  "message.seven_sins.progression.level_up": "You reached Sin Level %s"
+  "message.seven_sins.progression.level_up": "You reached Sin Level %s",
+
+  "hud.seven_sins.sin":          "Sin: %s",
+  "hud.seven_sins.level":        "Level: %s",
+  "hud.seven_sins.xp":           "XP: %s / %s",
+  "hud.seven_sins.skill_points": "SP: %s",
+  "hud.seven_sins.power_level":  "Power Level: %s",
+  "hud.seven_sins.ready":        "READY"
 }

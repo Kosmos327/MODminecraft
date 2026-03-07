@@ -5,6 +5,7 @@ import com.sevensins.character.capability.ISinData;
 import com.sevensins.network.packet.SelectCharacterPacket;
 import com.sevensins.network.packet.SinDataSyncPacket;
 import com.sevensins.network.packet.SyncCharacterDataPacket;
+import com.sevensins.network.packet.SyncCooldownPacket;
 import com.sevensins.network.packet.UnlockSkillPacket;
 import com.sevensins.network.packet.UseAbilityPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -75,6 +76,13 @@ public class ModNetwork {
                 SyncCharacterDataPacket::encode,
                 SyncCharacterDataPacket::decode,
                 SyncCharacterDataPacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                SyncCooldownPacket.class,
+                SyncCooldownPacket::encode,
+                SyncCooldownPacket::decode,
+                SyncCooldownPacket::handle
         );
     }
 
