@@ -1,6 +1,6 @@
 package com.sevensins.event;
 
-import com.sevensins.mana.ManaManager;
+import com.sevensins.mana.ManaRegenService;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -9,8 +9,13 @@ import net.minecraftforge.fml.common.Mod;
 /**
  * Forge event subscriber responsible for passive mana regeneration.
  *
- * <p>Every 20 ticks (roughly once per second) each server-side player
- * regenerates {@value #MANA_PER_REGEN} mana, up to their maximum.</p>
+ * <p>Every {@value #REGEN_INTERVAL_TICKS} ticks (roughly once per second) each
+ * server-side player regenerates {@value #MANA_PER_REGEN} mana, up to their
+ * maximum.</p>
+ *
+ * <p>Actual regen logic (including the max-mana skip) is handled by
+ * {@link ManaRegenService#applyRegen} so the optimisation is shared with any
+ * future callers.</p>
  */
 @Mod.EventBusSubscriber(modid = "seven_sins")
 public class ManaRegenEvents {
@@ -18,7 +23,7 @@ public class ManaRegenEvents {
     /** Number of ticks between each regen tick. */
     private static final int REGEN_INTERVAL_TICKS = 20;
 
-    /** Amount of mana restored each regen tick. */
+    /** Base amount of mana restored each regen tick. */
     private static final int MANA_PER_REGEN = 2;
 
     private ManaRegenEvents() {}
@@ -44,6 +49,6 @@ public class ManaRegenEvents {
             return;
         }
 
-        ManaManager.restoreMana(serverPlayer, MANA_PER_REGEN);
+        ManaRegenService.applyRegen(serverPlayer, MANA_PER_REGEN);
     }
 }

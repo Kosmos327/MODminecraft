@@ -37,7 +37,28 @@ public enum StoryFlag {
     OBTAINED_RHITTA("obtained_rhitta"),
 
     /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
-    OBTAINED_CHASTIEFOL("obtained_chastiefol");
+    OBTAINED_CHASTIEFOL("obtained_chastiefol"),
+
+    /** Set when the player defeats the Gray Demon boss. */
+    GRAY_DEMON_SLAIN("gray_demon_slain"),
+
+    /** Set when the player first encounters (spawns) the Gray Demon. */
+    GRAY_DEMON_ENCOUNTERED("gray_demon_encountered"),
+
+    /** Set the first time the Gray Demon enters its second phase. */
+    GRAY_DEMON_PHASE2_SEEN("gray_demon_phase2_seen"),
+
+    /** Set when the player defeats the Demon Commander boss. */
+    DEMON_COMMANDER_SLAIN("demon_commander_slain"),
+
+    /** Set when the player first encounters (spawns) the Demon Commander. */
+    DEMON_COMMANDER_ENCOUNTERED("demon_commander_encountered"),
+
+    /** Set the first time the Demon Commander enters its second phase. */
+    DEMON_COMMANDER_PHASE2_SEEN("demon_commander_phase2_seen"),
+
+    /** Set the first time the Demon Commander summons minions. */
+    DEMON_COMMANDER_SUMMONS_SEEN("demon_commander_summons_seen");
 
     private final String id;
 

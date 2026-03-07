@@ -141,6 +141,14 @@ public abstract class SacredTreasureItem extends Item {
                         Component.translatable("character.seven_sins." + linkedCharacter.getSerializedName()))
                         .withStyle(ChatFormatting.GOLD));
 
+        // Show upgrade level (e.g. "Upgrade: +2 / +5")
+        int upgradeLevel = SacredTreasureData.getUpgradeLevel(stack);
+        tooltipComponents.add(
+                Component.translatable(
+                        "item.seven_sins.sacred_treasure.upgrade",
+                        upgradeLevel, SacredTreasureData.MAX_UPGRADE_LEVEL)
+                        .withStyle(ChatFormatting.YELLOW));
+
         if (abilityDamageBonus > 0) {
             tooltipComponents.add(
                     Component.translatable("item.seven_sins.sacred_treasure.ability_bonus",

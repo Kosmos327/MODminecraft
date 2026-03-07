@@ -1,7 +1,9 @@
 package com.sevensins.event;
 
+import com.sevensins.ability.CooldownManager;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.network.DirtySyncTracker;
 import com.sevensins.network.ModNetwork;
 import com.sevensins.network.OpenCharacterSelectionPacket;
 import com.sevensins.story.StoryTriggerService;
@@ -13,20 +15,26 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
 /**
- * Server-side event handler for player login.
- * <p>
+ * Server-side event handler for player login and logout.
+ *
+ * <h2>Login</h2>
  * When a player logs in for the first time (or whenever their
  * {@code selectedCharacter} is still {@link CharacterType#NONE}), a
  * {@link OpenCharacterSelectionPacket} is sent to that specific client.
  * The client then opens {@link com.sevensins.client.screen.CharacterSelectionScreen}.
- * <p>
- * If the player already has a character but has not yet received the first
+ *
+ * <p>If the player already has a character but has not yet received the first
  * story quest (e.g. they joined before this system was added, or they
- * relogged before completing it), the quest is re-assigned here.
- * <p>
- * The GUI is never opened directly from the server — all screen logic is
+ * relogged before completing it), the quest is re-assigned here.</p>
+ *
+ * <h2>Logout</h2>
+ * Stale server-side state (cooldown entries, dirty-sync flags) is cleaned up
+ * when the player disconnects so that maps do not grow unbounded over long
+ * server sessions.
+ *
+ * <p>The GUI is never opened directly from the server — all screen logic is
  * handled via the dedicated network packet, which keeps the architecture
- * valid for both dedicated servers and LAN worlds.
+ * valid for both dedicated servers and LAN worlds.</p>
  */
 @Mod.EventBusSubscriber(modid = "seven_sins", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerLoginEvents {
@@ -55,6 +63,21 @@ public class PlayerLoginEvents {
                         .checkAndAssignFirstQuest(serverPlayer, data.getData());
             }
         });
+    }
+
+    /**
+     * Cleans up all server-side state associated with the player when they
+     * disconnect.  This prevents stale entries from lingering in
+     * {@link CooldownManager} and {@link DirtySyncTracker} across sessions.
+     */
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        Player player = event.getEntity();
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        CooldownManager.clearCooldowns(serverPlayer.getUUID());
+        DirtySyncTracker.removePlayer(serverPlayer.getUUID());
     }
 }
 
