@@ -1,6 +1,7 @@
 package com.sevensins.character;
 
 import com.sevensins.ability.AbilityType;
+import com.sevensins.ability.UltimateAbilityManager;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.item.SacredTreasureItem;
 import net.minecraft.world.entity.player.Player;
@@ -80,7 +81,8 @@ public final class CharacterStats {
 
     /**
      * Returns the flat ability-damage bonus from the sacred treasure held in
-     * the player's main hand, if that treasure is compatible with the ability.
+     * the player's main hand, if that treasure is compatible with the ability,
+     * <em>plus</em> any bonus granted by an active ultimate form.
      *
      * <p>Version 1 rule: a treasure bonus applies to an ability when both the
      * treasure and the ability belong to the same character type.</p>
@@ -90,15 +92,21 @@ public final class CharacterStats {
      * @return flat damage bonus (≥ 0)
      */
     public static int getAbilityDamageBonus(Player player, AbilityType abilityType) {
+        int bonus = 0;
+
+        // Sacred-treasure bonus (existing logic)
         SacredTreasureItem treasure = getEquippedSacredTreasure(player);
-        if (treasure == null || !treasure.isCompatible(player)) {
-            return 0;
+        if (treasure != null && treasure.isCompatible(player)) {
+            CharacterType abilityOwner = getCharacterForAbility(abilityType);
+            if (abilityOwner != CharacterType.NONE && abilityOwner == treasure.getLinkedCharacter()) {
+                bonus += treasure.rawAbilityDamageBonus();
+            }
         }
-        CharacterType abilityOwner = getCharacterForAbility(abilityType);
-        if (abilityOwner != CharacterType.NONE && abilityOwner == treasure.getLinkedCharacter()) {
-            return treasure.rawAbilityDamageBonus();
-        }
-        return 0;
+
+        // Ultimate-form bonus
+        bonus += getUltimateDamageBonus(player, abilityType);
+
+        return bonus;
     }
 
     /**
@@ -124,6 +132,63 @@ public final class CharacterStats {
                 .map(cap -> cap.getData().getMaxMana())
                 .orElse(0);
         return (baseMana * pct) / 100;
+    }
+
+    /** Flat damage bonus added to MELIODAS abilities during Demon Mode. */
+    private static final int DEMON_MODE_DAMAGE_BONUS = 4;
+
+    /** Flat damage bonus added to ESCANOR abilities during The One. */
+    private static final int THE_ONE_DAMAGE_BONUS = 6;
+
+    // -------------------------------------------------------------------------
+    // Ultimate form helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns {@code true} if the player is currently in Demon Mode.
+     *
+     * @param player the player to check
+     * @return {@code true} when Demon Mode is active
+     */
+    public static boolean isDemonModeActive(Player player) {
+        return UltimateAbilityManager.isDemonModeActive(player.getUUID());
+    }
+
+    /**
+     * Returns {@code true} if the player is currently in The One form.
+     *
+     * @param player the player to check
+     * @return {@code true} when The One is active
+     */
+    public static boolean isTheOneActive(Player player) {
+        return UltimateAbilityManager.isTheOneActive(player.getUUID());
+    }
+
+    /**
+     * Returns an additional flat damage bonus granted by the player's currently
+     * active ultimate form for the given ability type.
+     *
+     * <p>Abilities belonging to the same character as the active ultimate
+     * receive a bonus, enabling synergy between ultimates and regular abilities.
+     *
+     * @param player      the wielding player
+     * @param abilityType the ability being used
+     * @return flat ultimate-form damage bonus (≥ 0)
+     */
+    public static int getUltimateDamageBonus(Player player, AbilityType abilityType) {
+        CharacterType abilityOwner = getCharacterForAbility(abilityType);
+        if (abilityOwner == CharacterType.NONE) {
+            return 0;
+        }
+        if (UltimateAbilityManager.isDemonModeActive(player.getUUID())
+                && abilityOwner == CharacterType.MELIODAS) {
+            return DEMON_MODE_DAMAGE_BONUS;
+        }
+        if (UltimateAbilityManager.isTheOneActive(player.getUUID())
+                && abilityOwner == CharacterType.ESCANOR) {
+            return THE_ONE_DAMAGE_BONUS;
+        }
+        return 0;
     }
 
     // -------------------------------------------------------------------------
