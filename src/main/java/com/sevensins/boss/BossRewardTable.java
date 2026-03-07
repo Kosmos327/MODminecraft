@@ -17,8 +17,11 @@ public final class BossRewardTable {
     /** Vanilla XP points awarded to the killer of the Red Demon. */
     public static final int RED_DEMON_XP = 250;
 
-    /** Vanilla XP points awarded to the killer of the Demon King. */
-    public static final int DEMON_KING_XP = 1500;
+    /** Vanilla XP points awarded to the killer of the Gray Demon. */
+    public static final int GRAY_DEMON_XP = 350;
+
+    /** Vanilla XP points awarded to the killer of the Demon Commander. */
+    public static final int DEMON_COMMANDER_XP = 500;
 
     private BossRewardTable() {}
 
@@ -34,14 +37,24 @@ public final class BossRewardTable {
     }
 
     /**
-     * Grants the Demon King kill reward to {@code player}.
-     * Awards {@value #DEMON_KING_XP} XP.
+     * Grants the Gray Demon kill reward to {@code player}.
      * Safe to call with a {@code null} player — the reward is silently skipped.
      *
-     * @param player the {@link ServerPlayer} who killed the Demon King
+     * @param player the {@link ServerPlayer} who killed the boss
      */
-    public static void onDemonKingDeath(@Nullable ServerPlayer player) {
+    public static void onGrayDemonDeath(@Nullable ServerPlayer player) {
         if (player == null) return;
-        player.giveExperiencePoints(DEMON_KING_XP);
+        player.giveExperiencePoints(GRAY_DEMON_XP);
+    }
+
+    /**
+     * Grants the Demon Commander kill reward to {@code player}.
+     * Safe to call with a {@code null} player — the reward is silently skipped.
+     *
+     * @param player the {@link ServerPlayer} who killed the boss
+     */
+    public static void onDemonCommanderDeath(@Nullable ServerPlayer player) {
+        if (player == null) return;
+        player.giveExperiencePoints(DEMON_COMMANDER_XP);
     }
 }

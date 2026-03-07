@@ -3,15 +3,18 @@ package com.sevensins.boss;
 /**
  * Represents the active combat phase of a boss encounter.
  *
- * <p>Standard two-phase bosses use {@link #PHASE_1} and {@link #PHASE_2}.
- * The Demon King final boss additionally uses {@link #PHASE_3} and
- * {@link #FINAL_PHASE}.</p>
+ * <p>Version 1 phases:
+ * <ul>
+ *   <li>{@link #PHASE_1} – full health; standard behaviour.</li>
+ *   <li>{@link #PHASE_2} – typically below 70 % health; increased aggression.</li>
+ *   <li>{@link #ENRAGED} – typically below 30 % health; maximum aggression.</li>
+ * </ul>
+ *
+ * <p>Not all bosses use every phase — simpler bosses may only use
+ * {@link #PHASE_1} and {@link #PHASE_2}.</p>
  */
 public enum BossPhase {
     PHASE_1,
     PHASE_2,
-    /** Demon King phase — begins at 45 % HP. */
-    PHASE_3,
-    /** Demon King enraged phase — begins at 15 % HP. */
-    FINAL_PHASE
+    ENRAGED
 }

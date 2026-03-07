@@ -1,7 +1,8 @@
 package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
-import com.sevensins.entity.DemonKingEntity;
+import com.sevensins.entity.DemonCommanderEntity;
+import com.sevensins.entity.GrayDemonEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
 import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
@@ -41,14 +42,24 @@ public class ModEntities {
                             .build(SevenSinsMod.MODID + ":" + RedDemonEntity.REGISTRY_NAME)
             );
 
-    /** Demon King final boss — spawnable via {@code /summon seven_sins:demon_king} for testing. */
-    public static final RegistryObject<EntityType<DemonKingEntity>> DEMON_KING =
+    /** Gray Demon boss — spawnable via {@code /summon seven_sins:gray_demon} for testing. */
+    public static final RegistryObject<EntityType<GrayDemonEntity>> GRAY_DEMON =
             ENTITY_TYPES.register(
-                    DemonKingEntity.REGISTRY_NAME,
+                    GrayDemonEntity.REGISTRY_NAME,
                     () -> EntityType.Builder
-                            .<DemonKingEntity>of(DemonKingEntity::new, MobCategory.MONSTER)
+                            .<GrayDemonEntity>of(GrayDemonEntity::new, MobCategory.MONSTER)
+                            .sized(0.9f, 2.8f)
+                            .build(SevenSinsMod.MODID + ":" + GrayDemonEntity.REGISTRY_NAME)
+            );
+
+    /** Demon Commander boss — spawnable via {@code /summon seven_sins:demon_commander} for testing. */
+    public static final RegistryObject<EntityType<DemonCommanderEntity>> DEMON_COMMANDER =
+            ENTITY_TYPES.register(
+                    DemonCommanderEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<DemonCommanderEntity>of(DemonCommanderEntity::new, MobCategory.MONSTER)
                             .sized(1.0f, 3.0f)
-                            .build(SevenSinsMod.MODID + ":" + DemonKingEntity.REGISTRY_NAME)
+                            .build(SevenSinsMod.MODID + ":" + DemonCommanderEntity.REGISTRY_NAME)
             );
 
     public static void register(IEventBus eventBus) {
@@ -59,6 +70,7 @@ public class ModEntities {
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(MELIODAS_NPC.get(), MeliodasNpcEntity.createAttributes().build());
         event.put(RED_DEMON.get(), RedDemonEntity.createAttributes().build());
-        event.put(DEMON_KING.get(), DemonKingEntity.createAttributes().build());
+        event.put(GRAY_DEMON.get(), GrayDemonEntity.createAttributes().build());
+        event.put(DEMON_COMMANDER.get(), DemonCommanderEntity.createAttributes().build());
     }
 }

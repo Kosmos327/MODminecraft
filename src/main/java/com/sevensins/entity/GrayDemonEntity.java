@@ -8,7 +8,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -21,10 +20,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.PacketDistributor;
-
-import java.util.List;
 
 /**
  * The Gray Demon — the second major boss encounter of the Seven Deadly Sins RPG.
@@ -36,23 +32,9 @@ import java.util.List;
  * </ul>
  *
  * <h2>Phase system</h2>
- * <ul>
- *   <li>{@link BossPhase#PHASE_1} – normal combat (full health).</li>
- *   <li>{@link BossPhase#PHASE_2} – starts at 60 % HP; increased speed and
- *       periodic corruption pulse.</li>
- *   <li>{@link BossPhase#ENRAGED} – starts at 25 % HP; further speed boost,
- *       higher melee damage, and more frequent corruption pulses.</li>
- * </ul>
- *
- * <h2>Special mechanic — Corruption Pulse</h2>
- * Every {@value #PULSE_INTERVAL_PHASE2} ticks in PHASE_2 (and every
- * {@value #PULSE_INTERVAL_ENRAGED} ticks in ENRAGED) the Gray Demon releases a
- * dark-energy corruption pulse that damages all players within
- * {@value #PULSE_RADIUS} blocks.
- *
- * <h2>Networking</h2>
- * Every 10 ticks while alive, the entity broadcasts a
- * {@link SyncBossStatePacket} to players within {@value #SYNC_RANGE} blocks.
+ * The entity starts in {@link BossPhase#PHASE_1}.  When health drops to or
+ * below 50 % of maximum, it transitions to {@link BossPhase#PHASE_2}, gaining
+ * increased movement speed.
  *
  * <p>Registered in {@link com.sevensins.registry.ModEntities}.</p>
  */
@@ -70,32 +52,8 @@ public class GrayDemonEntity extends Monster {
     /** Radius (blocks) within which boss state is synced to players. */
     private static final double SYNC_RANGE = 100.0;
 
-    /** HP ratio at which Phase 2 begins. */
-    private static final float PHASE_2_HP_RATIO = 0.60f;
-
-    /** HP ratio at which Enraged phase begins. */
-    private static final float ENRAGED_HP_RATIO = 0.25f;
-
     /** Phase-2 movement speed. */
     private static final double PHASE_2_SPEED = 0.38;
-
-    /** Enraged movement speed. */
-    private static final double ENRAGED_SPEED = 0.46;
-
-    /** Attack damage multiplier applied in the Enraged phase. */
-    private static final double ENRAGED_DAMAGE = 26.0;
-
-    /** Radius (blocks) of the corruption pulse special attack. */
-    private static final double PULSE_RADIUS = 8.0;
-
-    /** Damage dealt to each player hit by the corruption pulse. */
-    private static final float PULSE_DAMAGE = 6.0f;
-
-    /** Ticks between corruption pulses in PHASE_2. */
-    private static final int PULSE_INTERVAL_PHASE2 = 80;
-
-    /** Ticks between corruption pulses in ENRAGED. */
-    private static final int PULSE_INTERVAL_ENRAGED = 40;
 
     private BossPhase phase = BossPhase.PHASE_1;
 
@@ -127,8 +85,8 @@ public class GrayDemonEntity extends Monster {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, MAX_HP)
                 .add(Attributes.ATTACK_DAMAGE, BASE_DAMAGE)
-                .add(Attributes.MOVEMENT_SPEED, 0.30)
-                .add(Attributes.FOLLOW_RANGE, 48.0);
+                .add(Attributes.MOVEMENT_SPEED, 0.3)
+                .add(Attributes.FOLLOW_RANGE, 40.0);
     }
 
     // -----------------------------------------------------------------------
@@ -140,8 +98,6 @@ public class GrayDemonEntity extends Monster {
         super.onAddedToWorld();
         if (!level().isClientSide()) {
             BossManager.getInstance().registerBoss(getUUID(), "Gray Demon", getHealth(), getMaxHealth());
-            broadcastToNearbyPlayers(
-                    Component.literal("A Gray Demon has appeared!").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }
 
@@ -149,8 +105,7 @@ public class GrayDemonEntity extends Monster {
     public void tick() {
         super.tick();
         if (!level().isClientSide() && isAlive()) {
-            checkPhaseTransitions();
-            tickCorruptionPulse();
+            checkPhaseTransition();
             if (tickCount % 10 == 0) {
                 syncBossState();
             }
@@ -167,88 +122,23 @@ public class GrayDemonEntity extends Monster {
     }
 
     // -----------------------------------------------------------------------
-    // Phase transitions
+    // Phase transition
     // -----------------------------------------------------------------------
 
-    private void checkPhaseTransitions() {
-        float hp = getHealth();
-        float maxHp = getMaxHealth();
+    private void checkPhaseTransition() {
+        if (phase == BossPhase.PHASE_1 && getHealth() <= getMaxHealth() * 0.5f) {
+            phase = BossPhase.PHASE_2;
 
-        if (phase == BossPhase.PHASE_1 && hp <= maxHp * PHASE_2_HP_RATIO) {
-            enterPhase2();
-        } else if (phase == BossPhase.PHASE_2 && hp <= maxHp * ENRAGED_HP_RATIO) {
-            enterEnraged();
+            var speedAttr = getAttribute(Attributes.MOVEMENT_SPEED);
+            if (speedAttr != null) {
+                speedAttr.setBaseValue(PHASE_2_SPEED);
+            }
+
+            BossManager.getInstance().updateBoss(getUUID(), getHealth(), phase);
+            broadcastToNearbyPlayers(
+                    Component.literal("The Gray Demon's corruption intensifies!").withStyle(ChatFormatting.GRAY));
+            syncBossState();
         }
-    }
-
-    private void enterPhase2() {
-        phase = BossPhase.PHASE_2;
-
-        var speedAttr = getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speedAttr != null) {
-            speedAttr.setBaseValue(PHASE_2_SPEED);
-        }
-
-        BossManager.getInstance().updateBoss(getUUID(), getHealth(), phase);
-        broadcastToNearbyPlayers(
-                Component.literal("The Gray Demon's power intensifies!")
-                        .withStyle(ChatFormatting.DARK_PURPLE));
-        syncBossState();
-    }
-
-    private void enterEnraged() {
-        phase = BossPhase.ENRAGED;
-
-        var speedAttr = getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speedAttr != null) {
-            speedAttr.setBaseValue(ENRAGED_SPEED);
-        }
-
-        var damageAttr = getAttribute(Attributes.ATTACK_DAMAGE);
-        if (damageAttr != null) {
-            damageAttr.setBaseValue(ENRAGED_DAMAGE);
-        }
-
-        BossManager.getInstance().updateBoss(getUUID(), getHealth(), phase);
-        broadcastToNearbyPlayers(
-                Component.literal("The Gray Demon has become ENRAGED!")
-                        .withStyle(ChatFormatting.DARK_PURPLE).withStyle(ChatFormatting.BOLD));
-        syncBossState();
-    }
-
-    // -----------------------------------------------------------------------
-    // Corruption pulse special attack
-    // -----------------------------------------------------------------------
-
-    private void tickCorruptionPulse() {
-        int interval = switch (phase) {
-            case PHASE_2  -> PULSE_INTERVAL_PHASE2;
-            case ENRAGED  -> PULSE_INTERVAL_ENRAGED;
-            default       -> 0; // disabled in PHASE_1
-        };
-
-        if (interval <= 0 || tickCount % interval != 0) return;
-
-        fireCorruptionPulse();
-    }
-
-    private void fireCorruptionPulse() {
-        if (!(level() instanceof ServerLevel serverLevel)) return;
-
-        AABB pulseBox = getBoundingBox().inflate(PULSE_RADIUS);
-        List<Player> targets = serverLevel.getEntitiesOfClass(Player.class, pulseBox,
-                p -> p.isAlive() && !p.isCreative() && !p.isSpectator());
-
-        if (targets.isEmpty()) return;
-
-        DamageSource pulseSource = damageSources().magic();
-        for (Player target : targets) {
-            target.hurt(pulseSource, PULSE_DAMAGE);
-        }
-
-        broadcastToNearbyPlayers(
-                Component.literal("The Gray Demon unleashes a corruption pulse!")
-                        .withStyle(ChatFormatting.DARK_PURPLE));
     }
 
     // -----------------------------------------------------------------------

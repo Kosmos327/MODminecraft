@@ -39,27 +39,26 @@ public enum StoryFlag {
     /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
     OBTAINED_CHASTIEFOL("obtained_chastiefol"),
 
-    // -------------------------------------------------------------------------
-    // Demon King flags
-    // -------------------------------------------------------------------------
+    /** Set when the player defeats the Gray Demon boss. */
+    GRAY_DEMON_SLAIN("gray_demon_slain"),
 
-    /** Set the first time the player enters the Demon King's arena. */
-    DEMON_KING_ENCOUNTERED("demon_king_encountered"),
+    /** Set when the player first encounters (spawns) the Gray Demon. */
+    GRAY_DEMON_ENCOUNTERED("gray_demon_encountered"),
 
-    /** Set when the Demon King transitions to Phase 2 (75 % HP). */
-    DEMON_KING_PHASE_2_SEEN("demon_king_phase_2_seen"),
+    /** Set the first time the Gray Demon enters its second phase. */
+    GRAY_DEMON_PHASE2_SEEN("gray_demon_phase2_seen"),
 
-    /** Set when the Demon King transitions to Phase 3 (45 % HP). */
-    DEMON_KING_PHASE_3_SEEN("demon_king_phase_3_seen"),
+    /** Set when the player defeats the Demon Commander boss. */
+    DEMON_COMMANDER_SLAIN("demon_commander_slain"),
 
-    /** Set when the Demon King enters Final Phase (15 % HP). */
-    DEMON_KING_FINAL_PHASE_SEEN("demon_king_final_phase_seen"),
+    /** Set when the player first encounters (spawns) the Demon Commander. */
+    DEMON_COMMANDER_ENCOUNTERED("demon_commander_encountered"),
 
-    /** Set when the player defeats the Demon King. */
-    DEMON_KING_SLAIN("demon_king_slain"),
+    /** Set the first time the Demon Commander enters its second phase. */
+    DEMON_COMMANDER_PHASE2_SEEN("demon_commander_phase2_seen"),
 
-    /** Set when the main story is fully completed (Demon King defeated). */
-    MAIN_STORY_COMPLETE("main_story_complete");
+    /** Set the first time the Demon Commander summons minions. */
+    DEMON_COMMANDER_SUMMONS_SEEN("demon_commander_summons_seen");
 
     private final String id;
 

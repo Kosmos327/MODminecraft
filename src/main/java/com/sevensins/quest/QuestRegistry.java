@@ -35,8 +35,11 @@ public final class QuestRegistry {
     /** ID of the quest to obtain Spirit Spear Chastiefol. */
     public static final String OBTAIN_CHASTIEFOL_ID = "obtain_chastiefol";
 
-    /** ID of the final boss quest — slay the Demon King. */
-    public static final String SLAY_DEMON_KING_ID = "slay_demon_king";
+    /** ID of the Chapter 5 Gray Demon boss quest. */
+    public static final String SLAY_GRAY_DEMON_ID = "slay_gray_demon";
+
+    /** ID of the Chapter 6 Demon Commander boss quest. */
+    public static final String SLAY_DEMON_COMMANDER_ID = "slay_demon_commander";
 
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
@@ -70,9 +73,16 @@ public final class QuestRegistry {
                 1
         ));
         register(new Quest(
-                SLAY_DEMON_KING_ID,
-                "The Demon King",
-                "Defeat the Demon King and end the demonic catastrophe.",
+                SLAY_GRAY_DEMON_ID,
+                "The Gray Demon",
+                "Defeat the Gray Demon lurking in the depths.",
+                QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                SLAY_DEMON_COMMANDER_ID,
+                "The Demon Commander",
+                "Defeat the Demon Commander leading demonic forces in the region.",
                 QuestType.KILL,
                 1
         ));

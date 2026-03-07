@@ -5,12 +5,14 @@ import com.sevensins.boss.BossManager;
 import com.sevensins.boss.BossRewardTable;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
-import com.sevensins.entity.DemonKingEntity;
+import com.sevensins.entity.DemonCommanderEntity;
+import com.sevensins.entity.GrayDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
 import com.sevensins.story.StoryFlag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -30,8 +32,9 @@ import net.minecraftforge.fml.common.Mod;
  *   <li>The player must have an active KILL quest.</li>
  * </ul>
  *
- * <p>Boss kills ({@link RedDemonEntity}) are handled first via
- * {@link #handleRedDemonBossLogic} and do not count toward generic kill quests.</p>
+ * <p>Boss kills ({@link RedDemonEntity}, {@link GrayDemonEntity},
+ * {@link DemonCommanderEntity}) are handled first via dedicated methods and do
+ * not count toward generic kill quests.</p>
  */
 @Mod.EventBusSubscriber(modid = SevenSinsMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class QuestEvents {
@@ -58,6 +61,14 @@ public class QuestEvents {
         if (event.getEntity() instanceof RedDemonEntity redDemon) {
             handleRedDemonBossLogic(redDemon, killer);
             return; // boss kill does not also count toward generic kill quests
+        }
+        if (event.getEntity() instanceof GrayDemonEntity grayDemon) {
+            handleGrayDemonBossLogic(grayDemon, killer);
+            return;
+        }
+        if (event.getEntity() instanceof DemonCommanderEntity demonCommander) {
+            handleDemonCommanderBossLogic(demonCommander, killer);
+            return;
         }
 
         if (event.getEntity() instanceof DemonKingEntity demonKing) {
@@ -120,40 +131,68 @@ public class QuestEvents {
     }
 
     /**
-     * Handles all side-effects of the Demon King being killed by a player:
+     * Handles all side-effects of the Gray Demon being killed by a player:
      * <ol>
      *   <li>Unregisters the boss from {@link BossManager}.</li>
-     *   <li>Grants the XP reward via {@link BossRewardTable#onDemonKingDeath}.</li>
-     *   <li>Completes the {@value QuestRegistry#SLAY_DEMON_KING_ID} quest if active.</li>
-     *   <li>Sets the {@link StoryFlag#DEMON_KING_SLAIN} and
-     *       {@link StoryFlag#MAIN_STORY_COMPLETE} story flags.</li>
+     *   <li>Grants the XP reward via {@link BossRewardTable}.</li>
+     *   <li>Completes the {@value QuestRegistry#SLAY_GRAY_DEMON_ID} quest if active.</li>
+     *   <li>Sets the {@link StoryFlag#GRAY_DEMON_SLAIN} story flag.</li>
      *   <li>Broadcasts a server-wide defeat message.</li>
      * </ol>
      */
-    private static void handleDemonKingBossLogic(DemonKingEntity demonKing, ServerPlayer killer) {
-        BossManager.getInstance().unregisterBoss(demonKing.getUUID());
-
-        BossRewardTable.onDemonKingDeath(killer);
+    private static void handleGrayDemonBossLogic(GrayDemonEntity grayDemon, ServerPlayer killer) {
+        BossManager.getInstance().unregisterBoss(grayDemon.getUUID());
+        BossRewardTable.onGrayDemonDeath(killer);
 
         ModCapabilities.get(killer).ifPresent(cap -> {
             if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
-
-            // Complete the final quest if active
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.GRAY_DEMON_SLAIN.getId());
             String activeId = cap.getData().getQuestData().getActiveQuestId();
-            if (QuestRegistry.SLAY_DEMON_KING_ID.equals(activeId)) {
-                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_DEMON_KING_ID);
+            if (QuestRegistry.SLAY_GRAY_DEMON_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_GRAY_DEMON_ID);
             }
-
-            // Set story flags for kill and main story completion
-            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
-            cap.getData().getQuestData().addStoryFlag(StoryFlag.MAIN_STORY_COMPLETE.getId());
         });
 
-        // Server-wide broadcast
         if (killer.getServer() != null) {
             killer.getServer().getPlayerList()
                     .broadcastSystemMessage(
-                            Component.literal("The Demon King has been defeated."), false);
+                            Component.literal("The Gray Demon has been defeated."), false);
+        }
+    }
+
+    /**
+     * Handles all side-effects of the Demon Commander being killed by a player:
+     * <ol>
+     *   <li>Cleans up tracked minions.</li>
+     *   <li>Unregisters the boss from {@link BossManager}.</li>
+     *   <li>Grants the XP reward via {@link BossRewardTable}.</li>
+     *   <li>Completes the {@value QuestRegistry#SLAY_DEMON_COMMANDER_ID} quest if active.</li>
+     *   <li>Sets the {@link StoryFlag#DEMON_COMMANDER_SLAIN} story flag.</li>
+     *   <li>Broadcasts a server-wide defeat message.</li>
+     * </ol>
+     */
+    private static void handleDemonCommanderBossLogic(DemonCommanderEntity demonCommander,
+                                                       ServerPlayer killer) {
+        // Cleanup summoned minions
+        if (killer.level() instanceof ServerLevel serverLevel) {
+            BossManager.getInstance().cleanupMinions(demonCommander.getUUID(), serverLevel);
+        }
+        BossManager.getInstance().unregisterBoss(demonCommander.getUUID());
+        BossRewardTable.onDemonCommanderDeath(killer);
+
+        ModCapabilities.get(killer).ifPresent(cap -> {
+            if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_COMMANDER_SLAIN.getId());
+            String activeId = cap.getData().getQuestData().getActiveQuestId();
+            if (QuestRegistry.SLAY_DEMON_COMMANDER_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_DEMON_COMMANDER_ID);
+            }
+        });
+
+        if (killer.getServer() != null) {
+            killer.getServer().getPlayerList()
+                    .broadcastSystemMessage(
+                            Component.literal("The Demon Commander has been defeated."), false);
         }
     }
 }
