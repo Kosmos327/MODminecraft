@@ -37,7 +37,23 @@ public enum StoryFlag {
     OBTAINED_RHITTA("obtained_rhitta"),
 
     /** Set when the player obtains Spirit Spear Chastiefol for the first time. */
-    OBTAINED_CHASTIEFOL("obtained_chastiefol");
+    OBTAINED_CHASTIEFOL("obtained_chastiefol"),
+
+    // -------------------------------------------------------------------------
+    // Endgame flags (post-main-story)
+    // -------------------------------------------------------------------------
+
+    /** Set when the player has completed the main story arc (Demon Cave cleared). */
+    MAIN_STORY_COMPLETE("main_story_complete"),
+
+    /** Set when the player successfully completes a Night Demon Raid. */
+    NIGHT_RAID_COMPLETE("night_raid_complete"),
+
+    /** Set when the player defeats the Mythic Red Demon. */
+    MYTHIC_DEMON_SLAIN("mythic_demon_slain"),
+
+    /** Set when the player obtains their first Legendary Artifact. */
+    LEGENDARY_ARTIFACT_OBTAINED("legendary_artifact_obtained");
 
     private final String id;
 

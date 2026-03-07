@@ -2,6 +2,7 @@ package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.entity.MeliodasNpcEntity;
+import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -39,6 +40,19 @@ public class ModEntities {
                             .build(SevenSinsMod.MODID + ":" + RedDemonEntity.REGISTRY_NAME)
             );
 
+    /**
+     * Mythic Red Demon — endgame boss that appears as the final wave of a Night
+     * Demon Raid.  Spawnable via {@code /summon seven_sins:mythic_red_demon} for testing.
+     */
+    public static final RegistryObject<EntityType<MythicRedDemonEntity>> MYTHIC_RED_DEMON =
+            ENTITY_TYPES.register(
+                    MythicRedDemonEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<MythicRedDemonEntity>of(MythicRedDemonEntity::new, MobCategory.MONSTER)
+                            .sized(0.8f, 2.5f)
+                            .build(SevenSinsMod.MODID + ":" + MythicRedDemonEntity.REGISTRY_NAME)
+            );
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
@@ -47,5 +61,6 @@ public class ModEntities {
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(MELIODAS_NPC.get(), MeliodasNpcEntity.createAttributes().build());
         event.put(RED_DEMON.get(), RedDemonEntity.createAttributes().build());
+        event.put(MYTHIC_RED_DEMON.get(), MythicRedDemonEntity.createAttributes().build());
     }
 }
