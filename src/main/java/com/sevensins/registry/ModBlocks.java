@@ -1,6 +1,7 @@
 package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
+import com.sevensins.block.SacredForgeBlock;
 import com.sevensins.block.SinAltarBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -25,6 +26,19 @@ public class ModBlocks {
                             .strength(3.5f, 3000.0f)
                             .requiresCorrectToolForDrops()
                             .lightLevel(state -> 7)
+            ));
+
+    /**
+     * The Sacred Forge – the upgrade station for Sacred Treasures.
+     * Players right-click this block while holding a Sacred Treasure to
+     * upgrade it using Sin Fragments and Magic Scrolls.
+     */
+    public static final RegistryObject<Block> SACRED_FORGE = BLOCKS.register("sacred_forge",
+            () -> new SacredForgeBlock(
+                    BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                            .strength(5.0f, 6000.0f)
+                            .requiresCorrectToolForDrops()
+                            .lightLevel(state -> 10)
             ));
 
     public static void register(IEventBus eventBus) {

@@ -2,6 +2,7 @@ package com.sevensins.entity;
 
 import com.sevensins.boss.BossManager;
 import com.sevensins.boss.BossPhase;
+import com.sevensins.config.BalanceHelper;
 import com.sevensins.network.ModNetwork;
 import com.sevensins.network.packet.SyncBossStatePacket;
 import net.minecraft.ChatFormatting;
@@ -37,9 +38,11 @@ import net.minecraftforge.network.PacketDistributor;
  * increased movement speed and warning nearby players.
  *
  * <h2>Networking</h2>
- * Every 10 ticks while alive, the entity broadcasts a
- * {@link SyncBossStatePacket} to players within {@value #SYNC_RANGE} blocks so
- * the {@link com.sevensins.client.hud.BossHealthOverlay} stays accurate.
+ * Every 10 ticks while alive, the entity checks whether the boss state has
+ * changed meaningfully (health delta &ge; 2 % of max HP, or a phase change)
+ * and broadcasts a {@link SyncBossStatePacket} to nearby players only when
+ * needed.  Phase transitions always trigger an immediate sync regardless of
+ * the interval.
  *
  * <p>Registered in {@link com.sevensins.registry.ModEntities}.</p>
  */
@@ -62,6 +65,11 @@ public class RedDemonEntity extends Monster {
 
     /** Current phase — protected so mythic subclasses can extend phase behaviour. */
     protected BossPhase phase = BossPhase.PHASE_1;
+
+    /** HP at the time of the last broadcast – used to suppress redundant syncs. */
+    private float lastSyncedHp = MAX_HP;
+    /** Phase at the time of the last broadcast; {@code null} until the first sync. */
+    private BossPhase lastSyncedPhase = null;
 
     public RedDemonEntity(EntityType<? extends RedDemonEntity> type, Level level) {
         super(type, level);
@@ -127,7 +135,7 @@ public class RedDemonEntity extends Monster {
         super.tick();
         if (!level().isClientSide() && isAlive()) {
             checkPhaseTransition();
-            if (tickCount % 10 == 0) {
+            if (tickCount % 10 == 0 && shouldSync()) {
                 syncBossState();
             }
         }
@@ -158,6 +166,7 @@ public class RedDemonEntity extends Monster {
             BossManager.getInstance().updateBoss(getUUID(), getHealth(), phase);
             broadcastToNearbyPlayers(
                     Component.literal("The Red Demon grows stronger!").withStyle(ChatFormatting.RED));
+            // Phase transition always forces an immediate sync
             syncBossState();
         }
     }
@@ -165,6 +174,26 @@ public class RedDemonEntity extends Monster {
     // -----------------------------------------------------------------------
     // Network sync helpers
     // -----------------------------------------------------------------------
+
+    /**
+     * Returns {@code true} when the boss state has changed enough to justify
+     * sending a sync packet to nearby players.
+     *
+     * <p>A sync is needed when:
+     * <ul>
+     *   <li>No sync has been sent yet (first tick).</li>
+     *   <li>The active phase differs from the last-synced phase.</li>
+     *   <li>HP has changed by more than {@value #SYNC_HP_DELTA_THRESHOLD} of
+     *       max HP since the last sync.</li>
+     * </ul>
+     * </p>
+     */
+    private boolean shouldSync() {
+        if (lastSyncedPhase == null) return true;
+        if (phase != lastSyncedPhase) return true;
+        float delta = Math.abs(getHealth() - lastSyncedHp);
+        return delta >= getMaxHealth() * SYNC_HP_DELTA_THRESHOLD;
+    }
 
     private void syncBossState() {
         if (!(level() instanceof ServerLevel serverLevel)) return;
@@ -176,6 +205,9 @@ public class RedDemonEntity extends Monster {
                 ModNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
             }
         }
+        // Record the state we just synced so redundant sends can be suppressed.
+        lastSyncedHp    = getHealth();
+        lastSyncedPhase = phase;
     }
 
     private void clearClientOverlay() {

@@ -60,6 +60,11 @@ public class QuestEvents {
             return; // boss kill does not also count toward generic kill quests
         }
 
+        if (event.getEntity() instanceof EstarossaEntity estarossa) {
+            handleEstarossaBossLogic(estarossa, killer);
+            return; // boss kill does not also count toward generic kill quests
+        }
+
         // --- Generic monster kill handling ---
         if (!(event.getEntity() instanceof Monster monster)) return;
 

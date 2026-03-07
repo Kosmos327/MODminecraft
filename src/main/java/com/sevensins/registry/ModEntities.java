@@ -1,6 +1,7 @@
 package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
+import com.sevensins.entity.EstarossaEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
 import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;

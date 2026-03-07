@@ -109,6 +109,10 @@ public class ModItems {
     public static final RegistryObject<Item> SIN_ALTAR_ITEM = ITEMS.register("sin_altar",
             () -> new BlockItem(ModBlocks.SIN_ALTAR.get(), new Item.Properties()));
 
+    /** Sacred Forge block item — allows placing the Sacred Forge in the world. */
+    public static final RegistryObject<Item> SACRED_FORGE_ITEM = ITEMS.register("sacred_forge",
+            () -> new BlockItem(ModBlocks.SACRED_FORGE.get(), new Item.Properties()));
+
     // -------------------------------------------------------------------------
     // Private helpers
     // -------------------------------------------------------------------------
