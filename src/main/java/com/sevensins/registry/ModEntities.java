@@ -2,6 +2,7 @@ package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.entity.MeliodasNpcEntity;
+import com.sevensins.entity.RedDemonEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -28,6 +29,16 @@ public class ModEntities {
                             .build(SevenSinsMod.MODID + ":" + MeliodasNpcEntity.REGISTRY_NAME)
             );
 
+    /** Red Demon boss — spawnable via {@code /summon seven_sins:red_demon} for testing. */
+    public static final RegistryObject<EntityType<RedDemonEntity>> RED_DEMON =
+            ENTITY_TYPES.register(
+                    RedDemonEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<RedDemonEntity>of(RedDemonEntity::new, MobCategory.MONSTER)
+                            .sized(0.8f, 2.5f)
+                            .build(SevenSinsMod.MODID + ":" + RedDemonEntity.REGISTRY_NAME)
+            );
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
@@ -35,5 +46,6 @@ public class ModEntities {
     @SubscribeEvent
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(MELIODAS_NPC.get(), MeliodasNpcEntity.createAttributes().build());
+        event.put(RED_DEMON.get(), RedDemonEntity.createAttributes().build());
     }
 }
