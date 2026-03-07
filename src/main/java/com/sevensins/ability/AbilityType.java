@@ -13,6 +13,7 @@ public enum AbilityType {
     INVASION,
     INFINITY,
     SUNSHINE,
+    HELL_BLAZE,
     NONE;
 
     /** Returns the lower-case name used when persisting to NBT or JSON. */
