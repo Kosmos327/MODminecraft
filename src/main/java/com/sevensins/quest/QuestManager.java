@@ -106,6 +106,29 @@ public final class QuestManager {
     }
 
     // -------------------------------------------------------------------------
+    // Dungeon quest completion
+    // -------------------------------------------------------------------------
+
+    /**
+     * Directly completes {@code questId} for {@code player} if it is a
+     * {@link QuestType#DUNGEON_CLEAR} quest and is currently active.
+     * Safe to call even when the quest is not active — silently no-ops.
+     */
+    public static void completeDungeonQuest(ServerPlayer player, String questId) {
+        if (player == null || questId == null) return;
+
+        QuestRegistry.getQuest(questId).ifPresent(quest -> {
+            if (quest.getType() != QuestType.DUNGEON_CLEAR) return;
+            ModCapabilities.get(player).ifPresent(cap -> {
+                PlayerQuestData questData = cap.getData().getQuestData();
+                if (!questId.equals(questData.getActiveQuestId())) return;
+                if (questData.isCompleted(questId)) return;
+                completeQuest(player, quest, cap.getData());
+            });
+        });
+    }
+
+    // -------------------------------------------------------------------------
     // Completion
     // -------------------------------------------------------------------------
 

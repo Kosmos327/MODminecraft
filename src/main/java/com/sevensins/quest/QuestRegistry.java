@@ -21,6 +21,9 @@ public final class QuestRegistry {
     /** ID of the Chapter 3 Red Demon boss quest. */
     public static final String SLAY_RED_DEMON_ID = "slay_red_demon";
 
+    /** ID of the Chapter 4 Demon Cave dungeon quest. */
+    public static final String CLEAR_DEMON_CAVE_ID = "clear_demon_cave";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {
@@ -43,6 +46,13 @@ public final class QuestRegistry {
                 "The Red Demon",
                 "Defeat the Red Demon threatening the land.",
                 QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                CLEAR_DEMON_CAVE_ID,
+                "Into the Demon Cave",
+                "Enter and clear a Demon Cave corrupted by demonic energy.",
+                QuestType.DUNGEON_CLEAR,
                 1
         ));
     }

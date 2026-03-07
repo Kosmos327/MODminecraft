@@ -8,6 +8,10 @@
   "item.seven_sins.lust_emblem":     "Emblem of Lust",
   "item.seven_sins.envy_emblem":     "Emblem of Envy",
   "item.seven_sins.gluttony_emblem": "Emblem of Gluttony",
+  "item.seven_sins.sin_fragment":    "Sin Fragment",
+  "item.seven_sins.magic_scroll":    "Magic Scroll",
+  "item.seven_sins.demon_fragment":  "Demon Fragment",
+  "item.seven_sins.sacred_scroll":   "Sacred Scroll",
 
   "block.seven_sins.sin_altar": "Sin Altar",
   "block.seven_sins.sin_altar.aligned":   "You are aligned with %s (Level %s)",

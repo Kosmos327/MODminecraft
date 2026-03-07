@@ -22,7 +22,13 @@ public enum StoryFlag {
     FIRST_DEMONS_COMPLETE("first_demons_complete"),
 
     /** Set when the player defeats the Red Demon boss. */
-    RED_DEMON_SLAIN("red_demon_slain");
+    RED_DEMON_SLAIN("red_demon_slain"),
+
+    /** Set when the player first enters a Demon Cave dungeon. */
+    DEMON_CAVE_STARTED("demon_cave_started"),
+
+    /** Set when the player successfully clears a Demon Cave dungeon. */
+    DEMON_CAVE_CLEARED("demon_cave_cleared");
 
     private final String id;
 

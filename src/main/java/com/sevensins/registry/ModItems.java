@@ -2,7 +2,9 @@ package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.common.data.SinType;
+import com.sevensins.item.MagicScrollItem;
 import com.sevensins.item.SinEmblemItem;
+import com.sevensins.item.SinFragmentItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -22,7 +24,19 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, SevenSinsMod.MODID);
 
     // -------------------------------------------------------------------------
-    // General items
+    // Dungeon reward items
+    // -------------------------------------------------------------------------
+
+    /** Sin Fragment — dropped as a dungeon reward; progression currency. */
+    public static final RegistryObject<Item> SIN_FRAGMENT = ITEMS.register("sin_fragment",
+            () -> new SinFragmentItem(new Item.Properties()));
+
+    /** Magic Scroll — chance-based dungeon reward. */
+    public static final RegistryObject<Item> MAGIC_SCROLL = ITEMS.register("magic_scroll",
+            () -> new MagicScrollItem(new Item.Properties()));
+
+    // -------------------------------------------------------------------------
+    // General items (legacy names kept for backwards compatibility)
     // -------------------------------------------------------------------------
 
     public static final RegistryObject<Item> DEMON_FRAGMENT = ITEMS.register("demon_fragment",
