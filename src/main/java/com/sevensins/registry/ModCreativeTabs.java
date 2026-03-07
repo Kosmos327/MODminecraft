@@ -25,6 +25,7 @@ public class ModCreativeTabs {
                                 output.accept(ModItems.SIN_ALTAR_ITEM.get());
                                 output.accept(ModItems.DEMON_FRAGMENT.get());
                                 output.accept(ModItems.SACRED_SCROLL.get());
+                                ModItems.ALL_SACRED_TREASURES.forEach(item -> output.accept(item.get()));
                             })
                             .build()
             );

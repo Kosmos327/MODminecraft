@@ -13,6 +13,15 @@
   "item.seven_sins.demon_fragment":  "Demon Fragment",
   "item.seven_sins.sacred_scroll":   "Sacred Scroll",
 
+  "item.seven_sins.lostvayne":   "Lostvayne",
+  "item.seven_sins.rhitta":      "Divine Axe Rhitta",
+  "item.seven_sins.chastiefol":  "Spirit Spear Chastiefol",
+
+  "item.seven_sins.sacred_treasure.character":    "Sacred Treasure of %s",
+  "item.seven_sins.sacred_treasure.ability_bonus": "+%s ability damage (compatible wielder)",
+  "item.seven_sins.sacred_treasure.melee_bonus":  "+%s%% melee damage (compatible wielder)",
+  "item.seven_sins.sacred_treasure.mana_bonus":   "+%s%% max mana (compatible wielder)",
+
   "block.seven_sins.sin_altar": "Sin Altar",
   "block.seven_sins.sin_altar.aligned":   "You are aligned with %s (Level %s)",
   "block.seven_sins.sin_altar.unaligned": "You are not yet aligned with any sin. Use a Sin Emblem to choose your path.",
@@ -32,6 +41,15 @@
   "sin.seven_sins.lust.description":     "The sin of intense craving and overwhelming desire.",
   "sin.seven_sins.envy.description":     "The sin of coveting what rightfully belongs to others.",
   "sin.seven_sins.gluttony.description": "The sin of overindulgence and insatiable appetite.",
+
+  "character.seven_sins.meliodas": "Meliodas (Wrath)",
+  "character.seven_sins.escanor":  "Escanor (Pride)",
+  "character.seven_sins.king":     "King (Sloth)",
+  "character.seven_sins.ban":      "Ban (Greed)",
+  "character.seven_sins.diane":    "Diane (Envy)",
+  "character.seven_sins.gowther":  "Gowther (Lust)",
+  "character.seven_sins.merlin":   "Merlin (Gluttony)",
+  "character.seven_sins.none":     "None",
 
   "effect.seven_sins.wrath":    "Wrath",
   "effect.seven_sins.greed":    "Greed",
