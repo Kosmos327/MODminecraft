@@ -29,8 +29,8 @@ import java.util.List;
  * <p>Key assignments:
  * <ul>
  *   <li><b>R</b> – ability one (first ability of the player's character)</li>
- *   <li><b>F</b> – ability two (stub / TODO)</li>
- *   <li><b>V</b> – ability three (stub / TODO)</li>
+ *   <li><b>F</b> – ability two (second ability of the player's character)</li>
+ *   <li><b>V</b> – ability three (third ability of the player's character)</li>
  * </ul>
  * </p>
  */
@@ -46,7 +46,7 @@ public class Keybinds {
             KEY_CATEGORY
     );
 
-    /** F – reserved for ability two (TODO). */
+    /** F – activates the character's second ability. */
     public static final KeyMapping ABILITY_TWO = new KeyMapping(
             "key.seven_sins.ability_two",
             GLFW.GLFW_KEY_F,
@@ -121,10 +121,23 @@ public class Keybinds {
                 });
             }
 
-            // Ability two (F) – TODO: implement and wire up the second character ability.
-            // Clicks are consumed to prevent accumulation until the feature is ready.
+            // Ability two (F) – sends the second ability of the player's character to the server.
             while (ABILITY_TWO.consumeClick()) {
-                SevenSinsMod.LOGGER.debug("[Seven Sins] ability_two pressed – not yet implemented");
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.player == null) break;
+
+                ModCapabilities.get(mc.player).ifPresent(cap -> {
+                    CharacterType character = cap.getData().getSelectedCharacter();
+                    if (character == CharacterType.NONE) return;
+
+                    List<Ability> abilities = AbilityManager.getAbilitiesFor(character);
+                    if (abilities.size() < 2) return;
+
+                    ModNetwork.CHANNEL.send(
+                            PacketDistributor.SERVER.noArg(),
+                            new UseAbilityPacket(abilities.get(1).getType())
+                    );
+                });
             }
 
             // Ability three (V) – sends the third ability of the player's character to the server.
