@@ -15,6 +15,9 @@ public final class QuestRegistry {
     /** ID of the first story quest assigned to every new player. */
     public static final String AWAKENING_TRIAL_ID = "awakening_trial";
 
+    /** ID of the Chapter 2 demon-hunt quest. */
+    public static final String FIRST_DEMON_HUNT_ID = "first_demon_hunt";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {
@@ -24,6 +27,13 @@ public final class QuestRegistry {
                 "Defeat 5 hostile creatures to awaken your Sin.",
                 QuestType.KILL,
                 5
+        ));
+        register(new Quest(
+                FIRST_DEMON_HUNT_ID,
+                "The First Demons",
+                "Defeat 3 powerful hostile creatures (max health \u2265 20) threatening the land.",
+                QuestType.KILL,
+                3
         ));
     }
 

@@ -13,7 +13,10 @@ public enum StoryChapter {
     NONE(0),
 
     /** Chapter 1 — "The Awakening of Sin". */
-    AWAKENING(1);
+    AWAKENING(1),
+
+    /** Chapter 2 — "The First Demons". */
+    FIRST_DEMONS(2);
 
     private final int stage;
 

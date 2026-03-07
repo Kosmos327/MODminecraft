@@ -82,6 +82,8 @@ public final class StoryTriggerService {
 
         if (QuestRegistry.AWAKENING_TRIAL_ID.equals(questId)) {
             onAwakeningTrialComplete(player);
+        } else if (QuestRegistry.FIRST_DEMON_HUNT_ID.equals(questId)) {
+            onFirstDemonHuntComplete(player);
         }
     }
 
@@ -110,6 +112,16 @@ public final class StoryTriggerService {
         ModCapabilities.get(player).ifPresent(cap -> {
             PlayerQuestData questData = cap.getData().getQuestData();
             questData.addStoryFlag(StoryFlag.AWAKENING_TRIAL_COMPLETE.getId());
+        });
+    }
+
+    private void onFirstDemonHuntComplete(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            PlayerQuestData questData = cap.getData().getQuestData();
+            questData.addStoryFlag(StoryFlag.FIRST_DEMONS_COMPLETE.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.FIRST_DEMONS.getStage());
+            player.sendSystemMessage(
+                    Component.literal("Chapter complete: you have faced the first demons."));
         });
     }
 }

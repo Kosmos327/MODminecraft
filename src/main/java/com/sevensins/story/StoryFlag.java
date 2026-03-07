@@ -10,7 +10,16 @@ package com.sevensins.story;
 public enum StoryFlag {
 
     /** Set after the player completes the "Trial of Awakening" quest. */
-    AWAKENING_TRIAL_COMPLETE("awakening_trial_complete");
+    AWAKENING_TRIAL_COMPLETE("awakening_trial_complete"),
+
+    /** Set when the player first talks to the mentor NPC (Meliodas). */
+    TALKED_TO_MELIODAS("talked_to_meliodas"),
+
+    /** Set when Chapter 2 ("The First Demons") has been started. */
+    FIRST_DEMONS_STARTED("first_demons_started"),
+
+    /** Set when the player completes the Chapter 2 demon-hunt quest. */
+    FIRST_DEMONS_COMPLETE("first_demons_complete");
 
     private final String id;
 
