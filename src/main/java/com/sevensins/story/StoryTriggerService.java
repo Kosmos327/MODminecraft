@@ -6,6 +6,7 @@ import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.quest.PlayerQuestData;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
+import com.sevensins.util.PlaytestHelper;
 import com.sevensins.world.DungeonType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -63,6 +64,8 @@ public final class StoryTriggerService {
 
             // Assign the first quest if not already active or completed
             checkAndAssignFirstQuest(player, charData);
+
+            PlaytestHelper.onCharacterSelected(player, characterType);
         });
     }
 
@@ -106,6 +109,14 @@ public final class StoryTriggerService {
      */
     public void checkAndAssignFirstQuest(ServerPlayer player, PlayerCharacterData charData) {
         if (charData.getSelectedCharacter() == CharacterType.NONE) return;
+
+        // Safety recovery: if a character has been chosen but the story stage
+        // was never initialized (e.g. the player joined before this system was
+        // added), quietly advance to Chapter 1 so the rest of the flow is valid.
+        if (charData.getPersonalStoryStage() == StoryChapter.NONE.getStage()) {
+            charData.setPersonalStoryStage(StoryChapter.AWAKENING.getStage());
+        }
+
         PlayerQuestData questData = charData.getQuestData();
         if (!questData.isCompleted(QuestRegistry.AWAKENING_TRIAL_ID)
                 && questData.getActiveQuestId().isEmpty()) {

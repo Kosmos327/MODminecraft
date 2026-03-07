@@ -79,6 +79,9 @@ public class UseAbilityPacket {
                 if (abilityOpt.isEmpty()) return;
                 IAbility ability = abilityOpt.get();
 
+                // 2b. Verify the ability has been unlocked in the skill tree
+                if (!cap.getData().hasUnlockedAbility(packet.abilityType)) return;
+
                 // 3. Check cooldown
                 if (CooldownManager.isOnCooldown(player.getUUID(), packet.abilityType)) return;
 

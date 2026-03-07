@@ -56,7 +56,7 @@ public class CharacterSelectionScreen extends Screen {
             final CharacterType type = SELECTABLE[i];
             int y = startY + i * (BUTTON_HEIGHT + BUTTON_SPACING);
             this.addRenderableWidget(Button.builder(
-                            Component.literal(capitalize(type.name())),
+                            Component.translatable("character.seven_sins." + type.name().toLowerCase()),
                             btn -> selectCharacter(type))
                     .bounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT)
                     .build());
@@ -75,10 +75,5 @@ public class CharacterSelectionScreen extends Screen {
         int totalHeight = SELECTABLE.length * (BUTTON_HEIGHT + BUTTON_SPACING) - BUTTON_SPACING;
         int titleY = (this.height - totalHeight) / 2 - 20;
         guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, titleY, 0xFFFFFF);
-    }
-
-    private static String capitalize(String name) {
-        if (name == null || name.isEmpty()) return name;
-        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 }

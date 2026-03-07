@@ -3,10 +3,13 @@ package com.sevensins.network.packet;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.PlayerCharacterData;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.network.ModNetwork;
+import com.sevensins.network.packet.SyncCharacterDataPacket;
 import com.sevensins.story.StoryTriggerService;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -85,6 +88,11 @@ public class SelectCharacterPacket {
                         // Trigger story Chapter 1 and first quest (sets personalStoryStage
                         // via StoryChapter.AWAKENING for all characters uniformly).
                         StoryTriggerService.getInstance().onCharacterSelected(player, character);
+
+                        // Sync the updated character data (including selectedCharacter) to the client
+                        ModNetwork.CHANNEL.send(
+                                PacketDistributor.PLAYER.with(() -> player),
+                                new SyncCharacterDataPacket(data));
                     }
                 });
         });
