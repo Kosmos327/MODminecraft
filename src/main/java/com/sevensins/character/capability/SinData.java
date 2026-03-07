@@ -24,7 +24,7 @@ public class SinData implements ISinData, INBTSerializable<CompoundTag> {
 
     @Nullable
     private SinType activeSin = null;
-    private int sinLevel      = 0;
+    private int sinLevel      = 1;
     private int sinExperience = 0;
 
     // -------------------------------------------------------------------------
@@ -134,7 +134,7 @@ public class SinData implements ISinData, INBTSerializable<CompoundTag> {
         if (tag.contains(KEY_ACTIVE_SIN)) {
             SinType.fromId(tag.getString(KEY_ACTIVE_SIN)).ifPresent(sin -> activeSin = sin);
         }
-        sinLevel      = tag.getInt(KEY_SIN_LEVEL);
+        setSinLevel(tag.getInt(KEY_SIN_LEVEL));
         sinExperience = tag.getInt(KEY_SIN_EXPERIENCE);
 
         sinPoints.clear();
