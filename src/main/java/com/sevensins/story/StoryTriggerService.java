@@ -175,6 +175,17 @@ public final class StoryTriggerService {
         });
     }
 
+    private void onGrayDemonSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            PlayerQuestData questData = cap.getData().getQuestData();
+            questData.addStoryFlag(StoryFlag.GRAY_DEMON_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.GRAY_DEMON.getStage());
+            player.sendSystemMessage(Component.literal("You have slain the Gray Demon!"));
+            player.sendSystemMessage(Component.literal(
+                    "The corruption fades... but darker threats await."));
+        });
+    }
+
     /**
      * Called by {@link com.sevensins.world.DungeonManager} when the player first
      * enters a dungeon.  Sets the entry story flag for the dungeon type.

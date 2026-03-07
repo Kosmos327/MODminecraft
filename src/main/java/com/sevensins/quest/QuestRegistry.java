@@ -35,6 +35,9 @@ public final class QuestRegistry {
     /** ID of the quest to obtain Spirit Spear Chastiefol. */
     public static final String OBTAIN_CHASTIEFOL_ID = "obtain_chastiefol";
 
+    /** ID of the Chapter 5 Gray Demon boss quest. */
+    public static final String SLAY_GRAY_DEMON_ID = "slay_gray_demon";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {
