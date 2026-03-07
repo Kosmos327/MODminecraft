@@ -265,28 +265,64 @@ public final class CharacterStats {
      * Returns a multiplier applied to mana costs.  Values less than {@code 1.0}
      * reduce mana costs; values greater than {@code 1.0} increase them.
      *
-     * <p>Version 1 always returns {@code 1.0}.  Override in future versions
-     * to add character-specific or sacred-treasure mana discounts.</p>
+     * <p>Character-specific discounts:</p>
+     * <ul>
+     *   <li><b>MERLIN (Gluttony)</b> – 10% mana cost reduction (arcane mastery).</li>
+     * </ul>
+     * <p>An additional 5% discount is applied when a compatible sacred treasure
+     * is equipped (any character).</p>
      *
      * @param player the queried player
      * @return mana cost modifier (always &gt; 0)
      */
     public static double getManaCostModifier(Player player) {
-        return 1.0;
+        CharacterType character = PassiveAbilityManager.getCharacterType(player);
+        double modifier = 1.0;
+
+        // Character-specific mana cost reduction
+        if (character == CharacterType.MERLIN) {
+            modifier *= 0.90; // −10% for Gluttony / Merlin
+        }
+
+        // Sacred treasure equipped bonus: −5% mana cost
+        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
+        if (treasure != null && treasure.isCompatible(player)) {
+            modifier *= 0.95;
+        }
+
+        return modifier;
     }
 
     /**
      * Returns a multiplier applied to ability cooldowns.  Values less than
      * {@code 1.0} reduce cooldowns; values greater than {@code 1.0} increase them.
      *
-     * <p>Version 1 always returns {@code 1.0}.  Override in future versions
-     * to add character-specific or sacred-treasure cooldown reductions.</p>
+     * <p>Character-specific reductions:</p>
+     * <ul>
+     *   <li><b>ESCANOR (Pride)</b> – 15% cooldown reduction during daytime.</li>
+     * </ul>
+     * <p>An additional 5% reduction is applied when a compatible sacred treasure
+     * is equipped (any character).</p>
      *
      * @param player the queried player
      * @return cooldown modifier (always &gt; 0)
      */
     public static double getCooldownModifier(Player player) {
-        return 1.0;
+        CharacterType character = PassiveAbilityManager.getCharacterType(player);
+        double modifier = 1.0;
+
+        // Character-specific cooldown reduction
+        if (character == CharacterType.ESCANOR && player.level().isDay()) {
+            modifier *= 0.85; // −15% during daytime for Pride / Escanor
+        }
+
+        // Sacred treasure equipped bonus: −5% cooldown
+        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
+        if (treasure != null && treasure.isCompatible(player)) {
+            modifier *= 0.95;
+        }
+
+        return modifier;
     }
 
     // -------------------------------------------------------------------------
