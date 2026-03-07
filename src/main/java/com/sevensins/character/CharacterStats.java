@@ -3,7 +3,9 @@ package com.sevensins.character;
 import com.sevensins.ability.AbilityType;
 import com.sevensins.ability.PassiveAbilityManager;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.item.SacredTreasureData;
 import com.sevensins.item.SacredTreasureItem;
+import com.sevensins.item.SacredTreasureUpgradeHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -53,11 +55,15 @@ public final class CharacterStats {
         int base = (sinLevel * 10) + maxMana + (unlockedCount * 25);
 
         // Add sacred treasure power bonus if the player holds a compatible treasure
-        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
-        int sacredBonus = (treasure != null && treasure.isCompatible(player))
-                ? SACRED_TREASURE_POWER_BONUS : 0;
+        ItemStack heldStack = player.getMainHandItem();
+        SacredTreasureItem treasure = heldStack.getItem() instanceof SacredTreasureItem t ? t : null;
+        boolean compatible = treasure != null && treasure.isCompatible(player);
 
-        return base + sacredBonus;
+        int sacredBonus   = compatible ? SACRED_TREASURE_POWER_BONUS : 0;
+        int upgradeBonus  = compatible
+                ? SacredTreasureUpgradeHelper.getUpgradePowerBonus(heldStack) : 0;
+
+        return base + sacredBonus + upgradeBonus;
     }
 
     // -------------------------------------------------------------------------
@@ -91,13 +97,17 @@ public final class CharacterStats {
      * @return flat damage bonus (≥ 0)
      */
     public static int getAbilityDamageBonus(Player player, AbilityType abilityType) {
-        SacredTreasureItem treasure = getEquippedSacredTreasure(player);
-        if (treasure == null || !treasure.isCompatible(player)) {
+        ItemStack held = player.getMainHandItem();
+        if (!(held.getItem() instanceof SacredTreasureItem treasure)) {
+            return 0;
+        }
+        if (!treasure.isCompatible(player)) {
             return 0;
         }
         CharacterType abilityOwner = getCharacterForAbility(abilityType);
         if (abilityOwner != CharacterType.NONE && abilityOwner == treasure.getLinkedCharacter()) {
-            return treasure.rawAbilityDamageBonus();
+            return treasure.rawAbilityDamageBonus()
+                    + SacredTreasureUpgradeHelper.getUpgradeAbilityBonus(held);
         }
         return 0;
     }
