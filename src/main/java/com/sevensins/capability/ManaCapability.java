@@ -1,6 +1,5 @@
-package com.sevensins.common.capability;
+package com.sevensins.capability;
 
-import com.sevensins.character.CharacterType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -9,35 +8,40 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /**
- * Registers and exposes the {@link ISinData} capability token used throughout
- * the mod.
+ * Registers and exposes the {@link IMana} capability token.
  */
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModCapabilities {
+public class ManaCapability {
 
-    public static final Capability<ISinData> SIN_DATA =
+    public static final Capability<IMana> MANA_CAPABILITY =
             CapabilityManager.get(new CapabilityToken<>() {});
 
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(ISinData.class);
+        event.register(IMana.class);
     }
 
     // -------------------------------------------------------------------------
-    // Default (in-memory) implementation used by SinDataProvider
+    // Default implementation
 
-    public static ISinData createDefaultSinData() {
-        return new ISinData() {
-            private CharacterType character = null;
+    public static IMana createDefault() {
+        return new IMana() {
+            private int mana = 100;
+            private final int maxMana = 100;
 
             @Override
-            public CharacterType getCharacter() {
-                return character;
+            public int getMana() {
+                return mana;
             }
 
             @Override
-            public void setCharacter(CharacterType character) {
-                this.character = character;
+            public void setMana(int mana) {
+                this.mana = Math.max(0, Math.min(mana, maxMana));
+            }
+
+            @Override
+            public int getMaxMana() {
+                return maxMana;
             }
         };
     }
