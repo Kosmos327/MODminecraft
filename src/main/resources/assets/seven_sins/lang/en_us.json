@@ -21,10 +21,18 @@
   "item.seven_sins.sacred_treasure.ability_bonus": "+%s ability damage (compatible wielder)",
   "item.seven_sins.sacred_treasure.melee_bonus":  "+%s%% melee damage (compatible wielder)",
   "item.seven_sins.sacred_treasure.mana_bonus":   "+%s%% max mana (compatible wielder)",
+  "item.seven_sins.sacred_treasure.upgrade":      "Upgrade: +%s / +%s",
 
   "block.seven_sins.sin_altar": "Sin Altar",
   "block.seven_sins.sin_altar.aligned":   "You are aligned with %s (Level %s)",
   "block.seven_sins.sin_altar.unaligned": "You are not yet aligned with any sin. Use a Sin Emblem to choose your path.",
+
+  "block.seven_sins.sacred_forge": "Sacred Forge",
+  "block.seven_sins.sacred_forge.upgraded":     "Sacred Treasure upgraded to +%s",
+  "block.seven_sins.sacred_forge.invalid_item": "Hold a Sacred Treasure to upgrade it.",
+  "block.seven_sins.sacred_forge.max_level":    "This treasure is already at maximum upgrade level (+5).",
+  "block.seven_sins.sacred_forge.need_fragments": "Not enough Sin Fragments.",
+  "block.seven_sins.sacred_forge.need_scrolls":   "Not enough Magic Scrolls.",
 
   "sin.seven_sins.wrath":    "Wrath",
   "sin.seven_sins.greed":    "Greed",
@@ -69,5 +77,22 @@
   "hud.seven_sins.xp":           "XP: %s / %s",
   "hud.seven_sins.skill_points": "SP: %s",
   "hud.seven_sins.power_level":  "Power Level: %s",
-  "hud.seven_sins.ready":        "READY"
+  "hud.seven_sins.ready":        "READY",
+  "hud.seven_sins.mana":         "Mana: %s / %s",
+
+  "screen.seven_sins.character_selection": "Choose Your Sin",
+  "screen.seven_sins.skill_tree":          "Skill Tree",
+  "screen.seven_sins.no_character":        "You have not chosen a sin yet.",
+
+  "quest.seven_sins.awakening_trial.title":       "Trial of Awakening",
+  "quest.seven_sins.first_demon_hunt.title":      "The First Demons",
+  "quest.seven_sins.slay_red_demon.title":        "The Red Demon",
+  "quest.seven_sins.clear_demon_cave.title":      "Into the Demon Cave",
+
+  "ability.seven_sins.unlock.success":            "Unlocked: %s",
+  "ability.seven_sins.unlock.already_unlocked":   "You have already unlocked %s.",
+  "ability.seven_sins.unlock.not_enough_points":  "Not enough skill points to unlock %s.",
+  "ability.seven_sins.unlock.missing_prerequisite": "You must unlock the prerequisite ability first.",
+  "ability.seven_sins.unlock.not_in_tree":        "That ability does not belong to your skill tree.",
+  "ability.seven_sins.unlock.no_character":       "You have not selected a character yet."
 }

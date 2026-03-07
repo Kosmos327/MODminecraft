@@ -129,6 +129,30 @@ public final class QuestManager {
     }
 
     // -------------------------------------------------------------------------
+    // Collect / event quest completion
+    // -------------------------------------------------------------------------
+
+    /**
+     * Directly completes {@code questId} for {@code player} if it is currently
+     * the active quest.  Intended for quests completed by in-game events
+     * (e.g. obtaining an item, triggering a story beat) that do not fit the
+     * kill or dungeon-clear categories.
+     * Safe to call even when the quest is not active — silently no-ops.
+     */
+    public static void completeEventQuest(ServerPlayer player, String questId) {
+        if (player == null || questId == null) return;
+
+        QuestRegistry.getQuest(questId).ifPresent(quest ->
+                ModCapabilities.get(player).ifPresent(cap -> {
+                    PlayerQuestData questData = cap.getData().getQuestData();
+                    if (!questId.equals(questData.getActiveQuestId())) return;
+                    if (questData.isCompleted(questId)) return;
+                    completeQuest(player, quest, cap.getData());
+                })
+        );
+    }
+
+    // -------------------------------------------------------------------------
     // Completion
     // -------------------------------------------------------------------------
 

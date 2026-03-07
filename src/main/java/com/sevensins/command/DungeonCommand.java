@@ -13,7 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.UUID;
 
 /**
- * Registers the {@code /sevensins} command tree.
+ * Registers the {@code /sevensins dungeon} sub-command tree.
  *
  * <h2>Available sub-commands</h2>
  * <pre>

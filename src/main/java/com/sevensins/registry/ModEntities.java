@@ -1,7 +1,10 @@
 package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
+import com.sevensins.entity.DemonCommanderEntity;
+import com.sevensins.entity.GrayDemonEntity;
 import com.sevensins.entity.MeliodasNpcEntity;
+import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -39,6 +42,26 @@ public class ModEntities {
                             .build(SevenSinsMod.MODID + ":" + RedDemonEntity.REGISTRY_NAME)
             );
 
+    /** Gray Demon boss — spawnable via {@code /summon seven_sins:gray_demon} for testing. */
+    public static final RegistryObject<EntityType<GrayDemonEntity>> GRAY_DEMON =
+            ENTITY_TYPES.register(
+                    GrayDemonEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<GrayDemonEntity>of(GrayDemonEntity::new, MobCategory.MONSTER)
+                            .sized(0.9f, 2.8f)
+                            .build(SevenSinsMod.MODID + ":" + GrayDemonEntity.REGISTRY_NAME)
+            );
+
+    /** Demon Commander boss — spawnable via {@code /summon seven_sins:demon_commander} for testing. */
+    public static final RegistryObject<EntityType<DemonCommanderEntity>> DEMON_COMMANDER =
+            ENTITY_TYPES.register(
+                    DemonCommanderEntity.REGISTRY_NAME,
+                    () -> EntityType.Builder
+                            .<DemonCommanderEntity>of(DemonCommanderEntity::new, MobCategory.MONSTER)
+                            .sized(1.0f, 3.0f)
+                            .build(SevenSinsMod.MODID + ":" + DemonCommanderEntity.REGISTRY_NAME)
+            );
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
@@ -47,5 +70,7 @@ public class ModEntities {
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(MELIODAS_NPC.get(), MeliodasNpcEntity.createAttributes().build());
         event.put(RED_DEMON.get(), RedDemonEntity.createAttributes().build());
+        event.put(GRAY_DEMON.get(), GrayDemonEntity.createAttributes().build());
+        event.put(DEMON_COMMANDER.get(), DemonCommanderEntity.createAttributes().build());
     }
 }

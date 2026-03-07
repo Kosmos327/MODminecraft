@@ -26,14 +26,20 @@ public final class QuestRegistry {
 
     // Sacred Treasure quest placeholder IDs (scaffold for future story chapters)
 
-    /** ID of the quest to obtain Lostvayne. */
-    public static final String OBTAIN_LOSTVAYNE_ID = "obtain_lostvayne";
+    /** ID of the Chapter 5 Estarossa boss quest. */
+    public static final String SLAY_ESTAROSSA_ID = "slay_estarossa";
 
     /** ID of the quest to obtain the Divine Axe Rhitta. */
     public static final String OBTAIN_RHITTA_ID = "obtain_rhitta";
 
     /** ID of the quest to obtain Spirit Spear Chastiefol. */
     public static final String OBTAIN_CHASTIEFOL_ID = "obtain_chastiefol";
+
+    /** ID of the Chapter 5 Gray Demon boss quest. */
+    public static final String SLAY_GRAY_DEMON_ID = "slay_gray_demon";
+
+    /** ID of the Chapter 6 Demon Commander boss quest. */
+    public static final String SLAY_DEMON_COMMANDER_ID = "slay_demon_commander";
 
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
@@ -64,6 +70,20 @@ public final class QuestRegistry {
                 "Into the Demon Cave",
                 "Enter and clear a Demon Cave corrupted by demonic energy.",
                 QuestType.DUNGEON_CLEAR,
+                1
+        ));
+        register(new Quest(
+                SLAY_GRAY_DEMON_ID,
+                "The Gray Demon",
+                "Defeat the Gray Demon lurking in the depths.",
+                QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                SLAY_DEMON_COMMANDER_ID,
+                "The Demon Commander",
+                "Defeat the Demon Commander leading demonic forces in the region.",
+                QuestType.KILL,
                 1
         ));
     }

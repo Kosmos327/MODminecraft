@@ -63,6 +63,11 @@ public class SkillTreeScreen extends Screen {
         ModCapabilities.get(mc.player).ifPresent(cap -> {
             PlayerCharacterData data = cap.getData();
             CharacterType character = data.getSelectedCharacter();
+
+            // Guard: if no character is selected, skip adding interactive widgets.
+            // The render() method displays a user-facing fallback message in this case.
+            if (character == CharacterType.NONE) return;
+
             SkillTreeDefinition tree = SkillTreeRegistry.getTree(character);
             if (tree == null) return;
 
@@ -120,6 +125,13 @@ public class SkillTreeScreen extends Screen {
         ModCapabilities.get(mc.player).ifPresent(cap -> {
             PlayerCharacterData data = cap.getData();
             CharacterType character = data.getSelectedCharacter();
+
+            if (character == CharacterType.NONE) {
+                // Player has not chosen a character yet — show a friendly hint
+                String noCharMsg = Component.translatable("screen.seven_sins.no_character").getString();
+                guiGraphics.drawCenteredString(this.font, noCharMsg, this.width / 2, this.height / 2, 0xFF5555);
+                return;
+            }
 
             String sinLabel = "Character: " + capitalize(character.name());
             String pointsLabel = "Skill Points: " + data.getSkillPoints();

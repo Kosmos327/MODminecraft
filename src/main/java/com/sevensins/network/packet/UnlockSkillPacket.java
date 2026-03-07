@@ -1,7 +1,6 @@
 package com.sevensins.network.packet;
 
 import com.sevensins.ability.AbilityType;
-import com.sevensins.character.PlayerCharacterData;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.character.skilltree.SkillUnlockManager;
 import com.sevensins.network.ModNetwork;
@@ -70,13 +69,9 @@ public class UnlockSkillPacket {
 
                     // Sync updated skill data back to client
                     ModCapabilities.get(player).ifPresent(cap -> {
-                        PlayerCharacterData data = cap.getData();
                         ModNetwork.CHANNEL.send(
                                 PacketDistributor.PLAYER.with(() -> player),
-                                new SyncCharacterDataPacket(
-                                        data.getSkillPoints(),
-                                        data.getUnlockedAbilities()
-                                )
+                                new SyncCharacterDataPacket(cap.getData())
                         );
                     });
                 }

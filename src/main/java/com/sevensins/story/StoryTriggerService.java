@@ -6,6 +6,7 @@ import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.quest.PlayerQuestData;
 import com.sevensins.quest.QuestManager;
 import com.sevensins.quest.QuestRegistry;
+import com.sevensins.util.PlaytestHelper;
 import com.sevensins.world.DungeonType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -63,6 +64,8 @@ public final class StoryTriggerService {
 
             // Assign the first quest if not already active or completed
             checkAndAssignFirstQuest(player, charData);
+
+            PlaytestHelper.onCharacterSelected(player, characterType);
         });
     }
 
@@ -89,6 +92,10 @@ public final class StoryTriggerService {
             onRedDemonSlain(player);
         } else if (QuestRegistry.CLEAR_DEMON_CAVE_ID.equals(questId)) {
             onDemonCaveQuestComplete(player);
+        } else if (QuestRegistry.SLAY_GRAY_DEMON_ID.equals(questId)) {
+            onGrayDemonSlain(player);
+        } else if (QuestRegistry.SLAY_DEMON_COMMANDER_ID.equals(questId)) {
+            onDemonCommanderSlain(player);
         }
     }
 
@@ -106,6 +113,14 @@ public final class StoryTriggerService {
      */
     public void checkAndAssignFirstQuest(ServerPlayer player, PlayerCharacterData charData) {
         if (charData.getSelectedCharacter() == CharacterType.NONE) return;
+
+        // Safety recovery: if a character has been chosen but the story stage
+        // was never initialized (e.g. the player joined before this system was
+        // added), quietly advance to Chapter 1 so the rest of the flow is valid.
+        if (charData.getPersonalStoryStage() == StoryChapter.NONE.getStage()) {
+            charData.setPersonalStoryStage(StoryChapter.AWAKENING.getStage());
+        }
+
         PlayerQuestData questData = charData.getQuestData();
         if (!questData.isCompleted(QuestRegistry.AWAKENING_TRIAL_ID)
                 && questData.getActiveQuestId().isEmpty()) {
@@ -153,6 +168,33 @@ public final class StoryTriggerService {
             cap.getData().setPersonalStoryStage(StoryChapter.DEMON_CAVE.getStage());
             player.sendSystemMessage(
                     Component.literal("Chapter complete: the Demon Cave has been purged."));
+            // Begin Chapter 5 — the Gray Demon lurks in the depths
+            player.sendSystemMessage(
+                    Component.literal("Strange reports of a Gray Demon emerge from the depths."));
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_GRAY_DEMON_ID);
+        });
+    }
+
+    private void onGrayDemonSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.GRAY_DEMON_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.GRAY_DEMON.getStage());
+            player.sendSystemMessage(Component.literal("You have slain the Gray Demon!"));
+            // Begin Chapter 6 — the Demon Commander rallies forces
+            player.sendSystemMessage(Component.literal(
+                    "A powerful Demon Commander rallies the demonic forces. Stop them!"));
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_DEMON_COMMANDER_ID);
+        });
+    }
+
+    private void onDemonCommanderSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_COMMANDER_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.DEMON_COMMANDER.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated the Demon Commander!"));
+            player.sendSystemMessage(
+                    Component.literal("The demonic forces fall into disarray."));
         });
     }
 
@@ -188,5 +230,32 @@ public final class StoryTriggerService {
                     cap.getData().getQuestData()
                             .addStoryFlag(StoryFlag.DEMON_CAVE_CLEARED.getId()));
         }
+    }
+
+    private void onNightRaidComplete(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            // Night raid complete flag is set by NightRaidManager; here we advance quests.
+            player.sendSystemMessage(
+                    Component.literal("You have survived the Night Demon Raid!"));
+            // Offer the next endgame quest if not already completed or active
+            PlayerQuestData questData = cap.getData().getQuestData();
+            if (!questData.isCompleted(QuestRegistry.SLAY_MYTHIC_DEMON_ID)
+                    && !QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(questData.getActiveQuestId())) {
+                QuestManager.assignQuest(player, QuestRegistry.SLAY_MYTHIC_DEMON_ID);
+            }
+        });
+    }
+
+    private void onMythicDemonSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            player.sendSystemMessage(
+                    Component.literal("The Mythic demon has fallen. Seek the Legendary Artifacts."));
+            // Offer the legendary artifact quest if not already completed or active
+            PlayerQuestData questData = cap.getData().getQuestData();
+            if (!questData.isCompleted(QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID)
+                    && !QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID.equals(questData.getActiveQuestId())) {
+                QuestManager.assignQuest(player, QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID);
+            }
+        });
     }
 }
