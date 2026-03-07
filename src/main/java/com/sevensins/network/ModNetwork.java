@@ -2,10 +2,12 @@ package com.sevensins.network;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.character.capability.ISinData;
+import com.sevensins.network.packet.AdvanceDialoguePacket;
 import com.sevensins.network.packet.SelectCharacterPacket;
 import com.sevensins.network.packet.SinDataSyncPacket;
 import com.sevensins.network.packet.SyncCharacterDataPacket;
 import com.sevensins.network.packet.SyncCooldownPacket;
+import com.sevensins.network.packet.TriggerDialoguePacket;
 import com.sevensins.network.packet.UnlockSkillPacket;
 import com.sevensins.network.packet.UseAbilityPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -83,6 +85,20 @@ public class ModNetwork {
                 SyncCooldownPacket::encode,
                 SyncCooldownPacket::decode,
                 SyncCooldownPacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                TriggerDialoguePacket.class,
+                TriggerDialoguePacket::encode,
+                TriggerDialoguePacket::decode,
+                TriggerDialoguePacket::handle
+        );
+        CHANNEL.registerMessage(
+                nextPacketId++,
+                AdvanceDialoguePacket.class,
+                AdvanceDialoguePacket::encode,
+                AdvanceDialoguePacket::decode,
+                AdvanceDialoguePacket::handle
         );
     }
 

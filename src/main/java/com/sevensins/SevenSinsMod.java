@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.sevensins.registry.ModBlocks;
 import com.sevensins.registry.ModCreativeTabs;
 import com.sevensins.registry.ModEffects;
+import com.sevensins.registry.ModEntities;
 import com.sevensins.registry.ModItems;
 import com.sevensins.registry.ModSounds;
 import com.sevensins.config.ModConfig;
@@ -46,6 +47,7 @@ public class SevenSinsMod {
         ModEffects.EFFECTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
+        ModEntities.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
     }
