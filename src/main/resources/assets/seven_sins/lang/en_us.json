@@ -9,9 +9,21 @@
   "item.seven_sins.envy_emblem": "Emblem of Envy",
   "item.seven_sins.gluttony_emblem": "Emblem of Gluttony",
 
+  "item.seven_sins.sin_fragment": "Sin Fragment",
+  "item.seven_sins.magic_scroll": "Magic Scroll",
+  "item.seven_sins.demon_fragment": "Demon Fragment",
+  "item.seven_sins.sacred_scroll": "Sacred Scroll",
+
+  "item.seven_sins.lostvayne": "Lostvayne",
+  "item.seven_sins.rhitta": "Divine Axe Rhitta",
+  "item.seven_sins.chastiefol": "Spirit Spear Chastiefol",
+
+  "item.seven_sins.crown_of_night": "Crown of Night",
+
   "block.seven_sins.sin_altar": "Sin Altar",
   "block.seven_sins.sin_altar.aligned": "You are aligned with %s (Level %s)",
   "block.seven_sins.sin_altar.unaligned": "You are not yet aligned with any sin. Use a Sin Emblem to choose your path.",
+  "block.seven_sins.sacred_forge": "Sacred Forge",
 
   "sin.seven_sins.wrath": "Wrath",
   "sin.seven_sins.greed": "Greed",
@@ -42,5 +54,12 @@
   "message.seven_sins.sin_level_up": "Your %s has reached level %s!",
 
   "screen.seven_sins.character_selection": "Choose Your Sin",
-  "screen.seven_sins.character_selection.subtitle": "Select the path you will follow"
+  "screen.seven_sins.character_selection.subtitle": "Select the path you will follow",
+
+  "hud.seven_sins.sin": "Sin: %s",
+  "hud.seven_sins.level": "Level: %s",
+  "hud.seven_sins.xp": "XP: %s / %s",
+  "hud.seven_sins.skill_points": "Skill Points: %s",
+  "hud.seven_sins.power_level": "Power: %s",
+  "hud.seven_sins.ready": "READY"
 }
