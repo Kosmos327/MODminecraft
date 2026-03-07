@@ -1,5 +1,6 @@
 package com.sevensins.character.capability;
 
+import com.sevensins.character.CharacterType;
 import com.sevensins.character.PlayerCharacterData;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -55,7 +56,7 @@ public class PlayerCharacterDataProvider implements ICapabilitySerializable<Comp
     public void deserializeNBT(CompoundTag tag) {
         if (tag.contains("selectedCharacter")) {
             data.setSelectedCharacter(
-                    com.sevensins.character.CharacterType.fromName(tag.getString("selectedCharacter")));
+                    CharacterType.fromName(tag.getString("selectedCharacter")));
         }
         if (tag.contains("level")) {
             data.setLevel(tag.getInt("level"));
