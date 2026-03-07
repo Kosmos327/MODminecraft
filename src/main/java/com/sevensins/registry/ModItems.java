@@ -2,9 +2,16 @@ package com.sevensins.registry;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.common.data.SinType;
+import com.sevensins.item.ChastiefolItem;
+import com.sevensins.item.CrownOfNightItem;
+import com.sevensins.item.LostvayneItem;
+import com.sevensins.item.MagicScrollItem;
+import com.sevensins.item.RhittaItem;
 import com.sevensins.item.SinEmblemItem;
+import com.sevensins.item.SinFragmentItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,7 +29,19 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, SevenSinsMod.MODID);
 
     // -------------------------------------------------------------------------
-    // General items
+    // Dungeon reward items
+    // -------------------------------------------------------------------------
+
+    /** Sin Fragment — dropped as a dungeon reward; progression currency. */
+    public static final RegistryObject<Item> SIN_FRAGMENT = ITEMS.register("sin_fragment",
+            () -> new SinFragmentItem(new Item.Properties()));
+
+    /** Magic Scroll — chance-based dungeon reward. */
+    public static final RegistryObject<Item> MAGIC_SCROLL = ITEMS.register("magic_scroll",
+            () -> new MagicScrollItem(new Item.Properties()));
+
+    // -------------------------------------------------------------------------
+    // General items (legacy names kept for backwards compatibility)
     // -------------------------------------------------------------------------
 
     public static final RegistryObject<Item> DEMON_FRAGMENT = ITEMS.register("demon_fragment",
@@ -50,11 +69,49 @@ public class ModItems {
     );
 
     // -------------------------------------------------------------------------
+    // Sacred Treasures — legendary weapons linked to specific character types
+    // -------------------------------------------------------------------------
+
+    /** Lostvayne — Sacred Treasure of Meliodas (Wrath). */
+    public static final RegistryObject<Item> LOSTVAYNE = ITEMS.register("lostvayne",
+            () -> new LostvayneItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Divine Axe Rhitta — Sacred Treasure of Escanor (Pride). */
+    public static final RegistryObject<Item> RHITTA = ITEMS.register("rhitta",
+            () -> new RhittaItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Spirit Spear Chastiefol — Sacred Treasure of King (Sloth). */
+    public static final RegistryObject<Item> CHASTIEFOL = ITEMS.register("chastiefol",
+            () -> new ChastiefolItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Ordered list of all sacred treasure items (e.g. for creative tab). */
+    public static final List<RegistryObject<Item>> ALL_SACRED_TREASURES = List.of(
+            LOSTVAYNE, RHITTA, CHASTIEFOL
+    );
+
+    // -------------------------------------------------------------------------
+    // Legendary Artifacts — rare endgame relics
+    // -------------------------------------------------------------------------
+
+    /** Crown of Night — first Legendary Artifact; endgame drop from Night Demon Raids. */
+    public static final RegistryObject<Item> CROWN_OF_NIGHT = ITEMS.register("crown_of_night",
+            () -> new CrownOfNightItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    /** Ordered list of all legendary artifact items (e.g. for creative tab). */
+    public static final List<RegistryObject<Item>> ALL_LEGENDARY_ARTIFACTS = List.of(
+            CROWN_OF_NIGHT
+    );
+
+    // -------------------------------------------------------------------------
     // Block items
     // -------------------------------------------------------------------------
 
     public static final RegistryObject<Item> SIN_ALTAR_ITEM = ITEMS.register("sin_altar",
             () -> new BlockItem(ModBlocks.SIN_ALTAR.get(), new Item.Properties()));
+
+    /** Sacred Forge block item — allows placing the Sacred Forge in the world. */
+    public static final RegistryObject<Item> SACRED_FORGE_ITEM = ITEMS.register("sacred_forge",
+            () -> new BlockItem(ModBlocks.SACRED_FORGE.get(), new Item.Properties()));
 
     // -------------------------------------------------------------------------
     // Private helpers

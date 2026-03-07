@@ -3,8 +3,11 @@ package com.sevensins.client;
 import com.sevensins.SevenSinsMod;
 import com.sevensins.ability.Ability;
 import com.sevensins.ability.AbilityManager;
+import com.sevensins.ability.AbilityType;
+import com.sevensins.ability.UltimateAbilityManager;
 import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
+import com.sevensins.client.screen.SkillTreeScreen;
 import com.sevensins.network.ModNetwork;
 import com.sevensins.network.packet.UseAbilityPacket;
 import net.minecraft.client.KeyMapping;
@@ -57,6 +60,20 @@ public class Keybinds {
             KEY_CATEGORY
     );
 
+    /** K – opens the Skill Tree screen. */
+    public static final KeyMapping OPEN_SKILL_TREE = new KeyMapping(
+            "key.seven_sins.open_skill_tree",
+            GLFW.GLFW_KEY_K,
+            KEY_CATEGORY
+    );
+
+    /** G – activates the character's ultimate ability. */
+    public static final KeyMapping ULTIMATE = new KeyMapping(
+            "key.seven_sins.ultimate",
+            GLFW.GLFW_KEY_G,
+            KEY_CATEGORY
+    );
+
     // -------------------------------------------------------------------------
     // MOD bus – register keybindings
 
@@ -65,6 +82,8 @@ public class Keybinds {
         event.register(ABILITY_ONE);
         event.register(ABILITY_TWO);
         event.register(ABILITY_THREE);
+        event.register(OPEN_SKILL_TREE);
+        event.register(ULTIMATE);
     }
 
     // -------------------------------------------------------------------------
@@ -112,6 +131,33 @@ public class Keybinds {
             // Clicks are consumed to prevent accumulation until the feature is ready.
             while (ABILITY_THREE.consumeClick()) {
                 SevenSinsMod.LOGGER.debug("[Seven Sins] ability_three pressed – not yet implemented");
+            }
+
+            // Skill Tree (K) – opens the SkillTreeScreen on the client.
+            while (OPEN_SKILL_TREE.consumeClick()) {
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.player != null && mc.screen == null) {
+                    mc.setScreen(new SkillTreeScreen());
+                }
+            }
+
+            // Ultimate (G) – sends the ultimate ability for the player's character to the server.
+            while (ULTIMATE.consumeClick()) {
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.player == null) break;
+
+                ModCapabilities.get(mc.player).ifPresent(cap -> {
+                    CharacterType character = cap.getData().getSelectedCharacter();
+                    if (character == CharacterType.NONE) return;
+
+                    AbilityType ultimateType = UltimateAbilityManager.getUltimateAbilityFor(character);
+                    if (ultimateType == AbilityType.NONE) return;
+
+                    ModNetwork.CHANNEL.send(
+                            PacketDistributor.SERVER.noArg(),
+                            new UseAbilityPacket(ultimateType)
+                    );
+                });
             }
         }
     }

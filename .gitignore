@@ -22,3 +22,6 @@ gradlew.bat
 # OS
 .DS_Store
 Thumbs.db
+
+# Build artifact files
+javac.*.args

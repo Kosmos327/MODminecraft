@@ -1,5 +1,12 @@
 package com.sevensins.character;
 
+import com.sevensins.ability.AbilityType;
+import com.sevensins.quest.PlayerQuestData;
+
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 public class PlayerCharacterData {
 
     private CharacterType selectedCharacter = CharacterType.NONE;
@@ -10,6 +17,8 @@ public class PlayerCharacterData {
     private int skillPoints = 0;
     private boolean joinedToMeliodasTeam = false;
     private int personalStoryStage = 0;
+    private final Set<AbilityType> unlockedAbilities = EnumSet.noneOf(AbilityType.class);
+    private final PlayerQuestData questData = new PlayerQuestData();
 
     public CharacterType getSelectedCharacter() {
         return selectedCharacter;
@@ -24,7 +33,7 @@ public class PlayerCharacterData {
     }
 
     public void setLevel(int level) {
-        this.level = level;
+        this.level = Math.max(1, level);
     }
 
     public int getExperience() {
@@ -32,7 +41,7 @@ public class PlayerCharacterData {
     }
 
     public void setExperience(int experience) {
-        this.experience = experience;
+        this.experience = Math.max(0, experience);
     }
 
     public int getMana() {
@@ -56,7 +65,7 @@ public class PlayerCharacterData {
     }
 
     public void setSkillPoints(int skillPoints) {
-        this.skillPoints = skillPoints;
+        this.skillPoints = Math.max(0, skillPoints);
     }
 
     public boolean isJoinedToMeliodasTeam() {
@@ -99,5 +108,48 @@ public class PlayerCharacterData {
 
     public void consumeMana(int amount) {
         mana = Math.max(mana - amount, 0);
+    }
+
+    // -------------------------------------------------------------------------
+    // Unlocked abilities
+    // -------------------------------------------------------------------------
+
+    /** Returns an unmodifiable view of the player's unlocked abilities. */
+    public Set<AbilityType> getUnlockedAbilities() {
+        return Collections.unmodifiableSet(unlockedAbilities);
+    }
+
+    /** Replaces all unlocked abilities with the contents of {@code abilities}. */
+    public void setUnlockedAbilities(Set<AbilityType> abilities) {
+        unlockedAbilities.clear();
+        if (abilities != null) {
+            unlockedAbilities.addAll(abilities);
+        }
+    }
+
+    /** Adds a single ability to the unlocked set. */
+    public void unlockAbility(AbilityType ability) {
+        if (ability != null && ability != AbilityType.NONE) {
+            unlockedAbilities.add(ability);
+        }
+    }
+
+    /** Returns {@code true} if the given ability has been unlocked. */
+    public boolean hasUnlockedAbility(AbilityType ability) {
+        return ability != null && unlockedAbilities.contains(ability);
+    }
+
+    // -------------------------------------------------------------------------
+    // Quest and story data
+    // -------------------------------------------------------------------------
+
+    /** Returns the per-player quest and story flag data. */
+    public PlayerQuestData getQuestData() {
+        return questData;
+    }
+
+    /** Copies all quest and story state from {@code other} into this instance. */
+    public void copyQuestDataFrom(PlayerCharacterData other) {
+        this.questData.copyFrom(other.questData);
     }
 }

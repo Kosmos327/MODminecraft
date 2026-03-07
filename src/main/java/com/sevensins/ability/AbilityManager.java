@@ -1,7 +1,10 @@
 package com.sevensins.ability;
 
 import com.sevensins.ability.impl.DianeEarthSmashAbility;
+import com.sevensins.ability.impl.DemonModeAbility;
 import com.sevensins.ability.impl.MeliodasFullCounterAbility;
+import com.sevensins.ability.impl.TheOneAbility;
+import com.sevensins.ability.impl.wrath.HellBlazeAbility;
 import com.sevensins.character.CharacterType;
 
 import java.util.Collections;
@@ -20,14 +23,18 @@ import java.util.Map;
 public class AbilityManager {
 
     private static final Ability FULL_COUNTER = new MeliodasFullCounterAbility();
+    private static final Ability HELL_BLAZE = new HellBlazeAbility();
     private static final Ability EARTH_SMASH = new DianeEarthSmashAbility();
+    private static final Ability DEMON_MODE = new DemonModeAbility();
+    private static final Ability THE_ONE = new TheOneAbility();
 
     private static final Map<CharacterType, List<Ability>> REGISTRY =
             new EnumMap<>(CharacterType.class);
 
     static {
-        REGISTRY.put(CharacterType.MELIODAS, List.of(FULL_COUNTER));
+        REGISTRY.put(CharacterType.MELIODAS, List.of(HELL_BLAZE, FULL_COUNTER, DEMON_MODE));
         REGISTRY.put(CharacterType.DIANE, List.of(EARTH_SMASH));
+        REGISTRY.put(CharacterType.ESCANOR, List.of(THE_ONE));
     }
 
     private AbilityManager() {}
