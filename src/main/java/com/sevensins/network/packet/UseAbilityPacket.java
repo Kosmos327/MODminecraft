@@ -4,7 +4,9 @@ import com.sevensins.ability.AbilityManager;
 import com.sevensins.ability.AbilityType;
 import com.sevensins.ability.CooldownManager;
 import com.sevensins.ability.IAbility;
+import com.sevensins.ability.UltimateAbilityManager;
 import com.sevensins.character.CharacterType;
+import com.sevensins.character.capability.ISinData;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.config.BalanceHelper;
 import com.sevensins.mana.ManaManager;
@@ -80,7 +82,30 @@ public class UseAbilityPacket {
                 if (abilityOpt.isEmpty()) return;
                 IAbility ability = abilityOpt.get();
 
-                // 3. Check cooldown
+                // 3a. Extra validation for ultimate abilities
+                if (UltimateAbilityManager.isUltimateAbility(packet.abilityType)) {
+                    // Require Sin Level >= 10
+                    int sinLevel = player.getCapability(ModCapabilities.SIN_DATA)
+                            .map(ISinData::getSinLevel)
+                            .orElse(0);
+                    if (sinLevel < 10) {
+                        player.displayClientMessage(
+                                net.minecraft.network.chat.Component.literal(
+                                        "Sin Level 10 required to use ultimate abilities"),
+                                false);
+                        return;
+                    }
+                    // Prevent activating while another ultimate is already active
+                    if (UltimateAbilityManager.isUltimateActive(player.getUUID())) {
+                        player.displayClientMessage(
+                                net.minecraft.network.chat.Component.literal(
+                                        "Ultimate is already active"),
+                                false);
+                        return;
+                    }
+                }
+
+                // 3b. Check cooldown
                 if (CooldownManager.isOnCooldown(player.getUUID(), packet.abilityType)) return;
 
                 // 4 & 5. Check mana, consume it, set cooldown, activate ability
