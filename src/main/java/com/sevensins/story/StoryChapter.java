@@ -34,7 +34,10 @@ public enum StoryChapter {
     ESTAROSSA(7),
 
     /** Chapter 8 — "The Demon King". */
-    DEMON_KING(8);
+    DEMON_KING(8),
+
+    /** Chapter 9 — "Night Raid" (endgame raid content). */
+    NIGHT_RAID(9);
 
     private final int stage;
 
