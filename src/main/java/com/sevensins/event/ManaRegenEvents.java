@@ -1,5 +1,6 @@
 package com.sevensins.event;
 
+import com.sevensins.ability.PassiveAbilityManager;
 import com.sevensins.mana.ManaRegenService;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
@@ -49,6 +50,13 @@ public class ManaRegenEvents {
             return;
         }
 
-        ManaRegenService.applyRegen(serverPlayer, MANA_PER_REGEN);
+        // Apply DIANE (Envy) passive mana-regen bonus
+        int effectiveRegen = MANA_PER_REGEN;
+        float regenBonus = PassiveAbilityManager.getManaRegenBonus(serverPlayer);
+        if (regenBonus > 0f) {
+            effectiveRegen = Math.round(MANA_PER_REGEN * (1f + regenBonus));
+        }
+
+        ManaRegenService.applyRegen(serverPlayer, effectiveRegen);
     }
 }

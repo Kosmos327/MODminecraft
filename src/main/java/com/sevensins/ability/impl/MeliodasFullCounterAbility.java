@@ -9,8 +9,10 @@ import net.minecraft.world.entity.player.Player;
  * Meliodas ability — Full Counter.
  *
  * <p>Activating the ability marks the player as being in "counter state" for
- * 3 seconds (60 ticks).  The actual damage-reflection mechanic for
- * projectile / magic attacks will be implemented in a dedicated event handler.
+ * 3 seconds (60 ticks).  While active, any incoming melee or ranged damage is
+ * reflected back to the attacker at 1.5× the original amount and the counter
+ * state is consumed.  Reflection is handled by
+ * {@link com.sevensins.event.PassiveAbilityEvents#onFullCounterHurt}.
  *
  * <ul>
  *   <li>Type: {@link AbilityType#FULL_COUNTER}</li>
@@ -44,13 +46,8 @@ public class MeliodasFullCounterAbility extends Ability {
         CompoundTag data = player.getPersistentData();
         data.putBoolean(NBT_ACTIVE, true);
         data.putLong(NBT_EXPIRE, expireTime);
-
-        // TODO: Register a server-tick event handler that clears the flag once
-        //       expireTime is reached (player.level().getGameTime() >= expireTime).
-
-        // TODO: In a damage event handler, check NBT_ACTIVE on the victim; if true
-        //       and the source is projectile or magic damage, reflect the damage
-        //       back to the attacker and clear the counter state.
+        // Expiry is checked lazily in isCounterActive().
+        // Damage reflection is handled in PassiveAbilityEvents.onFullCounterHurt().
     }
 
     /**
@@ -67,5 +64,13 @@ public class MeliodasFullCounterAbility extends Ability {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Deactivates the counter state for {@code player}.
+     * Should be called server-side when the counter is consumed or expires early.
+     */
+    public static void deactivateCounter(Player player) {
+        player.getPersistentData().putBoolean(NBT_ACTIVE, false);
     }
 }
