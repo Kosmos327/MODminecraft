@@ -1,5 +1,5 @@
 {
-  "seven_sins:sin_align": {
+  "sin_align": {
     "category": "master",
     "sounds": [
       {
@@ -9,7 +9,7 @@
       }
     ]
   },
-  "seven_sins:sin_level_up": {
+  "sin_level_up": {
     "category": "master",
     "sounds": [
       {
@@ -19,7 +19,7 @@
       }
     ]
   },
-  "seven_sins:altar_activate": {
+  "altar_activate": {
     "category": "master",
     "sounds": [
       {

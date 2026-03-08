@@ -53,6 +53,9 @@ public final class QuestRegistry {
     /** ID of the endgame quest to obtain a Legendary Artifact. */
     public static final String OBTAIN_LEGENDARY_ARTIFACT_ID = "obtain_legendary_artifact";
 
+    /** ID of the Chapter 8 / endgame Demon King boss quest. */
+    public static final String SLAY_DEMON_KING_ID = "slay_demon_king";
+
     private static final Map<String, Quest> QUESTS = new HashMap<>();
 
     static {
@@ -131,6 +134,20 @@ public final class QuestRegistry {
                 "Legendary Artifact",
                 "Obtain a Legendary Artifact from a Night Demon Raid.",
                 QuestType.DUNGEON_CLEAR,
+                1
+        ));
+        register(new Quest(
+                SLAY_ESTAROSSA_ID,
+                "Estarossa",
+                "Defeat Estarossa, the formidable Lord of Commandments.",
+                QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                SLAY_DEMON_KING_ID,
+                "The Demon King",
+                "Defeat the Demon King — the supreme ruler of the Demon Clan.",
+                QuestType.KILL,
                 1
         ));
     }

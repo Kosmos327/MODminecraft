@@ -141,6 +141,11 @@ public final class StoryTriggerService {
         ModCapabilities.get(player).ifPresent(cap -> {
             PlayerQuestData questData = cap.getData().getQuestData();
             questData.addStoryFlag(StoryFlag.AWAKENING_TRIAL_COMPLETE.getId());
+            // Advance chapter and chain to Chapter 2
+            cap.getData().setPersonalStoryStage(StoryChapter.AWAKENING.getStage());
+            player.sendSystemMessage(
+                    Component.literal("Your awakening is complete. Seek out the demons threatening the land."));
+            QuestManager.assignQuest(player, QuestRegistry.FIRST_DEMON_HUNT_ID);
         });
     }
 
@@ -271,7 +276,8 @@ public final class StoryTriggerService {
 
     private void onNightRaidComplete(ServerPlayer player) {
         ModCapabilities.get(player).ifPresent(cap -> {
-            // Night raid complete flag is set by NightRaidManager; here we advance quests.
+            // Night raid complete flag is set by NightRaidManager; here we advance chapter and quests.
+            cap.getData().setPersonalStoryStage(StoryChapter.NIGHT_RAID.getStage());
             player.sendSystemMessage(
                     Component.literal("You have survived the Night Demon Raid!"));
             // Offer the next endgame quest if not already completed or active

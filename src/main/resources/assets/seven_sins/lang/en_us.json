@@ -69,5 +69,12 @@
   "message.seven_sins.progression.level_up": "Your sin has reached Level %s!",
 
   "screen.seven_sins.character_selection": "Choose Your Sin",
-  "screen.seven_sins.character_selection.subtitle": "Select the path you will follow"
+  "screen.seven_sins.character_selection.subtitle": "Select the path you will follow",
+
+  "hud.seven_sins.sin": "Sin: %s",
+  "hud.seven_sins.level": "Level: %s",
+  "hud.seven_sins.xp": "XP: %s / %s",
+  "hud.seven_sins.skill_points": "Skill Points: %s",
+  "hud.seven_sins.power_level": "Power: %s",
+  "hud.seven_sins.ready": "READY"
 }

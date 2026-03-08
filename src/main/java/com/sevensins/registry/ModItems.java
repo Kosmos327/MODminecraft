@@ -12,6 +12,7 @@ import com.sevensins.item.SinFragmentItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -100,6 +101,45 @@ public class ModItems {
     /** Ordered list of all legendary artifact items (e.g. for creative tab). */
     public static final List<RegistryObject<Item>> ALL_LEGENDARY_ARTIFACTS = List.of(
             CROWN_OF_NIGHT
+    );
+
+    // -------------------------------------------------------------------------
+    // Spawn eggs — one per custom entity, for Creative-mode visual testing
+    // -------------------------------------------------------------------------
+
+    public static final RegistryObject<Item> RED_DEMON_SPAWN_EGG = ITEMS.register("red_demon_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.RED_DEMON, 0x8B0000, 0x1A0000,
+                    new Item.Properties()));
+
+    public static final RegistryObject<Item> GRAY_DEMON_SPAWN_EGG = ITEMS.register("gray_demon_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.GRAY_DEMON, 0x555555, 0x1F1F1F,
+                    new Item.Properties()));
+
+    public static final RegistryObject<Item> DEMON_COMMANDER_SPAWN_EGG = ITEMS.register("demon_commander_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.DEMON_COMMANDER, 0x2B0000, 0x8B0000,
+                    new Item.Properties()));
+
+    public static final RegistryObject<Item> MYTHIC_RED_DEMON_SPAWN_EGG = ITEMS.register("mythic_red_demon_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.MYTHIC_RED_DEMON, 0xAA0000, 0x000000,
+                    new Item.Properties()));
+
+    public static final RegistryObject<Item> ESTAROSSA_SPAWN_EGG = ITEMS.register("estarossa_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.ESTAROSSA, 0x111111, 0x550000,
+                    new Item.Properties()));
+
+    public static final RegistryObject<Item> DEMON_KING_SPAWN_EGG = ITEMS.register("demon_king_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.DEMON_KING, 0x000000, 0x990000,
+                    new Item.Properties()));
+
+    public static final RegistryObject<Item> MELIODAS_NPC_SPAWN_EGG = ITEMS.register("meliodas_npc_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.MELIODAS_NPC, 0xFFD700, 0x222222,
+                    new Item.Properties()));
+
+    /** Ordered list of all spawn egg items (e.g. for creative tab). */
+    public static final List<RegistryObject<Item>> ALL_SPAWN_EGGS = List.of(
+            RED_DEMON_SPAWN_EGG, GRAY_DEMON_SPAWN_EGG, DEMON_COMMANDER_SPAWN_EGG,
+            MYTHIC_RED_DEMON_SPAWN_EGG, ESTAROSSA_SPAWN_EGG, DEMON_KING_SPAWN_EGG,
+            MELIODAS_NPC_SPAWN_EGG
     );
 
     // -------------------------------------------------------------------------
