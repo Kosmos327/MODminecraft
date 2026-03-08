@@ -30,11 +30,11 @@ public enum StoryChapter {
     /** Chapter 6 — "The Demon Commander". */
     DEMON_COMMANDER(6),
 
-    /** Chapter 7 — "Night Demon Raid". */
-    NIGHT_RAID(7),
+    /** Chapter 7 — "Estarossa". */
+    ESTAROSSA(7),
 
-    /** Chapter 8 — "Estarossa". */
-    ESTAROSSA(8);
+    /** Chapter 8 — "The Demon King" (endgame). */
+    DEMON_KING(8);
 
     private final int stage;
 

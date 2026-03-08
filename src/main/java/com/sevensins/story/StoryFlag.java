@@ -94,7 +94,13 @@ public enum StoryFlag {
     NIGHT_RAID_COMPLETE("night_raid_complete"),
 
     /** Set when the player obtains a Legendary Artifact for the first time. */
-    LEGENDARY_ARTIFACT_OBTAINED("legendary_artifact_obtained");
+    LEGENDARY_ARTIFACT_OBTAINED("legendary_artifact_obtained"),
+
+    /** Set when the player defeats Estarossa. */
+    ESTAROSSA_SLAIN("estarossa_slain"),
+
+    /** Set when the player completes the full campaign (defeats the Demon King). */
+    CAMPAIGN_COMPLETE("campaign_complete");
 
     private final String id;
 
