@@ -3,6 +3,7 @@ package com.sevensins.event;
 import com.sevensins.SevenSinsMod;
 import com.sevensins.command.DebugCommand;
 import com.sevensins.command.DungeonCommand;
+import com.sevensins.command.RaidCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -18,6 +19,9 @@ import net.minecraftforge.fml.common.Mod;
  * <pre>
  * /sevensins dungeon spawn demon_cave
  * /sevensins dungeon quest assign
+ * /sevensins raid start
+ * /sevensins raid start night
+ * /sevensins raid status
  * /sevensins debug state
  * /sevensins debug story
  * /sevensins debug quest
@@ -37,6 +41,7 @@ public class CommandRegistrationEvents {
                         .requires(src -> src.hasPermission(2));
 
         DungeonCommand.registerUnder(root);
+        RaidCommand.registerUnder(root);
         DebugCommand.registerUnder(root);
 
         event.getDispatcher().register(root);

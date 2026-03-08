@@ -57,16 +57,14 @@ public final class SkillTreeRegistry {
 
         // ENVY – Diane
         REGISTRY.put(CharacterType.DIANE, new SkillTreeDefinition()
-                .addRoot(AbilityType.TELEPORT)
-                .addNode(AbilityType.ARCANE_BURST,   AbilityType.TELEPORT)
-                .addNode(AbilityType.INFINITY_MAGIC, AbilityType.ARCANE_BURST)
+                .addRoot(AbilityType.EARTH_SMASH)
         );
 
         // GLUTTONY – Merlin
         REGISTRY.put(CharacterType.MERLIN, new SkillTreeDefinition()
-                .addRoot(AbilityType.ENERGY_DRAIN)
-                .addNode(AbilityType.DEVOUR,       AbilityType.ENERGY_DRAIN)
-                .addNode(AbilityType.ABYSS_SHIELD, AbilityType.DEVOUR)
+                .addRoot(AbilityType.TELEPORT)
+                .addNode(AbilityType.ARCANE_BURST,   AbilityType.TELEPORT)
+                .addNode(AbilityType.INFINITY_MAGIC, AbilityType.ARCANE_BURST)
         );
     }
 
