@@ -41,7 +41,8 @@ public final class QuestRegistry {
     /** ID of the Chapter 7 Estarossa boss quest. */
     public static final String SLAY_ESTAROSSA_ID = "slay_estarossa";
 
-    // Endgame quest IDs
+    /** ID of the Chapter 8 Demon King boss quest. */
+    public static final String SLAY_DEMON_KING_ID = "slay_demon_king";
 
     /** ID of the endgame quest to survive a Night Demon Raid. */
     public static final String SURVIVE_NIGHT_RAID_ID = "survive_night_raid";
@@ -97,6 +98,20 @@ public final class QuestRegistry {
                 SLAY_DEMON_COMMANDER_ID,
                 "The Demon Commander",
                 "Defeat the Demon Commander leading demonic forces in the region.",
+                QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                SLAY_ESTAROSSA_ID,
+                "Estarossa",
+                "Defeat Estarossa, the embodiment of Love and the strongest of the Ten Commandments.",
+                QuestType.KILL,
+                1
+        ));
+        register(new Quest(
+                SLAY_DEMON_KING_ID,
+                "The Demon King",
+                "Defeat the Demon King, the supreme ruler of Purgatory.",
                 QuestType.KILL,
                 1
         ));

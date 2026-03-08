@@ -101,7 +101,21 @@ public class DialogueManager {
             String action = null;
 
             if ("meliodas_npc".equals(npcId)) {
-                if (questData.hasStoryFlag(StoryFlag.FIRST_DEMONS_COMPLETE.getId())) {
+                if (questData.hasStoryFlag(StoryFlag.DEMON_KING_ENCOUNTERED.getId())) {
+                    treeId = NPCDialogue.MELIODAS_ENDGAME_HINT;
+                } else if (questData.hasStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId())) {
+                    treeId = NPCDialogue.MELIODAS_ESTAROSSA_SLAIN;
+                } else if (questData.hasStoryFlag(StoryFlag.ESTAROSSA_ENCOUNTERED.getId())) {
+                    treeId = NPCDialogue.MELIODAS_ESTAROSSA_HINT;
+                } else if (questData.hasStoryFlag(StoryFlag.DEMON_COMMANDER_SLAIN.getId())) {
+                    treeId = NPCDialogue.MELIODAS_COMMANDER_FALLEN_HINT;
+                } else if (questData.hasStoryFlag(StoryFlag.GRAY_DEMON_SLAIN.getId())) {
+                    treeId = NPCDialogue.MELIODAS_GRAY_DEMON_HINT;
+                } else if (questData.hasStoryFlag(StoryFlag.DEMON_CAVE_CLEARED.getId())) {
+                    treeId = NPCDialogue.MELIODAS_CAVE_CLEARED_HINT;
+                } else if (questData.hasStoryFlag(StoryFlag.RED_DEMON_SLAIN.getId())) {
+                    treeId = NPCDialogue.MELIODAS_RED_DEMON_HINT;
+                } else if (questData.hasStoryFlag(StoryFlag.FIRST_DEMONS_COMPLETE.getId())) {
                     treeId = NPCDialogue.MELIODAS_CHAPTER2_COMPLETE;
                 } else if (questData.hasStoryFlag(StoryFlag.FIRST_DEMONS_STARTED.getId())) {
                     treeId = NPCDialogue.MELIODAS_CHAPTER2_REMINDER;
