@@ -1,5 +1,6 @@
 package com.sevensins.ability;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,7 +30,7 @@ public class CooldownManager {
      * <p>Expired entries are silently removed during the lookup.</p>
      */
     public static boolean isOnCooldown(UUID playerId, AbilityType ability) {
-        ConcurrentHashMap<AbilityType, Long> playerMap = COOLDOWNS.get(playerId);
+        Map<AbilityType, Long> playerMap = COOLDOWNS.get(playerId);
         if (playerMap == null) return false;
         Long expiry = playerMap.get(ability);
         if (expiry == null) return false;
@@ -58,7 +59,7 @@ public class CooldownManager {
      * during the lookup.</p>
      */
     public static long getRemainingMs(UUID playerId, AbilityType ability) {
-        ConcurrentHashMap<AbilityType, Long> playerMap = COOLDOWNS.get(playerId);
+        Map<AbilityType, Long> playerMap = COOLDOWNS.get(playerId);
         if (playerMap == null) return 0L;
         Long expiry = playerMap.get(ability);
         if (expiry == null) return 0L;
@@ -79,7 +80,7 @@ public class CooldownManager {
      * @param playerId the UUID of the player to clean up
      */
     public static void removeExpiredForPlayer(UUID playerId) {
-        ConcurrentHashMap<AbilityType, Long> playerMap = COOLDOWNS.get(playerId);
+        Map<AbilityType, Long> playerMap = COOLDOWNS.get(playerId);
         if (playerMap == null) return;
         long now = System.currentTimeMillis();
         Iterator<Map.Entry<AbilityType, Long>> it = playerMap.entrySet().iterator();
