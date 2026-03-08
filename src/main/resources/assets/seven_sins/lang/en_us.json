@@ -9,9 +9,21 @@
   "item.seven_sins.envy_emblem": "Emblem of Envy",
   "item.seven_sins.gluttony_emblem": "Emblem of Gluttony",
 
+  "item.seven_sins.sin_fragment": "Sin Fragment",
+  "item.seven_sins.magic_scroll": "Magic Scroll",
+  "item.seven_sins.demon_fragment": "Demon Fragment",
+  "item.seven_sins.sacred_scroll": "Sacred Scroll",
+
+  "item.seven_sins.lostvayne": "Lostvayne",
+  "item.seven_sins.rhitta": "Divine Axe Rhitta",
+  "item.seven_sins.chastiefol": "Spirit Spear Chastiefol",
+
+  "item.seven_sins.crown_of_night": "Crown of Night",
+
   "block.seven_sins.sin_altar": "Sin Altar",
   "block.seven_sins.sin_altar.aligned": "You are aligned with %s (Level %s)",
   "block.seven_sins.sin_altar.unaligned": "You are not yet aligned with any sin. Use a Sin Emblem to choose your path.",
+  "block.seven_sins.sacred_forge": "Sacred Forge",
 
   "sin.seven_sins.wrath": "Wrath",
   "sin.seven_sins.greed": "Greed",
@@ -44,11 +56,10 @@
   "screen.seven_sins.character_selection": "Choose Your Sin",
   "screen.seven_sins.character_selection.subtitle": "Select the path you will follow",
 
-  "item.seven_sins.red_demon_spawn_egg": "Red Demon Spawn Egg",
-  "item.seven_sins.gray_demon_spawn_egg": "Gray Demon Spawn Egg",
-  "item.seven_sins.demon_commander_spawn_egg": "Demon Commander Spawn Egg",
-  "item.seven_sins.mythic_red_demon_spawn_egg": "Mythic Red Demon Spawn Egg",
-  "item.seven_sins.estarossa_spawn_egg": "Estarossa Spawn Egg",
-  "item.seven_sins.demon_king_spawn_egg": "Demon King Spawn Egg",
-  "item.seven_sins.meliodas_npc_spawn_egg": "Meliodas Spawn Egg"
+  "hud.seven_sins.sin": "Sin: %s",
+  "hud.seven_sins.level": "Level: %s",
+  "hud.seven_sins.xp": "XP: %s / %s",
+  "hud.seven_sins.skill_points": "Skill Points: %s",
+  "hud.seven_sins.power_level": "Power: %s",
+  "hud.seven_sins.ready": "READY"
 }
