@@ -27,15 +27,15 @@ public enum AbilityType {
     ILLUSION_BURST,
     MEMORY_REWRITE,
     // ENVY (Diane)
+    EARTH_SMASH,
+    // GLUTTONY (Merlin)
     TELEPORT,
     ARCANE_BURST,
     INFINITY_MAGIC,
-    // GLUTTONY (Merlin)
+    // Unimplemented stubs (reserved for future Merlin abilities)
     ENERGY_DRAIN,
     DEVOUR,
     ABYSS_SHIELD,
-    // Legacy / other
-    EARTH_SMASH,
     INVASION,
     INFINITY,
     SUNSHINE,

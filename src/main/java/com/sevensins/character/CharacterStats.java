@@ -343,8 +343,8 @@ public final class CharacterStats {
             case SNATCH, FOX_HUNT, HUNTER_FEST                    -> CharacterType.BAN;
             case SPIRIT_SPEAR, GUARDIAN, INCREASE                 -> CharacterType.KING;
             case MIND_CONTROL, ILLUSION_BURST, MEMORY_REWRITE     -> CharacterType.GOWTHER;
-            case TELEPORT, ARCANE_BURST, INFINITY_MAGIC, EARTH_SMASH -> CharacterType.DIANE;
-            case ENERGY_DRAIN, DEVOUR, ABYSS_SHIELD               -> CharacterType.MERLIN;
+            case EARTH_SMASH                                       -> CharacterType.DIANE;
+            case TELEPORT, ARCANE_BURST, INFINITY_MAGIC           -> CharacterType.MERLIN;
             default                                               -> CharacterType.NONE;
         };
     }
