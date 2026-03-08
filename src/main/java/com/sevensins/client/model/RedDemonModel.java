@@ -1,4 +1,4 @@
-package com.example.mymod.client.model;
+package com.sevensins.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -23,7 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RedDemonModel<T extends net.minecraft.world.entity.Entity> extends EntityModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            new ResourceLocation("mymod", "red_demon_boss_fixed"),
+            new ResourceLocation("seven_sins", "red_demon_boss_fixed"),
             "main"
     );
 
