@@ -63,7 +63,7 @@ public class UseAbilityPacket {
                         ability.getCooldownTicks()
                 );
 
-                ability.use(player);
+                ability.activate(player);
             });
         });
         ctx.setPacketHandled(true);

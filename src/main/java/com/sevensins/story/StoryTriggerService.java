@@ -96,6 +96,14 @@ public final class StoryTriggerService {
             onGrayDemonSlain(player);
         } else if (QuestRegistry.SLAY_DEMON_COMMANDER_ID.equals(questId)) {
             onDemonCommanderSlain(player);
+        } else if (QuestRegistry.SLAY_ESTAROSSA_ID.equals(questId)) {
+            onEstarossaSlain(player);
+        } else if (QuestRegistry.SLAY_DEMON_KING_ID.equals(questId)) {
+            onDemonKingSlain(player);
+        } else if (QuestRegistry.SURVIVE_NIGHT_RAID_ID.equals(questId)) {
+            onNightRaidComplete(player);
+        } else if (QuestRegistry.SLAY_MYTHIC_DEMON_ID.equals(questId)) {
+            onMythicDemonSlain(player);
         }
     }
 
@@ -132,6 +140,11 @@ public final class StoryTriggerService {
         ModCapabilities.get(player).ifPresent(cap -> {
             PlayerQuestData questData = cap.getData().getQuestData();
             questData.addStoryFlag(StoryFlag.AWAKENING_TRIAL_COMPLETE.getId());
+            // Advance chapter and chain to Chapter 2
+            cap.getData().setPersonalStoryStage(StoryChapter.AWAKENING.getStage());
+            player.sendSystemMessage(
+                    Component.literal("Your awakening is complete. Seek out the demons threatening the land."));
+            QuestManager.assignQuest(player, QuestRegistry.FIRST_DEMON_HUNT_ID);
         });
     }
 
@@ -194,7 +207,34 @@ public final class StoryTriggerService {
             player.sendSystemMessage(
                     Component.literal("You have defeated the Demon Commander!"));
             player.sendSystemMessage(
-                    Component.literal("The demonic forces fall into disarray."));
+                    Component.literal("But the Lord of Commandments, Estarossa, approaches. Prepare yourself!"));
+            // Begin Chapter 7 — Estarossa
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_ESTAROSSA_ID);
+        });
+    }
+
+    private void onEstarossaSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.ESTAROSSA.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated Estarossa!"));
+            player.sendSystemMessage(
+                    Component.literal("The Demon King himself stirs. The final battle awaits!"));
+            // Begin Chapter 8 — Demon King endgame
+            QuestManager.assignQuest(player, QuestRegistry.SLAY_DEMON_KING_ID);
+        });
+    }
+
+    private void onDemonKingSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.CAMPAIGN_COMPLETE.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.DEMON_KING.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated the Demon King!"));
+            player.sendSystemMessage(
+                    Component.literal("The Seven Deadly Sins have triumphed. The Demon Clan is vanquished!"));
         });
     }
 
@@ -234,7 +274,8 @@ public final class StoryTriggerService {
 
     private void onNightRaidComplete(ServerPlayer player) {
         ModCapabilities.get(player).ifPresent(cap -> {
-            // Night raid complete flag is set by NightRaidManager; here we advance quests.
+            // Night raid complete flag is set by NightRaidManager; here we advance chapter and quests.
+            cap.getData().setPersonalStoryStage(StoryChapter.NIGHT_RAID.getStage());
             player.sendSystemMessage(
                     Component.literal("You have survived the Night Demon Raid!"));
             // Offer the next endgame quest if not already completed or active
@@ -257,5 +298,41 @@ public final class StoryTriggerService {
                 QuestManager.assignQuest(player, QuestRegistry.OBTAIN_LEGENDARY_ARTIFACT_ID);
             }
         });
+    }
+
+    private void onLegendaryArtifactObtained(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            player.sendSystemMessage(Component.literal(
+                    "With this power, you may now face Estarossa of the Ten Commandments."));
+            // Begin Chapter 8 — confront Estarossa
+            PlayerQuestData questData = cap.getData().getQuestData();
+            if (!questData.isCompleted(QuestRegistry.SLAY_ESTAROSSA_ID)
+                    && !QuestRegistry.SLAY_ESTAROSSA_ID.equals(questData.getActiveQuestId())) {
+                QuestManager.assignQuest(player, QuestRegistry.SLAY_ESTAROSSA_ID);
+            }
+        });
+    }
+
+    private void onEstarossaSlain(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap -> {
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId());
+            cap.getData().setPersonalStoryStage(StoryChapter.ESTAROSSA.getStage());
+            player.sendSystemMessage(
+                    Component.literal("You have defeated Estarossa of the Ten Commandments!"));
+            player.sendSystemMessage(
+                    Component.literal("The threat of the Demon Clan has been repelled... for now."));
+        });
+    }
+
+    private void onRhittaObtained(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap ->
+                cap.getData().getQuestData()
+                        .addStoryFlag(StoryFlag.OBTAINED_RHITTA.getId()));
+    }
+
+    private void onChastiefolObtained(ServerPlayer player) {
+        ModCapabilities.get(player).ifPresent(cap ->
+                cap.getData().getQuestData()
+                        .addStoryFlag(StoryFlag.OBTAINED_CHASTIEFOL.getId()));
     }
 }

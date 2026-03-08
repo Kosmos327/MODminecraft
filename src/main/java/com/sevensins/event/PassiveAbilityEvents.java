@@ -2,6 +2,9 @@ package com.sevensins.event;
 
 import com.sevensins.SevenSinsMod;
 import com.sevensins.ability.PassiveAbilityManager;
+import com.sevensins.ability.impl.MeliodasFullCounterAbility;
+import com.sevensins.character.CharacterStats;
+import com.sevensins.item.SacredTreasureItem;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -15,6 +18,8 @@ import net.minecraftforge.fml.common.Mod;
  *
  * <p>Hooks handled here:</p>
  * <ul>
+ *   <li>{@link LivingHurtEvent} (HIGH priority) – Full Counter damage reflection
+ *       for MELIODAS players currently in counter state.</li>
  *   <li>{@link LivingHurtEvent} (NORMAL priority) – attacker bonus damage and
  *       GLUTTONY damage reduction for the defender.</li>
  *   <li>{@link LivingHurtEvent} (LOW priority) – GREED lifesteal and LUST debuff
@@ -26,6 +31,43 @@ import net.minecraftforge.fml.common.Mod;
 public final class PassiveAbilityEvents {
 
     private PassiveAbilityEvents() {}
+
+    // -------------------------------------------------------------------------
+    // Full Counter damage reflection
+    // -------------------------------------------------------------------------
+
+    /**
+     * Intercepts incoming damage for MELIODAS players in Full Counter state.
+     *
+     * <p>When active, the damage is cancelled and reflected back to the attacker
+     * at 1.5× the original amount. The counter state is cleared immediately
+     * before reflecting to prevent infinite recursion between two counter-active
+     * players.</p>
+     *
+     * <p>Runs at {@link EventPriority#HIGH} so that reflection is decided before
+     * any passive damage modifiers alter the amount.</p>
+     */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onFullCounterHurt(LivingHurtEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer defender)) return;
+        if (!MeliodasFullCounterAbility.isCounterActive(defender)) return;
+
+        // Require a living attacker that is not the defender themselves
+        if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) return;
+        if (attacker == defender) return;
+
+        float amount = event.getAmount();
+        if (amount <= 0f) return;
+
+        // Deactivate counter BEFORE reflecting to prevent infinite loops
+        MeliodasFullCounterAbility.deactivateCounter(defender);
+
+        // Cancel the incoming hit
+        event.setCanceled(true);
+
+        // Reflect damage to the attacker using the magic damage source
+        attacker.hurt(defender.damageSources().magic(), amount * 1.5f);
+    }
 
     // -------------------------------------------------------------------------
     // Damage modification – attacker and defender passives
@@ -49,6 +91,15 @@ public final class PassiveAbilityEvents {
             float bonusDamage = PassiveAbilityManager.getBonusDamage(attacker);
             if (bonusDamage > 0f) {
                 amount *= (1f + bonusDamage);
+            }
+
+            // --- Sacred treasure melee damage bonus ---
+            SacredTreasureItem treasure = CharacterStats.getEquippedSacredTreasure(attacker);
+            if (treasure != null) {
+                int meleePct = treasure.getDamageBonus(attacker);
+                if (meleePct > 0) {
+                    amount *= (1f + meleePct / 100f);
+                }
             }
         }
 

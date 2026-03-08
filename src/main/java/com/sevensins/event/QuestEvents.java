@@ -7,6 +7,7 @@ import com.sevensins.character.CharacterType;
 import com.sevensins.character.capability.ModCapabilities;
 import com.sevensins.entity.DemonCommanderEntity;
 import com.sevensins.entity.DemonKingEntity;
+import com.sevensins.entity.EstarossaEntity;
 import com.sevensins.entity.GrayDemonEntity;
 import com.sevensins.entity.MythicRedDemonEntity;
 import com.sevensins.entity.RedDemonEntity;
@@ -73,8 +74,18 @@ public class QuestEvents {
             return;
         }
 
+        if (event.getEntity() instanceof EstarossaEntity estarossa) {
+            handleEstarossaBossLogic(estarossa, killer);
+            return;
+        }
+
         if (event.getEntity() instanceof DemonKingEntity demonKing) {
             handleDemonKingBossLogic(demonKing, killer);
+            return;
+        }
+
+        if (event.getEntity() instanceof EstarossaEntity estarossa) {
+            handleEstarossaBossLogic(estarossa, killer);
             return;
         }
 
@@ -222,24 +233,87 @@ public class QuestEvents {
     }
 
     /**
+     * Handles all side-effects of Estarossa being killed by a player:
+     * <ol>
+     *   <li>Unregisters the boss from {@link BossManager}.</li>
+     *   <li>Grants the XP reward via {@link BossRewardTable}.</li>
+     *   <li>Completes the {@value QuestRegistry#SLAY_ESTAROSSA_ID} quest if active.</li>
+     *   <li>Sets the {@link StoryFlag#ESTAROSSA_SLAIN} story flag.</li>
+     *   <li>Broadcasts a server-wide defeat message.</li>
+     * </ol>
+     */
+    private static void handleEstarossaBossLogic(EstarossaEntity estarossa, ServerPlayer killer) {
+        BossManager.getInstance().unregisterBoss(estarossa.getUUID());
+        BossRewardTable.onEstarossaDeath(killer);
+
+        ModCapabilities.get(killer).ifPresent(cap -> {
+            if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId());
+            String activeId = cap.getData().getQuestData().getActiveQuestId();
+            if (QuestRegistry.SLAY_ESTAROSSA_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_ESTAROSSA_ID);
+            }
+        });
+
+        if (killer.getServer() != null) {
+            killer.getServer().getPlayerList()
+                    .broadcastSystemMessage(
+                            Component.literal("Estarossa has been defeated!"), false);
+        }
+    }
+
+    /**
      * Handles all side-effects of the Demon King being killed by a player.
      */
     private static void handleDemonKingBossLogic(DemonKingEntity demonKing,
                                                   ServerPlayer killer) {
         BossManager.getInstance().unregisterBoss(demonKing.getUUID());
-        BossRewardTable.onBossDeath(killer);
+        BossRewardTable.onDemonKingDeath(killer);
 
         ModCapabilities.get(killer).ifPresent(cap -> {
             if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
-            // DEMON_KING_ENCOUNTERED is already set on proximity by DemonKingEntity;
-            // here we set the "slain" flag to mark the kill milestone.
             cap.getData().getQuestData().addStoryFlag(StoryFlag.DEMON_KING_SLAIN.getId());
+            String activeId = cap.getData().getQuestData().getActiveQuestId();
+            if (QuestRegistry.SLAY_DEMON_KING_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_DEMON_KING_ID);
+            }
         });
 
         if (killer.getServer() != null) {
             killer.getServer().getPlayerList()
                     .broadcastSystemMessage(
                             Component.literal("The Demon King has been defeated!"), false);
+        }
+    }
+
+    /**
+     * Handles all side-effects of Estarossa being killed by a player:
+     * <ol>
+     *   <li>Unregisters the boss from {@link BossManager}.</li>
+     *   <li>Grants the XP reward via {@link BossRewardTable}.</li>
+     *   <li>Completes the {@value QuestRegistry#SLAY_ESTAROSSA_ID} quest if active.</li>
+     *   <li>Sets the {@link StoryFlag#ESTAROSSA_SLAIN} story flag.</li>
+     *   <li>Broadcasts a server-wide defeat message.</li>
+     * </ol>
+     */
+    private static void handleEstarossaBossLogic(EstarossaEntity estarossa,
+                                                  ServerPlayer killer) {
+        BossManager.getInstance().unregisterBoss(estarossa.getUUID());
+        BossRewardTable.onEstarossaDeath(killer);
+
+        ModCapabilities.get(killer).ifPresent(cap -> {
+            if (cap.getData().getSelectedCharacter() == CharacterType.NONE) return;
+            cap.getData().getQuestData().addStoryFlag(StoryFlag.ESTAROSSA_SLAIN.getId());
+            String activeId = cap.getData().getQuestData().getActiveQuestId();
+            if (QuestRegistry.SLAY_ESTAROSSA_ID.equals(activeId)) {
+                QuestManager.completeBossKillQuest(killer, QuestRegistry.SLAY_ESTAROSSA_ID);
+            }
+        });
+
+        if (killer.getServer() != null) {
+            killer.getServer().getPlayerList()
+                    .broadcastSystemMessage(
+                            Component.literal("Estarossa has been defeated!"), false);
         }
     }
 }
