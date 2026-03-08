@@ -19,6 +19,14 @@
   "item.seven_sins.chastiefol": "Spirit Spear Chastiefol",
   "item.seven_sins.crown_of_night": "Crown of Night",
 
+  "item.seven_sins.red_demon_spawn_egg": "Red Demon Spawn Egg",
+  "item.seven_sins.gray_demon_spawn_egg": "Gray Demon Spawn Egg",
+  "item.seven_sins.demon_commander_spawn_egg": "Demon Commander Spawn Egg",
+  "item.seven_sins.mythic_red_demon_spawn_egg": "Mythic Red Demon Spawn Egg",
+  "item.seven_sins.estarossa_spawn_egg": "Estarossa Spawn Egg",
+  "item.seven_sins.demon_king_spawn_egg": "Demon King Spawn Egg",
+  "item.seven_sins.meliodas_npc_spawn_egg": "Meliodas NPC Spawn Egg",
+
   "item.seven_sins.sacred_treasure.ability_bonus": "Ability Damage: +%s%%",
   "item.seven_sins.sacred_treasure.melee_bonus": "Melee Damage: +%s",
   "item.seven_sins.sacred_treasure.mana_bonus": "Max Mana: +%s",
