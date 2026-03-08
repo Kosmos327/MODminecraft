@@ -30,6 +30,7 @@ public class ModCreativeTabs {
                                 output.accept(ModItems.MAGIC_SCROLL.get());
                                 ModItems.ALL_SACRED_TREASURES.forEach(item -> output.accept(item.get()));
                                 ModItems.ALL_LEGENDARY_ARTIFACTS.forEach(item -> output.accept(item.get()));
+                                ModItems.ALL_SPAWN_EGGS.forEach(item -> output.accept(item.get()));
                             })
                             .build()
             );
