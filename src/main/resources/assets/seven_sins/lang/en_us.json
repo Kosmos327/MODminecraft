@@ -42,5 +42,13 @@
   "message.seven_sins.sin_level_up": "Your %s has reached level %s!",
 
   "screen.seven_sins.character_selection": "Choose Your Sin",
-  "screen.seven_sins.character_selection.subtitle": "Select the path you will follow"
+  "screen.seven_sins.character_selection.subtitle": "Select the path you will follow",
+
+  "item.seven_sins.red_demon_spawn_egg": "Red Demon Spawn Egg",
+  "item.seven_sins.gray_demon_spawn_egg": "Gray Demon Spawn Egg",
+  "item.seven_sins.demon_commander_spawn_egg": "Demon Commander Spawn Egg",
+  "item.seven_sins.mythic_red_demon_spawn_egg": "Mythic Red Demon Spawn Egg",
+  "item.seven_sins.estarossa_spawn_egg": "Estarossa Spawn Egg",
+  "item.seven_sins.demon_king_spawn_egg": "Demon King Spawn Egg",
+  "item.seven_sins.meliodas_npc_spawn_egg": "Meliodas Spawn Egg"
 }
